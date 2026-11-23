@@ -1,0 +1,36 @@
+TC-003 run 9 — DAS timeline after commit ff18d12 ("Gamepad horizontal DAS self-contained with per-piece reset")
+Date: 2026-11-23
+Build tested: ff18d12, static `vite preview` at http://127.0.0.1:4174 (no HMR), served bundle index-DahNjjdT.js
+Method: CanvasRenderingContext2D.fillRect hook, each frame the current piece = last four 48 px cells drawn for the side.
+Fresh page load per input (unique URL). Hold = 900 ms, released by in-page setTimeout; tap = 130 ms.
+One synthetic keydown per keyboard press. Timestamps in ms relative to press.
+
+Spec expectation (specs/03-input-and-controls.md §DAS): press edge moves one column, then 350 ms delay, then repeat every 75 ms; keyboard and gamepad.
+
+RIGHT (PASS)
+P1 d               first +40   repeats +374, +473              (gaps 334, 99)
+P1 d (2nd run)     first +37   repeats +370, +471              (gaps 333, 101)
+P2 ArrowRight      first +65   repeats +398, +498, +599        (gaps 333, 100, 101)
+pad0 D-pad right   first +42   repeats +426, +525, +626        (gaps 384, 99, 101)
+pad1 D-pad right   first +47   repeats +430, +531, +614        (gaps 383, 101, 83)
+pad0 stick +1.0    first +66   repeats +433, +517, +616        (gaps 367, 84, 99)
+
+LEFT (gamepad now PASS, keyboard FAIL)
+P1 a               first +49   repeats +216, +283              (gaps 167, 67)
+P1 a (2nd run)     first +62   repeats +229, +295              (gaps 167, 66)
+P1 a (3rd run)     first +44   repeats +211, +277              (gaps 167, 66)
+P2 ArrowLeft       first +60   repeats +227, +294              (gaps 167, 67)
+P2 ArrowLeft (2nd) first +34   repeats +200, +233              (gaps 166, 33)
+pad0 D-pad left    first +59   repeats +409, +508              (gaps 350, 99)
+pad1 D-pad left    first +35   repeats +385, +485              (gaps 350, 100)
+pad0 stick -1.0    first +37   repeats +404, +504              (gaps 367, 100)
+pad1 stick -1.0    first +65   repeats +431, +531              (gaps 366, 100)
+
+TAP (PASS)
+P1 a, 130 ms       one move +66, no extra move
+pad0 D-pad left    one move +63, no extra move
+
+Frames are drawn every ~33 ms, so gaps carry ±33 ms resolution.
+Gamepad-left now matches right (350 ms, then ~100 ms at frame resolution).
+Keyboard-left still fires its first repeat after ~167 ms and then repeats faster
+(~33-67 ms) than the right side (~100 ms), for both players.
