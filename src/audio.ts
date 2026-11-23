@@ -1,14 +1,14 @@
 const SOUND_FILES: Record<string, string> = {
-  move: '/sounds/move.ogg',
-  rotate: '/sounds/rotate.ogg',
-  soft_drop: '/sounds/soft_drop.ogg',
-  piece_lock: '/sounds/piece_lock.ogg',
-  line_clear: '/sounds/line_clear.ogg',
-  game_over: '/sounds/game_over.ogg',
-  pause: '/sounds/pause.ogg',
-  unpause: '/sounds/unpause.ogg',
-  menu_select: '/sounds/menu_select.ogg',
-  menu_back: '/sounds/menu_back.ogg',
+  move: 'sounds/move.ogg',
+  rotate: 'sounds/rotate.ogg',
+  soft_drop: 'sounds/soft_drop.ogg',
+  piece_lock: 'sounds/piece_lock.ogg',
+  line_clear: 'sounds/line_clear.ogg',
+  game_over: 'sounds/game_over.ogg',
+  pause: 'sounds/pause.ogg',
+  unpause: 'sounds/unpause.ogg',
+  menu_select: 'sounds/menu_select.ogg',
+  menu_back: 'sounds/menu_back.ogg',
 };
 
 let volume = 0.7;
