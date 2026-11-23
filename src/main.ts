@@ -904,8 +904,11 @@ function drawStats() {
     i++
   ) {
     const s = stats.sessions[i];
+    const winLabel = s.winner === "p1" ? "P1" : "P2";
+    const winScore = s.winner === "p1" ? s.scores[0] : s.scores[1];
+    const loseScore = s.winner === "p1" ? s.scores[1] : s.scores[0];
     ctx.fillText(
-      `${s.date.slice(0, 16)}  ${s.winner}  P1:${s.scores[0]} P2:${s.scores[1]}`,
+      `${s.date.slice(0, 10)} ${s.date.slice(11, 16)}  ${winLabel}  ${winScore}:${loseScore}`,
       700,
       y,
     );
