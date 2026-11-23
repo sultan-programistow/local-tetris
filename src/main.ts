@@ -30,18 +30,19 @@ window.addEventListener('resize', scaleCanvas); scaleCanvas();
 
 // Input
 const keys = new Set<string>();
-const USED_KEYS = new Set(['a','d','s','z','x','ArrowLeft','ArrowRight','ArrowDown','[',']','Escape','Enter','w','W']);
+const USED_KEYS = new Set(['a','d','s','z','x','w','W','ArrowLeft','ArrowRight','ArrowDown','ArrowUp','[',']','Escape','Enter']);
 window.addEventListener('keydown', e => {
   if (USED_KEYS.has(e.key)) { keys.add(e.key); e.preventDefault(); }
   // rotation edge handling during play
   if (screen === 'play' && match && match.status === 'playing') {
-    const isP1rot = e.key === 'z' || e.key === 'x';
-    const isP2rot = e.key === '[' || e.key === ']';
-    if (isP1rot || isP2rot) {
-      const idx = isP1rot ? 0 : 1;
+    let idx = -1, dir = 0;
+    if (e.key === 'z') { idx = 0; dir = -1; }
+    else if (e.key === 'x' || e.key === 'w' || e.key === 'W') { idx = 0; dir = 1; }
+    else if (e.key === '[') { idx = 1; dir = -1; }
+    else if (e.key === ']' || e.key === 'ArrowUp') { idx = 1; dir = 1; }
+    if (idx >= 0) {
       const p = match.players[idx] as any;
       if (p.current && !p.gameOver) {
-        const dir = (e.key === 'z' || e.key === '[') ? -1 : 1;
         tryRotate(p.board, p.current, dir as 1 | -1);
         p.lockTimer = 0;
       }
@@ -143,7 +144,8 @@ function update(dt: number) {
     // D-pad / left stick
     const left = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
     const right = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
-    const softDropBtn = gp.buttons[0]?.pressed;
+    const softDropBtn = gp.buttons[0]?.pressed || gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
+    const upBtn = gp.buttons[12]?.pressed || gp.axes[1] < -0.5;
     // edge detection for left/right handled by keys set? We'll inject into keys via a virtual set? Instead handle movement directly.
     // For simplicity, set virtual key flags by toggling a gamepad state on player
     if (p._gp === undefined) p._gp = { left:false, right:false, down:false, a:false, x:false, b:false };
@@ -152,8 +154,11 @@ function update(dt: number) {
     if (left && !g.left) { if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; } g._dasL = 0; }
     if (right && !g.right) { if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; } g._dasR = 0; }
     g.left = left; g.right = right; g.down = softDropBtn;
-    // soft drop via A button only
+    // soft drop via A or D-pad down
     if (softDropBtn && p.current && !collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
+    // D-pad up rotates CW (edge)
+    if (upBtn && !g.up && p.current) { tryRotate(p.board, p.current, 1); p.lockTimer = 0; }
+    g.up = upBtn;
     // rotation buttons: X(2) CCW, B(1) CW, triggers
     const ccw = gp.buttons[2]?.pressed || gp.buttons[4]?.pressed;
     const cw = gp.buttons[1]?.pressed || gp.buttons[5]?.pressed;

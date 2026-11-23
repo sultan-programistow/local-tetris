@@ -22,14 +22,13 @@
 
 ## Keyboard
 
-- Player 1: A/D = move left/right, S = soft drop, W/Q? Actually: W not used; rotations: Q = rotate CCW, E = rotate CW (or Z/X). Final: use Z = rotate CCW, X = rotate CW. Space not used (soft drop only).
-  - Final mapping: A/D move, S soft drop, Z rotate CCW, X rotate CW.
-- Player 2: ←/→ move, ↓ soft drop, Z? Use , / . for rotations? Final: ←/→ move, ↓ soft drop, N rotate CCW, M rotate CW (or use / and .). Simpler: Player 2 uses arrow keys for move+drop, and [ ] for rotations. Developer to pick comfortable keys; document in Controls screen.
-- Global: Esc = pause/menu, M = volume? Volume via menu. Enter = confirm in menus.
+- Player 1: A/D = move left/right, S = soft drop, W/X = rotate CW, Z = rotate CCW.
+- Player 2: ←/→ = move left/right, ↓ = soft drop, ↑ = rotate CW, [ = rotate CCW, ] = rotate CW.
+- Global: Esc = pause/menu, Enter = confirm in menus.
 
 ## Gamepad (Web Gamepad API)
 
-- D-pad / left stick: move left/right.
+- D-pad / left stick: move left/right, up = rotate CW, down = soft drop (like A).
 - A button: soft drop.
 - X + left trigger/bumper: rotate CCW.
 - B + right trigger/bumper: rotate CW.
