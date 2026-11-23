@@ -33,6 +33,51 @@ const keys = new Set<string>();
 window.addEventListener('keydown', e => { keys.add(e.key); e.preventDefault(); });
 window.addEventListener('keyup', e => { keys.delete(e.key); });
 
+// Mouse support for menus
+let mouseX = 0, mouseY = 0;
+let hoveredMenu = -1;
+let volumeDragging = false;
+function toLogical(e: MouseEvent) {
+  const rect = canvas.getBoundingClientRect();
+  mouseX = (e.clientX - rect.left) * (1920 / rect.width);
+  mouseY = (e.clientY - rect.top) * (1080 / rect.height);
+}
+canvas.addEventListener('mousemove', e => { toLogical(e); updateHover(); });
+canvas.addEventListener('mousedown', e => { toLogical(e); handleMouseClick(); volumeDragging = (screen === 'volume'); });
+window.addEventListener('mousemove', e => { if (volumeDragging) { toLogical(e); updateVolumeFromMouse(); } });
+window.addEventListener('mouseup', () => { volumeDragging = false; });
+function updateHover() {
+  if (screen === 'menu') {
+    hoveredMenu = -1;
+    MENU.forEach((_, i) => {
+      const y = 400 + i * 60;
+      if (mouseX >= 800 && mouseX <= 1120 && mouseY >= y - 30 && mouseY <= y + 10) hoveredMenu = i;
+    });
+  }
+}
+function handleMouseClick() {
+  if (screen === 'menu' && hoveredMenu >= 0) {
+    menuIndex = hoveredMenu;
+    const opt = MENU[menuIndex];
+    if (opt === 'Start') startMatch();
+    else if (opt === 'Stats') screen = 'stats';
+    else if (opt === 'Volume') screen = 'volume';
+    else if (opt === 'Controls') screen = 'controls';
+  } else if (screen === 'volume') {
+    updateVolumeFromMouse();
+  } else if (screen === 'gameover') {
+    startMatch();
+  } else if (screen === 'stats' || screen === 'controls') {
+    // click anywhere back? keep esc; no
+  }
+}
+function updateVolumeFromMouse() {
+  if (screen !== 'volume') return;
+  // slider region
+  const v = Math.min(1, Math.max(0, (mouseX - 400) / 1120));
+  volume = v; saveVolume(volume);
+}
+
 let match: MatchState | null = null;
 let screen: 'menu' | 'countdown' | 'play' | 'pause' | 'gameover' | 'stats' | 'controls' | 'volume' = 'menu';
 let menuIndex = 0;
@@ -264,7 +309,8 @@ function drawMenu() {
   ctx.fillText('TETRIS DUEL', 960, 200);
   ctx.font = '36px sans-serif';
   MENU.forEach((m, i) => {
-    ctx.fillStyle = i === menuIndex ? '#0f0' : '#aaa';
+    const active = i === menuIndex || i === hoveredMenu;
+    ctx.fillStyle = active ? '#0f0' : '#aaa';
     ctx.fillText(m, 960, 400 + i * 60);
   });
   ctx.textAlign = 'left';
@@ -310,8 +356,11 @@ function drawVolume() {
   ctx.fillStyle = '#fff'; ctx.font = 'bold 48px sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('VOLUME', 960, 120);
   ctx.font = '32px monospace';
-  ctx.fillText(`Volume: ${Math.round(volume*100)}%`, 960, 400);
-  ctx.fillText('Use Left/Right to adjust, Esc to back', 960, 500);
+  // slider
+  ctx.fillStyle = '#444'; ctx.fillRect(400, 420, 1120, 20);
+  ctx.fillStyle = '#0f0'; ctx.fillRect(400, 420, 1120 * volume, 20);
+  ctx.fillStyle = '#fff'; ctx.fillText(`Volume: ${Math.round(volume*100)}%`, 960, 380);
+  ctx.fillText('Use Left/Right or drag slider, Esc to back', 960, 500);
   ctx.textAlign = 'left';
 }
 

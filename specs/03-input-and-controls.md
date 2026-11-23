@@ -1,5 +1,12 @@
 # 03 — Input & Controls
 
+## Mouse
+
+- Mouse is supported in menus and screens (main menu, pause menu, game over, stats, controls, volume).
+- Hover highlights the focused item; click selects it.
+- During gameplay, mouse is not used (keyboard/gamepad only for play).
+- Cursor may be hidden during play and shown in menus.
+
 ## Keyboard
 
 - Player 1: A/D = move left/right, S = soft drop, W/Q? Actually: W not used; rotations: Q = rotate CCW, E = rotate CW (or Z/X). Final: use Z = rotate CCW, X = rotate CW. Space not used (soft drop only).
