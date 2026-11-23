@@ -635,14 +635,14 @@ function handleGamepadMenus() {
       if (down && !prev.down) menuIndex = (menuIndex + 1) % items.length;
       // B/Select acts as Back: resume when a game is in progress
       if (b && !prev.b && pausedFromGame) {
-        pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing';
+        pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; playSfx('unpause');
       }
       const startPressed = gp.buttons[9]?.pressed;
       const activate = (a && !prev.a) || (pausedFromGame && startPressed && !prev.start && !startOpenedMenu);
       if (activate) {
         const opt = items[menuIndex];
         if (opt === 'Start') startMatch();
-        else if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
+        else if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; playSfx('unpause'); }
         else if (opt === 'Restart') { pausedFromGame = false; startMatch(); }
         else if (opt === 'Stats') screen = 'stats';
         else if (opt === 'Volume') screen = 'volume';
