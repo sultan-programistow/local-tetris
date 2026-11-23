@@ -3,7 +3,7 @@
 - **Area:** Menus / input / navigation
 - **Priority:** High
 - **Date run:** 2026-11-24 (run 1: PASS)
-- **Environment:** Chromium (headless `--headless=new`, Chrome 158) at 1920×1080, production build served with `vite preview` at `http://127.0.0.1:4176`, commit `8da9d1f`, canvas 1920×1080 with no CSS scaling
+- **Environment:** Chromium (headless `--headless=new`, Chrome 158) at 1920×1080, production build served with `vite preview` at `http://127.0.0.1:4176`, commit `41b3faa`, canvas 1920×1080 with no CSS scaling
 - **Spec pins:** `specs/03-input-and-controls.md` §"Keyboard" (`Enter/Space = confirm in menus`, `Esc = pause/menu`), §"Menu navigation (gamepad)" (`D-pad / left stick: navigate up/down/left/right`, `A: select/confirm`, `B: back`) @ `ceabcd2`; `specs/04-screens-and-ui.md` §"Main Menu" (`Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back`) @ `ceabcd2`
 - **Spec gap:** W/S as menu navigation keys are **not** specified. The user asked for them explicitly; sub-cases K3/K4 test a user requirement, not the spec.
 
@@ -48,7 +48,7 @@ Expected sequences are from the menu order Start → Stats → Volume → Contro
 
 ## Result
 
-**PASS** (run 1, commit `8da9d1f`) — all 12 sub-cases match. Every direction path moves exactly one item per discrete press and wraps at both ends; Enter, Space and A activate the selected item; Esc and B go back both from sub-screens and from a game-paused menu.
+**PASS** (run 1, commit `41b3faa`) — all 12 sub-cases match. Every direction path moves exactly one item per discrete press and wraps at both ends; Enter, Space and A activate the selected item; Esc and B go back both from sub-screens and from a game-paused menu. The same script also passed unchanged on `8da9d1f`; the two commits differ only in stats/session code.
 
 ## Evidence
 

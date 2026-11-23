@@ -879,8 +879,10 @@ function drawStats() {
   ctx.fillText("STATS", 960, 120);
   ctx.font = "28px monospace";
   ctx.textAlign = "left";
-  ctx.fillText("Today", 850, 180);
-  ctx.fillText("Total", 1000, 180);
+  ctx.fillStyle = "#aaa";
+  ctx.fillText("Today", 900, 180);
+  ctx.fillText("Total", 1050, 180);
+  ctx.fillStyle = "#fff";
   const rows = [
     ["Games", stats.sessionsToday, stats.sessionsPlayed],
     [
@@ -901,14 +903,15 @@ function drawStats() {
   ];
   rows.forEach((r, i) => {
     ctx.fillText(String(r[0]), 700, 220 + i * 36);
-    ctx.fillText(String(r[1]), 850, 220 + i * 36);
-    ctx.fillText(String(r[2]), 1000, 220 + i * 36);
+    ctx.fillText(String(r[1]), 900, 220 + i * 36);
+    ctx.fillText(String(r[2]), 1050, 220 + i * 36);
   });
-  ctx.fillStyle = "#aaa";
+  ctx.fillStyle = "#fff";
   ctx.textAlign = "center";
   ctx.fillText("Sessions", 960, 420);
   ctx.textAlign = "left";
-  ctx.fillText("Date".padEnd(18) + "Winner".padEnd(8) + "Score  Dur", 700, 470);
+  ctx.fillStyle = "#aaa";
+  ctx.fillText("Date".padEnd(18) + "Duration".padEnd(10) + "Winner".padEnd(10) + "Score", 700, 470);
   ctx.fillStyle = "#fff";
   const visible = 12;
   const start = statsScroll;
@@ -923,8 +926,9 @@ function drawStats() {
     const winScore = s.winner === "p1" ? s.scores[0] : s.scores[1];
     const loseScore = s.winner === "p1" ? s.scores[1] : s.scores[0];
     const dur = `${Math.floor(s.durationMs / 60000)}:${String(Math.floor((s.durationMs % 60000) / 1000)).padStart(2, "0")}`;
+    ctx.fillStyle = "#fff";
     ctx.fillText(
-      `${s.date.slice(0, 10)} ${s.date.slice(11, 16)}  ${winLabel}  ${winScore}:${loseScore}  ${dur}`,
+      `${(s.date.slice(0, 10) + " " + s.date.slice(11, 16)).padEnd(18)}${dur.padEnd(10)}${winLabel.padEnd(10)}${winScore}:${loseScore}`,
       700,
       y,
     );
