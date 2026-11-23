@@ -30,7 +30,7 @@ Options: Start, Stats, Volume, Controls.
 - Winner announcement (P1 / P2 / Draw).
 - Both scores, pieces placed.
 - Summary + last 5 sessions.
-- "Press to restart" (any key / A) → new match with new seed.
+- "Press any key or gamepad button to restart" → new match with new seed.
 
 ## Stats Screen
 

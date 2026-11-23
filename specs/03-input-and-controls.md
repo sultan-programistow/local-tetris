@@ -36,6 +36,14 @@
 - Start: pause.
 - Select: back in menus.
 
+### Menu navigation (gamepad)
+
+- D-pad / left stick: navigate up/down/left/right.
+- A: select/confirm.
+- B: back.
+- Select: back.
+- Start: confirm (optional).
+
 ## DAS (Delayed Auto Shift)
 
 - Initial delay: 250ms before auto-repeat starts.
