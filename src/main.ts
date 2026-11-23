@@ -57,6 +57,7 @@ window.addEventListener('keydown', e => {
       const p = match.players[idx] as any;
       if (p.current && !p.gameOver) {
         tryRotate(p.board, p.current, dir as 1 | -1);
+         playSfx('rotate');
         p.lockTimer = 0;
       }
     }
@@ -353,13 +354,14 @@ function lockPiece(p: any, idx: number) {
       p.board.set(x, y, piece.def.color);
     }
   }
+   playSfx('piece_lock');
   p.score += 1;
   p.piecesPlaced += 1;
   // level
   p.level = Math.floor(p.piecesPlaced / 10) + 1;
   // line clear
   const full = p.board.fullRows();
-  if (full.length > 0) p.board.removeRows(full);
+  if (full.length > 0) { p.board.removeRows(full); playSfx("line_clear"); }
   // spawn next
   match!.spawnFor(p);
   // check immediate collision => top out
@@ -377,6 +379,7 @@ function decideWinner() {
   match!.winner = w;
   match!.status = 'gameover';
   screen = 'gameover';
+  playSfx('game_over');
   // stats
   const sess: Session = { date: new Date().toISOString(), winner: w, scores: [p0.score, p1.score], pieces: [p0.piecesPlaced, p1.piecesPlaced] };
   stats.sessionsPlayed++;
