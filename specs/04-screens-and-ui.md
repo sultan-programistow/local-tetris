@@ -5,6 +5,7 @@
 Options: Start/Resume (dynamic), Stats, Volume, Controls.
 - The first item's label is dynamic: "Resume" when the menu is opened from in-game (Esc/Start), "Start" otherwise.
 - Start button (gamepad) in the Main Menu resumes the game when a match is in progress (same as selecting Resume/Start).
+- Menu items are centered horizontally; Main Menu and Game Over screen share the same horizontal position/alignment for menu items (consistent layout).
 - Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover highlights, click selects.
 - Volume: slider 0–1 (persisted), adjustable via mouse drag or keyboard.
 - Controls: shows key/button mapping.
@@ -19,6 +20,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 
 - Two 10×20 boards side by side.
 - Per player HUD: score, level, lines? (lines cleared optional display), next piece (1) preview.
+- Next piece preview: rendered in a small preview box (e.g., 4×4 cell area) in the player's HUD, centered, using the same piece colors and cell size scaled to fit; shows the next piece in its spawn orientation. No hold slot (hold not implemented in v1).
 - Session stats not shown during play.
 - Per-player game over (soft): when a player tops out, their board is grayed out (tiles rendered semi-transparent/grayed) with a "GAME OVER" label overlaid on top (above tiles in z-order) that obscures the tiles (opaque/strong contrast, not blending). The other board stays active. Full match game over waits for the second player (or score beat).
 - Esc (keyboard) or Start (gamepad) opens the Main Menu, which effectively pauses the game. No separate pause state or pause menu.
@@ -30,6 +32,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 - Summary + last 5 sessions.
 - Two options: Restart (default) and Main Menu. Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover + click. Restart starts a new match (new random seed). Main Menu returns to the main menu.
 - Height: should occupy the same screen height as the Main Menu where possible (consistent layout).
+- Menu items centered horizontally and share the same horizontal position as the Main Menu (consistent layout).
 
 ## Stats Screen
 

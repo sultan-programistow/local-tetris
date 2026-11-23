@@ -68,9 +68,11 @@ export class MatchState {
   sharedNext: PieceDef | null = null;
   ensureNext(): void { if (!this.sharedNext) this.sharedNext = this.nextPieceDef(); }
   takeNext(): PieceDef { this.ensureNext(); const d = this.sharedNext!; this.sharedNext = null; return d; }
+  peekNext(): PieceDef { this.ensureNext(); return this.sharedNext!; }
   spawnFor(p: PlayerState): boolean {
     const def = this.takeNext();
     const piece = createPiece(def);
+    p.nextDef = this.peekNext();
     piece.x = 3;
     piece.y = 0;
     if (collides(p.board, piece)) {

@@ -417,8 +417,28 @@ function drawPlay(countdown: boolean) {
   drawBoard(p1, 1920 - 200 - COLS*CELL, 40, CELL);
   // HUD
   ctx.fillStyle = '#fff'; ctx.font = '24px monospace';
-  ctx.fillText(`P1 Score: ${p0.score}  Lvl ${p0.level}`, 200, 60);
-  ctx.fillText(`P2 Score: ${p1.score}  Lvl ${p1.level}`, 1920 - 200 - COLS*CELL, 60);
+  ctx.fillText(`P1 Score: ${p0.score}  Lvl ${p0.level}`, 200, 30);
+  ctx.fillText(`P2 Score: ${p1.score}  Lvl ${p1.level}`, 1920 - 200 - COLS*CELL, 30);
+  // next piece preview
+  function drawNext(p: any, ox: number, oy: number) {
+    const cs = 20;
+    ctx.strokeStyle = '#666'; ctx.lineWidth = 1;
+    ctx.strokeRect(ox, oy, 4*cs, 4*cs);
+    if (p.nextDef) {
+      const m = p.nextDef.shape;
+      const cols = m[0].length, rows = m.length;
+      const offX = Math.floor((4 - cols)/2);
+      const offY = Math.floor((4 - rows)/2);
+      ctx.fillStyle = p.nextDef.color;
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        if (m[r][c]) ctx.fillRect(ox + (offX+c)*cs + 1, oy + (offY+r)*cs + 1, cs-2, cs-2);
+      }
+    }
+    ctx.fillStyle = '#aaa'; ctx.font = '14px monospace';
+    ctx.fillText('NEXT', ox, oy - 6);
+  }
+  drawNext(p0, 200 + COLS*CELL + 20, 40);
+  drawNext(p1, 1920 - 200 - COLS*CELL - 4*20 - 20, 40);
   if (countdown) {
     ctx.fillStyle = '#fff'; ctx.font = 'bold 96px sans-serif'; ctx.textAlign = 'center';
     const n = Math.ceil(match!.countdownMs / 1000);
