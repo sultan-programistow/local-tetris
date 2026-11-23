@@ -31,7 +31,7 @@ local-tetris/
 - `Board`: 2D grid (10×20) of cell color/null.
 - `Piece`: shape matrix, position, rotation state, color.
 - `GameState`: boards[2], current pieces[2], queues[2] (next 1), scores[2], levels[2], piecesPlaced[2], status (playing/gameover), seed.
-- `Stats`: sessionsPlayed, totalPlayTimeMs, winsP1, winsP2, lastSessions[] (max 5: date, winner, scores, pieces).
+- `Stats`: sessionsPlayed, totalPlayTimeMs, todayPlayTimeMs (reset when date changes), winsP1, winsP2, lastSessions[] (max 5: date, winner, scores, pieces).
 
 ## Seeded RNG
 

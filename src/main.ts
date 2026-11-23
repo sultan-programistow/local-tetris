@@ -4,14 +4,22 @@ import { collides, tryRotate } from './game/collision';
 import { Board } from './game/board';
 import { COLS, ROWS } from './game/board';
 import { availablePieces } from './game/pieces';
+import { preload as preloadAudio, setVolume as setAudioVolume, play as playSfx } from './audio';
 
 const STORAGE_STATS = 'local-tetris:stats';
 const STORAGE_VOLUME = 'local-tetris:volume';
 
 interface Session { date: string; winner: string; scores: [number, number]; pieces: [number, number]; }
-interface Stats { sessionsPlayed: number; totalPlayTimeMs: number; winsP1: number; winsP2: number; lastSessions: Session[]; }
+interface Stats { sessionsPlayed: number; totalPlayTimeMs: number; todayPlayTimeMs: number; todayDate: string; winsP1: number; winsP2: number; lastSessions: Session[]; }
 
-function loadStats(): Stats { try { return JSON.parse(localStorage.getItem(STORAGE_STATS) || '') } catch { return { sessionsPlayed: 0, totalPlayTimeMs: 0, winsP1: 0, winsP2: 0, lastSessions: [] }; } }
+function loadStats(): Stats {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORAGE_STATS) || '');
+    if (s.todayPlayTimeMs === undefined) s.todayPlayTimeMs = 0;
+    if (!s.todayDate) s.todayDate = new Date().toISOString().slice(0,10);
+    return s;
+  } catch { return { sessionsPlayed: 0, totalPlayTimeMs: 0, todayPlayTimeMs: 0, todayDate: new Date().toISOString().slice(0,10), winsP1: 0, winsP2: 0, lastSessions: [] }; }
+}
 function saveStats(s: Stats) { localStorage.setItem(STORAGE_STATS, JSON.stringify(s)); }
 function loadVolume(): number { const v = parseFloat(localStorage.getItem(STORAGE_VOLUME) || '0.7'); return isNaN(v) ? 0.7 : v; }
 function saveVolume(v: number) { localStorage.setItem(STORAGE_VOLUME, String(v)); }
@@ -107,7 +115,7 @@ function updateVolumeFromMouse() {
   if (screen !== 'volume') return;
   // slider region
   const v = Math.min(1, Math.max(0, (mouseX - 400) / 1120));
-  volume = v; saveVolume(volume);
+  volume = v; saveVolume(volume); setAudioVolume(volume);
 }
 
 let match: MatchState | null = null;
@@ -123,6 +131,8 @@ function menuItems(): string[] {
   return items;
 }
 let volume = loadVolume();
+preloadAudio();
+setAudioVolume(volume);
 let sessionStart = 0;
 let stats = loadStats();
 
@@ -367,7 +377,11 @@ function decideWinner() {
   // stats
   const sess: Session = { date: new Date().toISOString(), winner: w, scores: [p0.score, p1.score], pieces: [p0.piecesPlaced, p1.piecesPlaced] };
   stats.sessionsPlayed++;
-  stats.totalPlayTimeMs += Date.now() - sessionStart;
+  const playMs = Date.now() - sessionStart;
+  stats.totalPlayTimeMs += playMs;
+  const today = new Date().toISOString().slice(0,10);
+  if (stats.todayDate !== today) { stats.todayDate = today; stats.todayPlayTimeMs = 0; }
+  stats.todayPlayTimeMs += playMs;
   if (w === 'p1') stats.winsP1++;
   if (w === 'p2') stats.winsP2++;
   stats.lastSessions.unshift(sess);
@@ -495,7 +509,8 @@ function drawStats() {
   ctx.fillText('STATS', 960, 120);
   ctx.font = '24px monospace'; ctx.textAlign = 'left';
   ctx.fillText(`Sessions: ${stats.sessionsPlayed}  Play time: ${Math.round(stats.totalPlayTimeMs/60000)}m`, 200, 220);
-  ctx.fillText(`P1 wins: ${stats.winsP1}  P2 wins: ${stats.winsP2}`, 200, 260);
+  ctx.fillText(`Time played today: ${Math.round(stats.todayPlayTimeMs/60000)}m`, 200, 260);
+  ctx.fillText(`P1 wins: ${stats.winsP1}  P2 wins: ${stats.winsP2}`, 200, 300);
   let y = 320;
   for (const s of stats.lastSessions) {
     ctx.fillText(`${s.date.slice(0,10)}  ${s.winner}  P1:${s.scores[0]} P2:${s.scores[1]}`, 200, y); y += 32;
@@ -544,7 +559,7 @@ window.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         const opt = items[menuIndex];
         if (opt === 'Start' || opt === 'Resume' || opt === 'Restart') {
-          if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
+          if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; playSfx('unpause'); }
           else { pausedFromGame = false; startMatch(); }
         }
         else if (opt === 'Stats') screen = 'stats';
@@ -554,8 +569,8 @@ window.addEventListener('keydown', e => {
     } else if (screen === 'stats' || screen === 'controls') {
       if (e.key === 'Escape') screen = 'menu';
     } else if (screen === 'volume') {
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { volume = Math.max(0, volume - 0.05); saveVolume(volume); }
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); }
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); }
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); }
       if (e.key === 'Escape') screen = 'menu';
     } else if (screen === 'gameover') {
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') gameOverIndex = Math.max(0, gameOverIndex - 1);
@@ -566,9 +581,9 @@ window.addEventListener('keydown', e => {
         else { screen = 'menu'; gameOverIndex = 0; }
       } else if (e.key === 'Escape') { screen = 'menu'; gameOverIndex = 0; }
     } else if (screen === 'play') {
-      if (e.key === 'Escape') { pausedFromGame = true; pausedReturn = 'play'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
+      if (e.key === 'Escape') { pausedFromGame = true; pausedReturn = 'play'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; playSfx('pause'); }
     } else if (screen === 'countdown') {
-      if (e.key === 'Escape') { pausedFromGame = true; pausedReturn = 'countdown'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
+      if (e.key === 'Escape') { pausedFromGame = true; pausedReturn = 'countdown'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; playSfx('pause'); }
     }
   }
 });
@@ -630,8 +645,8 @@ function handleGamepadMenus() {
       // B/Select returns to Main Menu
       if (b && !prev.b) { screen = 'menu'; gameOverIndex = 0; }
     } else if (screen === 'volume') {
-      if (left && !prev.left) { volume = Math.max(0, volume - 0.05); saveVolume(volume); }
-      if (right && !prev.right) { volume = Math.min(1, volume + 0.05); saveVolume(volume); }
+      if (left && !prev.left) { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); }
+      if (right && !prev.right) { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); }
       if (b && !prev.b) screen = 'menu';
     } else if (screen === 'stats' || screen === 'controls') {
       if (b && !prev.b) screen = 'menu';
