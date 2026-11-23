@@ -19,6 +19,7 @@ interface Session {
   winner: string;
   scores: [number, number];
   pieces: [number, number];
+  durationMs: number;
 }
 interface Stats {
   sessionsPlayed: number;
@@ -42,6 +43,7 @@ function loadStats(): Stats {
     if (s.winsP1Today === undefined) s.winsP1Today = 0;
     if (s.winsP2Today === undefined) s.winsP2Today = 0;
     if (!Array.isArray(s.sessions)) s.sessions = s.lastSessions || [];
+    for (const sess of s.sessions) if (sess.durationMs === undefined) sess.durationMs = 0;
     return s;
   } catch {
     return {
@@ -660,6 +662,7 @@ function decideWinner() {
     winner: w,
     scores: [p0.score, p1.score],
     pieces: [p0.piecesPlaced, p1.piecesPlaced],
+    durationMs: Date.now() - sessionStart,
   };
   stats.sessionsPlayed++;
   const today = new Date().toISOString().slice(0, 10);
@@ -903,7 +906,7 @@ function drawStats() {
   });
   ctx.fillStyle = "#aaa";
   ctx.fillText("Sessions:", 700, 440);
-  ctx.fillText("Date            Winner  Score", 700, 470);
+  ctx.fillText("Date            Winner  Score  Dur", 700, 470);
   ctx.fillStyle = "#fff";
   const visible = 12;
   const start = statsScroll;
@@ -917,8 +920,9 @@ function drawStats() {
     const winLabel = s.winner === "p1" ? "P1" : "P2";
     const winScore = s.winner === "p1" ? s.scores[0] : s.scores[1];
     const loseScore = s.winner === "p1" ? s.scores[1] : s.scores[0];
+    const dur = `${Math.floor(s.durationMs / 60000)}:${String(Math.floor((s.durationMs % 60000) / 1000)).padStart(2, "0")}`;
     ctx.fillText(
-      `${s.date.slice(0, 10)} ${s.date.slice(11, 16)}  ${winLabel}  ${winScore}:${loseScore}`,
+      `${s.date.slice(0, 10)} ${s.date.slice(11, 16)}  ${winLabel}  ${winScore}:${loseScore}  ${dur}`,
       700,
       y,
     );
