@@ -23,13 +23,13 @@ Clicking "Start" transitions from the main menu to the game screen (countdown, t
 
 ## Actual result
 
-The screen stays on the main menu. Canvas non-background pixel count is effectively unchanged before/after the click (`15,566` → `15,525`; the small delta is antialiasing, not a screen change).
+Run 3 (latest): clicking "Start" transitions to the game screen. Canvas non-background pixel count rises `15,566 → 43,498`, and the green menu label disappears (0 green px). Repeated after a fresh reload: `15,566 → 43,850`. See `tests/reports/TC-001/run3-*`.
 
-For comparison, pressing `Enter` on the same highlighted item does transition: pixel count rises to `43,896` (countdown/play screen with both boards).
+Runs 1–2 (same day, before the app changed): the screen stayed on the main menu (`15,566 → 15,525`).
 
 ## Status
 
-**FAIL** — mouse click on "Start" does not start the game.
+**PASS** (run 3) — mouse click on "Start" now starts the game. Runs 1–2 failed.
 
 ## Run history
 
@@ -37,11 +37,12 @@ For comparison, pressing `Enter` on the same highlighted item does transition: p
 |---|---|---|---|
 | 1 | 2026-11-23 | FAIL | pixels 15,566 → 15,525 after click; `Enter` → 43,896 |
 | 2 | 2026-11-23 | FAIL | pixels 15,566 → 15,525 after click; green "Start" still present (405 px); `Enter` → 43,498 |
+| 3 | 2026-11-23 | PASS | pixels 15,566 → 43,498 after click; green label gone; repeat 15,566 → 43,850 |
 
 ## Notes / follow-up
 
 - Root cause is out of scope for this test asset; handed to engineering for triage.
-- Confirm with the user whether mouse support is in scope. If yes, re-run this case after the fix.
+- Mouse support now works; this case is the regression guard for it.
 - Keyboard path (`Enter` on highlighted item) passes.
 
 ## Evidence
@@ -49,4 +50,5 @@ For comparison, pressing `Enter` on the same highlighted item does transition: p
 - Menu screenshot (before, run 1): `tests/reports/TC-001/menu-before.png`
 - Game screenshot (after `Enter`, run 1): `tests/reports/TC-001/game-after-enter.png`
 - Run 2: `tests/reports/TC-001/run2-menu-before.png`, `run2-after-click.png`, `run2-after-enter.png`
+- Run 3 (pass): `tests/reports/TC-001/run3-menu-before.png`, `run3-after-click.png`
 - Start label pixel bounds (logical canvas): x 925–996, y 375–399; click landed at its center.
