@@ -46,6 +46,8 @@ However, the hovered item is **also** drawn green, so two items appear highlight
 
 Two menu items can show the same green "selected" style simultaneously (keyboard selection + mouse hover). If the design wants a single selected item, this is an ambiguity worth a design decision.
 
+**Decision (2026-11-23):** Option B — mouse hover moves the keyboard selection, so only one item is selected. Pending spec update and implementation; this case will be updated/re-run once the change lands.
+
 ## Notes / follow-up
 
 - Gamepad steering was not tested (no gamepad connected); keyboard path was.
