@@ -10,7 +10,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 - Start button (gamepad) in the Main Menu resumes the game when a match is in progress (same as selecting Resume/Start). When no game is in progress, the Start button does nothing.
 - Esc (keyboard) in the Main Menu also resumes the game when a match is in progress (same as Start button / selecting Resume). When no game is in progress, Esc does nothing (or backs out).
 - Menu items are centered horizontally; Main Menu and Game Over screen share the same horizontal position/alignment for menu items (consistent layout).
-- Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover highlights, click selects.
+- Navigation: D-pad/arrows or W/S, A/Enter/Space select, B/Esc/Select back. Mouse: hover highlights, click selects. (W/w up, s down; Shift+S does not navigate.)
 - Volume: slider 0.0–1.0 (persisted), adjustable via mouse drag/click or keyboard/gamepad; live apply. Icon reflects state.
 - Controls: shows key/button mapping.
 - Stats: opens stats screen.
@@ -35,7 +35,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 - Winner announcement (P1 / P2 / Draw).
 - Both scores, pieces placed.
 - Summary + last 5 sessions.
-- Three options: Restart (default), Stats, Main Menu. Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover + click. Restart starts a new match (new random seed). Stats opens the stats screen. Main Menu returns to the main menu.
+- Three options: Restart (default), Stats, Main Menu. Navigation: D-pad/arrows or W/S, A/Enter/Space select, B/Esc/Select back. Mouse: hover + click. (W/w up, s down.) Restart starts a new match (new random seed). Stats opens the stats screen. Main Menu returns to the main menu.
 - Height: should occupy the same screen height as the Main Menu where possible (consistent layout).
 - Menu items centered horizontally and share the same horizontal position as the Main Menu (consistent layout).
 

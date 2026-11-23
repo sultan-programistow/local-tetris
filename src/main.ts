@@ -1010,7 +1010,7 @@ window.addEventListener("keydown", (e) => {
     // menu navigation
     if (screen === "menu") {
       const items = menuItems();
-      if (e.key === "ArrowDown" || e.key === "s") {
+      if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") {
         menuIndex = (menuIndex + 1) % items.length;
         playSfx("menu_select");
       }
@@ -1055,7 +1055,7 @@ window.addEventListener("keydown", (e) => {
     } else if (screen === "gameover") {
       if (e.key === "ArrowUp" || e.key === "w" || e.key === "W")
         gameOverIndex = Math.max(0, gameOverIndex - 1);
-      else if (e.key === "ArrowDown" || e.key === "s")
+      else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S")
         gameOverIndex = Math.min(2, gameOverIndex + 1);
       else if (e.key === "Enter" || e.key === " ") {
         if (gameOverIndex === 0) startMatch();

@@ -2,10 +2,10 @@
 
 - **Area:** Menus / input / navigation
 - **Priority:** High
-- **Date run:** 2026-11-24 (run 1: PASS)
-- **Environment:** Chromium (headless `--headless=new`, Chrome 158) at 1920×1080, production build served with `vite preview` at `http://127.0.0.1:4176`, commit `41b3faa`, canvas 1920×1080 with no CSS scaling
-- **Spec pins:** `specs/03-input-and-controls.md` §"Keyboard" (`Enter/Space = confirm in menus`, `Esc = pause/menu`), §"Menu navigation (gamepad)" (`D-pad / left stick: navigate up/down/left/right`, `A: select/confirm`, `B: back`) @ `ceabcd2`; `specs/04-screens-and-ui.md` §"Main Menu" (`Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back`) @ `ceabcd2`
-- **Spec gap:** W/S as menu navigation keys are **not** specified. The user asked for them explicitly; sub-cases K3/K4 test a user requirement, not the spec.
+- **Date run:** 2026-11-24 (run 2: FAIL — Shift+S does not navigate; all other sub-cases PASS)
+- **Environment:** Chromium (headless `--headless=new`, Chrome 158) at 1920×1080, production build served with `vite preview` at `http://127.0.0.1:4176`, commit `0c25ff9`, canvas 1920×1080 with no CSS scaling
+- **Spec pins:** `specs/03-input-and-controls.md` §"Keyboard" (`Enter/Space = confirm in menus`, `Esc = pause/menu`; `ArrowUp/W (both cases) = up`, `ArrowDown/S (lowercase only) = down`) and §"Menu navigation" (`ArrowUp or W (both cases) = previous item`) — W/S wording is the Architekt edit of 2026-11-24, **uncommitted** in the working tree at `0c25ff9`; §"Menu navigation (gamepad)" (`D-pad / left stick: navigate up/down/left/right`, `A: select/confirm`, `B: back`) @ `ceabcd2`; `specs/04-screens-and-ui.md` §"Main Menu" and §"Game Over" (`Navigation: D-pad/arrows or W/S, A/Enter/Space select, B/Esc/Select back`, W/w up, s down) — same uncommitted edit.
+- **User decision (2026-11-24):** W/S are permanent menu keys, and `w`/`W` and `s`/`S` must behave identically. The current spec's "lowercase only" wording is expected to change after the Developer fix; sub-case K13 tests the user requirement and currently FAILS.
 
 ## Purpose
 
@@ -45,6 +45,8 @@ Expected sequences are from the menu order Start → Stats → Volume → Contro
 | K10 | Left stick `↓` ×3 then `A`; then `B` | Controls opens; B returns to menu | CONTROLS screen; menu with Controls selected | PASS |
 | K11 | `Esc` in play; `Esc` in the paused menu | menu shows Resume; second Esc resumes play | menu with Resume selected; play screen returns with scores | PASS |
 | K12 | `B` in the paused menu | resumes play | play screen returns | PASS |
+| K13a | `W` ×2 with Shift held | Controls, then Volume | Controls, then Volume | PASS |
+| K13b | `S` ×2 with Shift held | Stats, then Volume (user decision; spec says lowercase only) | stays on Start — no move | FAIL |
 
 ## Result
 
