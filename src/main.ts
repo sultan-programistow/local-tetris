@@ -571,7 +571,8 @@ function handleGamepadMenus() {
     if (up && !gpPrev.up) menuIndex = (menuIndex - 1 + items.length) % items.length;
     if (down && !gpPrev.down) menuIndex = (menuIndex + 1) % items.length;
     const startPressed = gp.buttons[9]?.pressed;
-    if ((a && !gpPrev.a) || (startPressed && !gpPrev.start)) {
+    const activate = (a && !gpPrev.a) || (pausedFromGame && startPressed && !gpPrev.start);
+    if (activate) {
       const opt = items[menuIndex];
       if (opt === 'Start') startMatch();
       else if (opt === 'Resume') { pausedFromGame = false; screen = 'play'; if (match) match.status = 'playing'; }
