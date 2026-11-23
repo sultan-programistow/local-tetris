@@ -31,6 +31,13 @@ For comparison, pressing `Enter` on the same highlighted item does transition: p
 
 **FAIL** — mouse click on "Start" does not start the game.
 
+## Run history
+
+| Run | Date | Result | Key evidence |
+|---|---|---|---|
+| 1 | 2026-11-23 | FAIL | pixels 15,566 → 15,525 after click; `Enter` → 43,896 |
+| 2 | 2026-11-23 | FAIL | pixels 15,566 → 15,525 after click; green "Start" still present (405 px); `Enter` → 43,498 |
+
 ## Notes / follow-up
 
 - Root cause is out of scope for this test asset; handed to engineering for triage.
@@ -39,6 +46,7 @@ For comparison, pressing `Enter` on the same highlighted item does transition: p
 
 ## Evidence
 
-- Menu screenshot (before): `tests/reports/TC-001/menu-before.png`
-- Game screenshot (after `Enter`): `tests/reports/TC-001/game-after-enter.png`
+- Menu screenshot (before, run 1): `tests/reports/TC-001/menu-before.png`
+- Game screenshot (after `Enter`, run 1): `tests/reports/TC-001/game-after-enter.png`
+- Run 2: `tests/reports/TC-001/run2-menu-before.png`, `run2-after-click.png`, `run2-after-enter.png`
 - Start label pixel bounds (logical canvas): x 925–996, y 375–399; click landed at its center.
