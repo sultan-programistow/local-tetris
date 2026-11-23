@@ -3,7 +3,7 @@
 ## Main Menu
 
 Options: Start, Stats, Volume, Controls.
-- Navigation: D-pad/arrows, A/Enter select, B/Esc/Select back. Mouse: hover highlights, click selects.
+- Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover highlights, click selects.
 - Volume: slider 0–1 (persisted), adjustable via mouse drag or keyboard.
 - Controls: shows key/button mapping.
 - Stats: opens stats screen.
@@ -25,7 +25,7 @@ Options: Start, Stats, Volume, Controls.
 
 - Resume, Volume, Restart.
 - (No Quit to title in v1? Actually Restart restarts match; to exit to main menu add "Main Menu" option.) Include "Main Menu" option.
-- Navigation: D-pad/arrows, A/Enter select, B/Esc/Select back. Mouse: hover + click.
+- Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover + click.
 
 - Winner announcement (P1 / P2 / Draw).
 - Both scores, pieces placed.

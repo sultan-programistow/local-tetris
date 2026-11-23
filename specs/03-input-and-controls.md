@@ -24,7 +24,7 @@
 
 - Player 1: A/D = move left/right, S = soft drop, W/X = rotate CW, Z = rotate CCW.
 - Player 2: ←/→ = move left/right, ↓ = soft drop, ↑ = rotate CW, [ = rotate CCW, ] = rotate CW.
-- Global: Esc = pause/menu, Enter = confirm in menus.
+- Global: Esc = pause/menu, Enter/Space = confirm in menus.
 
 ## Gamepad (Web Gamepad API)
 

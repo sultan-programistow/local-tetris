@@ -30,7 +30,7 @@ window.addEventListener('resize', scaleCanvas); scaleCanvas();
 
 // Input
 const keys = new Set<string>();
-const USED_KEYS = new Set(['a','d','s','z','x','w','W','ArrowLeft','ArrowRight','ArrowDown','ArrowUp','[',']','Escape','Enter']);
+const USED_KEYS = new Set(['a','d','s','z','x','w','W','ArrowLeft','ArrowRight','ArrowDown','ArrowUp','[',']','Escape','Enter',' ']);
 window.addEventListener('keydown', e => {
   if (USED_KEYS.has(e.key)) { keys.add(e.key); e.preventDefault(); }
   // rotation edge handling during play
@@ -467,7 +467,7 @@ window.addEventListener('keydown', e => {
     if (screen === 'menu') {
       if (e.key === 'ArrowDown' || e.key === 's') menuIndex = (menuIndex + 1) % MENU.length;
       if (e.key === 'ArrowUp' || e.key === 'w') menuIndex = (menuIndex - 1 + MENU.length) % MENU.length;
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' || e.key === ' ') {
         const opt = MENU[menuIndex];
         if (opt === 'Start') startMatch();
         else if (opt === 'Stats') screen = 'stats';
