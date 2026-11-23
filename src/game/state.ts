@@ -55,24 +55,22 @@ export class MatchState {
   // get next piece def based on level (use max level? each player own level but shared sequence => use a shared level? spec: both receive same seeded piece sequence. Level affects drop speed per player AND piece unlock. Piece pool may differ by level per player. To keep sequence identical, we pick from pool based on... hmm.
   // Decision: piece selection uses a shared "match level" = max of both? Or each player's level. Spec says same seeded sequence. Use seeded random from a pool determined by current global piece index? Simpler: pick from standard 7 always for levels 1-2; for unlock, use player's own level but then sequences diverge. 
   // To keep identical, use a single shared level counter = pieces placed of... ambiguous. We'll use a shared "sequence level" based on total pieces placed by player0? Simpler: piece pool expands based on max(piecesPlaced) threshold. Use a global piece counter.
-  pieceIndex = 0;
+  pieceSequence: PieceDef[] = [];
   levelForPiece(i: number): number { return Math.floor(i / 10) + 1; }
-  nextPieceDef(): PieceDef {
-    const lvl = this.levelForPiece(this.pieceIndex);
-    this.pieceIndex++;
-    const pool = availablePieces(lvl);
-    const idx = Math.floor(this.rng.next() * pool.length);
-    return pool[idx];
+  getPiece(n: number): PieceDef {
+    while (this.pieceSequence.length <= n) {
+      const i = this.pieceSequence.length;
+      const lvl = this.levelForPiece(i);
+      const pool = availablePieces(lvl);
+      const idx = Math.floor(this.rng.next() * pool.length);
+      this.pieceSequence.push(pool[idx]);
+    }
+    return this.pieceSequence[n];
   }
-  // queue shared next piece
-  sharedNext: PieceDef | null = null;
-  ensureNext(): void { if (!this.sharedNext) this.sharedNext = this.nextPieceDef(); }
-  takeNext(): PieceDef { this.ensureNext(); const d = this.sharedNext!; this.sharedNext = null; return d; }
-  peekNext(): PieceDef { this.ensureNext(); return this.sharedNext!; }
   spawnFor(p: PlayerState): boolean {
-    const def = this.takeNext();
+    const def = this.getPiece(p.piecesPlaced);
     const piece = createPiece(def);
-    p.nextDef = this.peekNext();
+    p.nextDef = this.getPiece(p.piecesPlaced + 1);
     piece.x = 3;
     piece.y = 0;
     if (collides(p.board, piece)) {
