@@ -162,8 +162,6 @@ function update(dt: number) {
     if (left && !g.left) { if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; } g._dasL = 0; }
     if (right && !g.right) { if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; } g._dasR = 0; }
     g.left = left; g.right = right; g.down = softDropBtn;
-    // soft drop via A or D-pad down
-    if (softDropBtn && p.current && !collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
     // D-pad up rotates CW (edge)
     if (upBtn && !g.up && p.current) { tryRotate(p.board, p.current, 1); p.lockTimer = 0; }
     g.up = upBtn;
@@ -220,9 +218,18 @@ function update(dt: number) {
       }
     } else { p._dasR = 0; p._dasRprev = 0; }
 
-    // soft drop
-    if (keys.has(downKey) && p.current) {
-      if (!collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
+    // soft drop with 250ms initial delay then 10ms repeat
+    const gpSoft = (p._gp && p._gp.down) ? true : false;
+    const softHeld = keys.has(downKey) || gpSoft;
+    if (p._sdTimer === undefined) p._sdTimer = 0;
+    if (softHeld && p.current) {
+      p._sdTimer += dt * 1000;
+      if (p._sdTimer >= 250) {
+        if (!collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
+        p._sdTimer = 240;
+      }
+    } else {
+      p._sdTimer = 0;
     }
 
     // gravity
