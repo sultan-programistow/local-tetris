@@ -1,0 +1,45 @@
+TC-005 run 4 — tap and hold timeline (2026-11-23, static preview :4173, cell 50px,
+build from commit e9ddd8c "Soft drop tap moves one cell immediately")
+
+Method: fillRect hook logs every 50px board cell with performance.now(); per-frame
+top row per player; +50px = one cell down. P1 x<900, P2 x>=900.
+"both" = both players advanced in the same frame => gravity (~800 ms).
+"P1"/"P2" = single player advanced => attributable to that input.
+"reset" (negative dy) = previous piece locked and a new piece spawned at the top.
+
+A. TAP (120 ms press)
+
+s             press 4847  -> step 4906 (+59 ms) dy+50 P1   [tap]
+                             step 5039 both                [gravity]
+ArrowDown     press 5668  -> step 5722 (+54 ms) dy+50 P2   [tap]
+                             step 5856 both                [gravity]
+D-pad down    press 6489  -> step 6555 (+66 ms) dy+50 P1   [tap]
+                             step 6656 both                [gravity]
+A             press 7310  -> step 7356 (+46 ms) dy+50 P1   [tap]
+                             step 7455 both                [gravity]
+w             press 8130  -> 8139 bbox 150x50 -> 50x150     [rotation, no dy] (spec: W = rotate CW)
+
+Result: each tap moves exactly one cell, no extra cells. PASS.
+
+B. HOLD (1100 ms press), timing from press
+
+s             press 20971 -> 21006 (+35)  dy+50 P1  [immediate tap step]
+                            21306 (+335) dy+50 P1  [repeat starts: +300 after first cell]
+                            21373 21405 21439 21472 21506  (each +50, ~33 ms apart)
+                            reset 22005 (new piece)
+ArrowDown     press 23272 -> 23306 (+34)  dy+50 P2
+                            23656 (+384) dy+50 P2  [+350 after first cell]
+                            23689 23723 23756 23790 23822 23856 23906 23940
+                            reset 24407
+D-pad down    press 25573 -> 25639 (+66)  dy+50 P1
+                            25989 (+416) dy+50 P1  [+350 after first cell]
+                            26022 26055 ...
+                            reset 26523
+A             press 27873 -> 27923 (+50)  dy+50 P1
+                            28290 (+417) dy+50 P1  [+367 after first cell]
+                            28323 28390 ...
+                            reset 28806
+
+Result: after the immediate single cell the repeat begins 350 ms later (measured
+335-417 ms after press = 250 spec vs 350 implemented), then ~33 ms/cell (frame
+bound) to the floor. Spec 03 says "first cell 250ms, then 10ms repeat".
