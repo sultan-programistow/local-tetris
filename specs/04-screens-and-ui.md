@@ -41,8 +41,16 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 
 ## Stats Screen
 
-- Aggregate stats shown as both "total" and "today" where applicable: sessions played, play time, P1 wins, P2 wins, win %.
-- Scrollable list of all play sessions (date, winner, scores, pieces).
+- Layout: two columns — "Today" and "Total" — side by side, each showing aggregate stats.
+- Each column contains:
+  - Games: number of sessions played.
+  - Total time: cumulative play time.
+  - P1 wins (with win %).
+  - P2 wins (with win %).
+- Win % is derived from wins / games for that column's scope (today or total).
+- Below the two-column table: a scrollable list of all play sessions, most recent first.
+  - Each session row shows: date + time, P1 score, P2 score, winner.
+  - Scroll via W/S arrow keys, D-pad, and left analog stick (vertical axis).
 - Back via B/Esc/Select.
 - Height: should occupy the same screen height as the Main Menu where possible.
 

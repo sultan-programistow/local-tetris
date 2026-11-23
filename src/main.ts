@@ -561,6 +561,12 @@ function drawVolume() {
 // Menu input handling
 let lastKey = '';
 window.addEventListener('keydown', e => {
+  if (screen === 'volume') {
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); }
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); }
+    if (e.key === 'Escape') screen = 'menu';
+    return;
+  }
   if (e.key !== lastKey) {
     lastKey = e.key;
     // menu navigation
@@ -582,10 +588,6 @@ window.addEventListener('keydown', e => {
         else if (opt === 'Controls') screen = 'controls';
       }
     } else if (screen === 'stats' || screen === 'controls') {
-      if (e.key === 'Escape') screen = 'menu';
-    } else if (screen === 'volume') {
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { volume = Math.max(0, volume - 0.05); saveVolume(volume); audio.setVolume(volume); audio.play('menu_select'); }
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); audio.setVolume(volume); audio.play('menu_select'); }
       if (e.key === 'Escape') screen = 'menu';
     } else if (screen === 'gameover') {
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') gameOverIndex = Math.max(0, gameOverIndex - 1);
@@ -611,7 +613,7 @@ let gpPrev: any[] = [
   { up:false, down:false, left:false, right:false, a:false, b:false, start:false },
 ];
 let startOpenedMenu = false;
-function handleGamepadMenus() {
+function handleGamepadMenus(dt: number) {
   const gps = (navigator as any).getGamepads ? (navigator as any).getGamepads() : [];
   // Process both players' gamepads (0 and 1) for menu navigation.
   for (let gi = 0; gi < 2; gi++) {
@@ -671,8 +673,8 @@ function handleGamepadMenus() {
   }
 }
 function loop(now: number) {
-  handleGamepadMenus();
   const dt = (now - last) / 1000; last = now;
+  handleGamepadMenus(dt);
   update(dt);
   keyEdges.clear();
   requestAnimationFrame(loop);

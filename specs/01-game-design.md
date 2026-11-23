@@ -26,9 +26,30 @@ Two players play Tetris simultaneously on the same screen. Both receive the **sa
 
 ## Piece Set
 
-- Levels 1–2: standard 7 tetrominoes (I, O, T, S, Z, J, L).
-- Level 3+: introduce pentominoes (5-cell) and irregular variants gradually.
+Piece table (id, name, unlock level, color). Each piece is a separate entry; adjust rows to change colors/levels.
+
+| id | name | unlockLevel | color |
+|---|---|---|---|
+| I | I | 1 | #00f0f0 |
+| O | O | 1 | #f0f000 |
+| T | T | 1 | #a000f0 |
+| S | S | 1 | #00f000 |
+| Z | Z | 1 | #f00000 |
+| J | J | 1 | #0000f0 |
+| L | L | 1 | #f0a000 |
+| P1 | Pento-X | 3 | #ff4da6 |
+| P2 | Pento-U | 5 | #ff6e40 |
+| P3 | Pento-F | 7 | #7fff00 |
+| P4 | Pento-P | 9 | #ff7f50 |
+| P5 | Pento-W | 11 | #9370db |
+| I3 | Tromino-I | 6 | #ff1493 |
+| L3 | Tromino-L | 10 | #00ff7f |
+
+- Levels 1–2: standard 7 tetrominoes.
+- Level 3+: introduce pentominoes/irregular variants gradually (one new shape every 2 levels).
 - Standard pieces use classic Tetris colors; new pieces use distinct vibrant colors.
+
+Note: I (#00f0f0 cyan) and Pento-U (#00ccff cyan) are similar; consider recoloring Pento-U.
 
 ## Match Flow
 
