@@ -1,6 +1,6 @@
-# Tetris Duel — Specification Index
+# Local Tetris — Specification Index
 
-Project: **Tetris Duel** (working name)
+Project: **Local Tetris** (working name)
 Type: 2-player local couch Tetris, single HTML page, no server/sockets.
 
 ## Documents

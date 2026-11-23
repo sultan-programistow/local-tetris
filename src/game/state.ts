@@ -81,7 +81,6 @@ export class MatchState {
       return false;
     }
     p.current = piece;
-    p.nextDef = null;
     return true;
   }
   // advance: ensure nextDef queued? We'll just spawn on demand.

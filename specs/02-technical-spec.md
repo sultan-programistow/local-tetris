@@ -10,7 +10,7 @@
 ## Project Structure (suggested)
 
 ```
-tetris-duel/
+local-tetris/
   index.html
   src/
     main.ts          # entry, screen router
@@ -41,8 +41,8 @@ tetris-duel/
 ## Persistence (localStorage)
 
 Keys:
-- `tetris-duel:stats` — Stats object.
-- `tetris-duel:volume` — number 0–1.
+- `local-tetris:stats` — Stats object.
+- `local-tetris:volume` — number 0–1.
 - No reset option in v1.
 
 ## Rendering
