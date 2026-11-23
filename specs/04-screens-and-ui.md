@@ -5,6 +5,7 @@
 Title: "LOCAL TETRIS" displayed at the top of the screen.
 
 Options: Start/Resume (dynamic), Stats, Volume, Controls.
+- When opened from in-game (a match is in progress), include a "Restart" option (starts a new match with a new random seed).
 - The first item's label is dynamic: "Resume" when the menu is opened from in-game (Esc/Start), "Start" otherwise.
 - Start button (gamepad) in the Main Menu resumes the game when a match is in progress (same as selecting Resume/Start). When no game is in progress, the Start button does nothing.
 - Esc (keyboard) in the Main Menu also resumes the game when a match is in progress (same as Start button / selecting Resume). When no game is in progress, Esc does nothing (or backs out).

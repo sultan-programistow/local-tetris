@@ -86,9 +86,9 @@ function handleMouseClick() {
   if (screen === 'menu' && hoveredMenu >= 0) {
     menuIndex = hoveredMenu;
     const opt = menuItems()[menuIndex];
-    if (opt === 'Start' || opt === 'Resume') {
+    if (opt === 'Start' || opt === 'Resume' || opt === 'Restart') {
       if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
-      else startMatch();
+      else { pausedFromGame = false; startMatch(); }
     }
     else if (opt === 'Stats') screen = 'stats';
     else if (opt === 'Volume') screen = 'volume';
@@ -115,7 +115,9 @@ let pausedReturn: 'play' | 'countdown' = 'play';
 let menuIndex = 0;
 let gameOverIndex = 0;
 function menuItems(): string[] {
-  const items = [pausedFromGame ? 'Resume' : 'Start', 'Stats', 'Volume', 'Controls'];
+  const items = pausedFromGame
+    ? ['Resume', 'Restart', 'Stats', 'Volume', 'Controls']
+    : ['Start', 'Stats', 'Volume', 'Controls'];
   return items;
 }
 let volume = loadVolume();
@@ -539,9 +541,9 @@ window.addEventListener('keydown', e => {
       }
       if (e.key === 'Enter' || e.key === ' ') {
         const opt = items[menuIndex];
-        if (opt === 'Start' || opt === 'Resume') {
+        if (opt === 'Start' || opt === 'Resume' || opt === 'Restart') {
           if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
-          else startMatch();
+          else { pausedFromGame = false; startMatch(); }
         }
         else if (opt === 'Stats') screen = 'stats';
         else if (opt === 'Volume') screen = 'volume';
@@ -597,6 +599,7 @@ function handleGamepadMenus() {
       const opt = items[menuIndex];
       if (opt === 'Start') startMatch();
       else if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
+      else if (opt === 'Restart') { pausedFromGame = false; startMatch(); }
       else if (opt === 'Stats') screen = 'stats';
       else if (opt === 'Volume') screen = 'volume';
       else if (opt === 'Controls') screen = 'controls';
