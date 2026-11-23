@@ -173,6 +173,18 @@ function update(dt: number) {
     if (p._gp === undefined) p._gp = { left:false, right:false, down:false, a:false, x:false, b:false };
     const g = p._gp;
     g.left = left; g.right = right; g.down = softDropBtn;
+    if (g._thL === undefined) { g._thL = 350; g._thR = 350; g._tL = 0; g._tR = 0; g._heldL = false; g._heldR = false; }
+    if (g._curRef !== p.current) { g._thL = 350; g._thR = 350; g._tL = 0; g._tR = 0; g._heldL = false; g._heldR = false; g._curRef = p.current; }
+    // left DAS
+    if (left) {
+      if (!g._heldL) { if (p.current && !collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; } g._tL = 0; g._thL = 350; g._heldL = true; }
+      else { g._tL += dt * 1000; if (g._tL >= g._thL) { if (p.current && !collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; } g._tL = 0; g._thL = 75; } }
+    } else { g._tL = 0; g._thL = 350; g._heldL = false; }
+    // right DAS
+    if (right) {
+      if (!g._heldR) { if (p.current && !collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; } g._tR = 0; g._thR = 350; g._heldR = true; }
+      else { g._tR += dt * 1000; if (g._tR >= g._thR) { if (p.current && !collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; } g._tR = 0; g._thR = 75; } }
+    } else { g._tR = 0; g._thR = 350; g._heldR = false; }
     // D-pad up rotates CW (edge)
     if (upBtn && !g.up && p.current) { tryRotate(p.board, p.current, 1); p.lockTimer = 0; }
     g.up = upBtn;
@@ -194,10 +206,8 @@ function update(dt: number) {
 
     // horizontal DAS
     if (p._leftHeld === undefined) { p._leftHeld = false; p._rightHeld = false; p._dasL = 0; p._dasR = 0; p._movedL = false; p._movedR = false; }
-    const gpLeft = (p._gp && p._gp.left) ? true : false;
-    const gpRight = (p._gp && p._gp.right) ? true : false;
-    const leftHeld = keys.has(leftKey) || gpLeft;
-    const rightHeld = keys.has(rightKey) || gpRight;
+    const leftHeld = keys.has(leftKey);
+    const rightHeld = keys.has(rightKey);
     if (p._dasThresholdL === undefined) { p._dasThresholdL = 350; p._dasThresholdR = 350; }
     if (p._currentRef !== p.current) { p._dasL = 0; p._dasThresholdL = 350; p._dasR = 0; p._dasThresholdR = 350; p._currentRef = p.current; }
     const leftEdge = (keys.has(leftKey) && !prevKeys.has(leftKey)) || (leftHeld && !p._leftHeld);
