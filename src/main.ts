@@ -151,7 +151,7 @@ function update(dt: number) {
     // left
     if (left && !g.left) { if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; } g._dasL = 0; }
     if (right && !g.right) { if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; } g._dasR = 0; }
-    g.left = left; g.right = right; g.down = down;
+    g.left = left; g.right = right; g.down = softDropBtn;
     // soft drop via A button only
     if (softDropBtn && p.current && !collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
     // rotation buttons: X(2) CCW, B(1) CW, triggers
