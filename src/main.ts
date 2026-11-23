@@ -143,7 +143,7 @@ function update(dt: number) {
     // D-pad / left stick
     const left = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
     const right = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
-    const down = gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
+    const softDropBtn = gp.buttons[0]?.pressed;
     // edge detection for left/right handled by keys set? We'll inject into keys via a virtual set? Instead handle movement directly.
     // For simplicity, set virtual key flags by toggling a gamepad state on player
     if (p._gp === undefined) p._gp = { left:false, right:false, down:false, a:false, x:false, b:false };
@@ -152,8 +152,8 @@ function update(dt: number) {
     if (left && !g.left) { if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; } g._dasL = 0; }
     if (right && !g.right) { if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; } g._dasR = 0; }
     g.left = left; g.right = right; g.down = down;
-    // soft drop
-    if (down && p.current && !collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
+    // soft drop via A button only
+    if (softDropBtn && p.current && !collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
     // rotation buttons: X(2) CCW, B(1) CW, triggers
     const ccw = gp.buttons[2]?.pressed || gp.buttons[4]?.pressed;
     const cw = gp.buttons[1]?.pressed || gp.buttons[5]?.pressed;

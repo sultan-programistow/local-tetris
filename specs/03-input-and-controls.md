@@ -29,8 +29,8 @@
 
 ## Gamepad (Web Gamepad API)
 
-- D-pad / left stick: move left/right, down = soft drop.
-- A button: soft drop (redundant with down).
+- D-pad / left stick: move left/right.
+- A button: soft drop.
 - X + left trigger/bumper: rotate CCW.
 - B + right trigger/bumper: rotate CW.
 - Start: pause.
@@ -40,7 +40,7 @@
 
 - Initial delay: 250ms before auto-repeat starts.
 - Repeat rate (ARR): 50ms.
-- Applies to left/right movement and soft drop.
+- Applies to left/right movement and soft drop (keyboard and gamepad).
 
 ## Soft Drop
 
