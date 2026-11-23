@@ -1,0 +1,33 @@
+TC-003 run 10 — DAS timeline after commit 3798531 ("Remove leftover dead DAS loop that double-counted left timer")
+Date: 2026-11-23
+Build tested: 3798531, static `vite preview` at http://127.0.0.1:4174 (no HMR), served bundle index-tL4VIw9p.js
+Method: CanvasRenderingContext2D.fillRect hook, each frame the current piece = last four 48 px cells drawn for the side.
+Fresh page load per input (unique URL). Hold = 900 ms, released by in-page setTimeout; tap = 130 ms.
+One synthetic keydown per keyboard press. Timestamps in ms relative to press.
+
+Spec expectation (specs/03-input-and-controls.md §DAS): press edge moves one column, then 350 ms delay, then repeat every 75 ms; keyboard and gamepad.
+
+LEFT (PASS)
+P1 a               first +62   repeats +395, +478              (gaps 333, 83)
+P1 a (2nd run)     first +61   repeats +395, +462              (gaps 334, 67)
+P2 ArrowLeft       first +25   repeats +375, +458              (gaps 350, 83)
+P2 ArrowLeft (2nd) first +53   repeats +370, +469              (gaps 317, 99)
+pad0 D-pad left    first +39   repeats +389, +456              (gaps 350, 67)
+pad1 D-pad left    first +19   repeats +402, +502              (gaps 383, 100)
+pad0 stick -1.0    first +40   repeats +390, +490              (gaps 350, 100)
+
+RIGHT (PASS, regression check)
+P1 d               first +61   repeats +377, +477, +560        (gaps 316, 100, 83)
+P2 ArrowRight      first +38   repeats +372, +472, +572, +672  (gaps 334, 100, 100, 100)
+pad0 D-pad right   first +65   repeats +432, +532, +632        (gaps 367, 100, 100)
+pad1 D-pad right   first +65   repeats +416, +515, +615        (gaps 351, 99, 100)
+pad0 stick +1.0    first +65   repeats +432, +515              (gaps 367, 83)
+
+TAP (PASS)
+P1 a, 130 ms       one move +37, no extra move
+P2 ArrowRight      one move +63, no extra move
+pad0 D-pad left    one move +51, no extra move
+
+Frames are drawn every ~33 ms, so gaps carry ±33 ms resolution: a 350 ms delay reads
+317-383 ms, a 75 ms repeat reads 67-100 ms. All directions and inputs are now inside that
+band, with no left/right difference.
