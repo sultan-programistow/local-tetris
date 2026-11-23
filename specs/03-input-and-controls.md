@@ -67,7 +67,6 @@
 - Resets on successful move/rotation (with cap to prevent infinite stall; e.g., max 15 resets or 3s total).
 - Piece locks when timer expires.
 
-## Pause
+## Pause (removed)
 
-- Esc (keyboard) or Start (gamepad) toggles pause.
-- Opens pause menu.
+- No separate pause state. Esc (keyboard) or Start (gamepad) opens the Main Menu, which effectively pauses the game.

@@ -74,7 +74,7 @@ function updateHover() {
   }
   if (screen === 'menu') {
     hoveredMenu = -1;
-    MENU.forEach((_, i) => {
+    menuItems().forEach((_, i) => {
       const y = 400 + i * 60;
       if (mouseX >= 800 && mouseX <= 1120 && mouseY >= y - 30 && mouseY <= y + 10) { hoveredMenu = i; menuIndex = i; }
     });
@@ -83,8 +83,11 @@ function updateHover() {
 function handleMouseClick() {
   if (screen === 'menu' && hoveredMenu >= 0) {
     menuIndex = hoveredMenu;
-    const opt = MENU[menuIndex];
-    if (opt === 'Start') startMatch();
+    const opt = menuItems()[menuIndex];
+    if (opt === 'Start' || opt === 'Resume') {
+      if (opt === 'Resume') { pausedFromGame = false; screen = 'play'; if (match) match.status = 'playing'; }
+      else startMatch();
+    }
     else if (opt === 'Stats') screen = 'stats';
     else if (opt === 'Volume') screen = 'volume';
     else if (opt === 'Controls') screen = 'controls';
@@ -104,15 +107,20 @@ function updateVolumeFromMouse() {
 }
 
 let match: MatchState | null = null;
-let screen: 'menu' | 'countdown' | 'play' | 'pause' | 'gameover' | 'stats' | 'controls' | 'volume' = 'menu';
+let screen: 'menu' | 'countdown' | 'play' | 'gameover' | 'stats' | 'controls' | 'volume' = 'menu';
+let pausedFromGame = false;
 let menuIndex = 0;
 let gameOverIndex = 0;
-const MENU = ['Start', 'Stats', 'Volume', 'Controls'];
+function menuItems(): string[] {
+  const items = [pausedFromGame ? 'Resume' : 'Start', 'Stats', 'Volume', 'Controls'];
+  return items;
+}
 let volume = loadVolume();
 let sessionStart = 0;
 let stats = loadStats();
 
 function startMatch() {
+  pausedFromGame = false;
   const seed = Math.floor(Math.random() * 1e9);
   match = new MatchState(seed);
   screen = 'countdown';
@@ -348,7 +356,7 @@ function draw() {
   ctx.fillRect(0, 0, 1920, 1080);
   if (screen === 'menu') drawMenu();
   else if (screen === 'countdown') drawPlay(true);
-  else if (screen === 'play' || screen === 'pause') drawPlay(false);
+  else if (screen === 'play') drawPlay(false);
   else if (screen === 'gameover') drawGameOver();
   else if (screen === 'stats') drawStats();
   else if (screen === 'controls') drawControls();
@@ -366,6 +374,23 @@ function drawBoard(p: any, ox: number, oy: number, cell: number) {
   // board border
   ctx.strokeStyle = '#ccc'; ctx.lineWidth = 2;
   ctx.strokeRect(ox, oy, COLS*cell, ROWS*cell);
+  // cells
+  ctx.save();
+  if (over) ctx.globalAlpha = 0.35;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const v = p.board.grid[r][c];
+    if (v) { ctx.fillStyle = v; ctx.fillRect(ox + c*cell + 1, oy + r*cell + 1, cell-2, cell-2); }
+  }
+  ctx.restore();
+  // current piece (only while playing)
+  if (p.current && !over) {
+    ctx.fillStyle = p.current.def.color;
+    for (let r = 0; r < p.current.matrix.length; r++) for (let c = 0; c < p.current.matrix[r].length; c++) {
+      if (p.current.matrix[r][c]) {
+        ctx.fillRect(ox + (p.current.x+c)*cell + 1, oy + (p.current.y+r)*cell + 1, cell-2, cell-2);
+      }
+    }
+  }
   if (over) {
     ctx.fillStyle = 'rgba(0,0,0,0.75)';
     ctx.fillRect(ox, oy, COLS*cell, ROWS*cell);
@@ -375,25 +400,8 @@ function drawBoard(p: any, ox: number, oy: number, cell: number) {
     ctx.shadowBlur = 0;
     ctx.textAlign = 'left';
   }
-  // cells
-  ctx.save();
-  if (over) ctx.globalAlpha = 0.35;
-  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
-    const v = p.board.grid[r][c];
-    if (v) { ctx.fillStyle = v; ctx.fillRect(ox + c*cell + 1, oy + r*cell + 1, cell-2, cell-2); }
-  }
-  ctx.restore();
-  // current piece
-  if (p.current) {
-    ctx.fillStyle = p.current.def.color;
-    for (let r = 0; r < p.current.matrix.length; r++) for (let c = 0; c < p.current.matrix[r].length; c++) {
-      if (p.current.matrix[r][c]) {
-        ctx.fillRect(ox + (p.current.x+c)*cell + 1, oy + (p.current.y+r)*cell + 1, cell-2, cell-2);
-      }
-    }
-  }
 }
-
+ 
 const CELL = 50;
 function drawPlay(countdown: boolean) {
   const p0 = match!.players[0], p1 = match!.players[1];
@@ -409,18 +417,14 @@ function drawPlay(countdown: boolean) {
     ctx.fillText(String(n > 0 ? n : 'GO'), 960, 540);
     ctx.textAlign = 'left';
   }
-  if (screen === 'pause') {
-    ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(0,0,1920,1080);
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 64px sans-serif'; ctx.textAlign='center';
-    ctx.fillText('PAUSED', 960, 540); ctx.textAlign='left';
-  }
+  // no separate pause screen
 }
 
 function drawMenu() {
   ctx.fillStyle = '#fff'; ctx.font = 'bold 72px sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('TETRIS DUEL', 960, 200);
   ctx.font = '36px sans-serif';
-  MENU.forEach((m, i) => {
+  menuItems().forEach((m, i) => {
     ctx.fillStyle = i === menuIndex ? '#0f0' : '#aaa';
     ctx.fillText(m, 960, 400 + i * 60);
   });
@@ -486,11 +490,15 @@ window.addEventListener('keydown', e => {
     lastKey = e.key;
     // menu navigation
     if (screen === 'menu') {
-      if (e.key === 'ArrowDown' || e.key === 's') menuIndex = (menuIndex + 1) % MENU.length;
-      if (e.key === 'ArrowUp' || e.key === 'w') menuIndex = (menuIndex - 1 + MENU.length) % MENU.length;
+      const items = menuItems();
+      if (e.key === 'ArrowDown' || e.key === 's') menuIndex = (menuIndex + 1) % items.length;
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') menuIndex = (menuIndex - 1 + items.length) % items.length;
       if (e.key === 'Enter' || e.key === ' ') {
-        const opt = MENU[menuIndex];
-        if (opt === 'Start') startMatch();
+        const opt = items[menuIndex];
+        if (opt === 'Start' || opt === 'Resume') {
+          if (opt === 'Resume') { pausedFromGame = false; screen = 'play'; if (match) match.status = 'playing'; }
+          else startMatch();
+        }
         else if (opt === 'Stats') screen = 'stats';
         else if (opt === 'Volume') screen = 'volume';
         else if (opt === 'Controls') screen = 'controls';
@@ -508,9 +516,7 @@ window.addEventListener('keydown', e => {
         if (gameOverIndex === 0) startMatch(); else { screen = 'menu'; gameOverIndex = 0; }
       } else if (e.key === 'Escape') { screen = 'menu'; gameOverIndex = 0; }
     } else if (screen === 'play') {
-      if (e.key === 'Escape') { match!.status = 'paused'; screen = 'pause'; }
-    } else if (screen === 'pause') {
-      if (e.key === 'Escape') { match!.status = 'playing'; screen = 'play'; }
+      if (e.key === 'Escape') { pausedFromGame = true; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
     }
   }
 });
@@ -518,7 +524,7 @@ window.addEventListener('keyup', () => { lastKey = ''; });
 
 // Simplified game loop with real input polling for movement
 let last = performance.now();
-let gpPrev: any = { up:false, down:false, a:false, b:false };
+let gpPrev: any = { up:false, down:false, a:false, b:false, start:false };
 function handleGamepadMenus() {
   const gps = (navigator as any).getGamepads ? (navigator as any).getGamepads() : [];
   const gp = gps[0];
@@ -527,12 +533,17 @@ function handleGamepadMenus() {
   const down = gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
   const a = gp.buttons[0]?.pressed;
   const b = gp.buttons[1]?.pressed || gp.buttons[8]?.pressed;
+  if (screen === 'play') {
+    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
+  }
   if (screen === 'menu') {
-    if (up && !gpPrev.up) menuIndex = (menuIndex - 1 + MENU.length) % MENU.length;
-    if (down && !gpPrev.down) menuIndex = (menuIndex + 1) % MENU.length;
+    const items = menuItems();
+    if (up && !gpPrev.up) menuIndex = (menuIndex - 1 + items.length) % items.length;
+    if (down && !gpPrev.down) menuIndex = (menuIndex + 1) % items.length;
     if (a && !gpPrev.a) {
-      const opt = MENU[menuIndex];
+      const opt = items[menuIndex];
       if (opt === 'Start') startMatch();
+      else if (opt === 'Resume') { pausedFromGame = false; screen = 'play'; if (match) match.status = 'playing'; }
       else if (opt === 'Stats') screen = 'stats';
       else if (opt === 'Volume') screen = 'volume';
       else if (opt === 'Controls') screen = 'controls';
@@ -545,11 +556,8 @@ function handleGamepadMenus() {
     }
   } else if (screen === 'stats' || screen === 'controls' || screen === 'volume') {
     if (b && !gpPrev.b) screen = 'menu';
-  } else if (screen === 'pause') {
-    if (a && !gpPrev.a) { match!.status = 'playing'; screen = 'play'; }
-    if (b && !gpPrev.b) { match!.status = 'playing'; screen = 'play'; }
   }
-  gpPrev = { up, down, a, b };
+  gpPrev = { up, down, a, b, start: gp.buttons[9]?.pressed };
 }
 function loop(now: number) {
   handleGamepadMenus();
