@@ -35,7 +35,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 - Winner announcement (P1 / P2 / Draw).
 - Both scores, pieces placed.
 - Summary + last 5 sessions.
-- Two options: Restart (default) and Main Menu. Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover + click. Restart starts a new match (new random seed). Main Menu returns to the main menu.
+- Three options: Restart (default), Stats, Main Menu. Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover + click. Restart starts a new match (new random seed). Stats opens the stats screen. Main Menu returns to the main menu.
 - Height: should occupy the same screen height as the Main Menu where possible (consistent layout).
 - Menu items centered horizontally and share the same horizontal position as the Main Menu (consistent layout).
 

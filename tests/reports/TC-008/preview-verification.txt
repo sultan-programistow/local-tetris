@@ -1,0 +1,56 @@
+TC-008 — Next-piece preview verification log
+Date: 2026-11-23
+Build: local-tetris source 4379d90, production build, `vite preview` at http://127.0.0.1:4173
+Served bundle: assets/index-D36Hlz_v.js
+sha256 (served) = 01303a5a553cdeb52d69163dfc4e67d7ae09f5cc0a99ec154c92e4a472eebb91
+sha256 (dist)   = 01303a5a553cdeb52d69163dfc4e67d7ae09f5cc0a99ec154c92e4a472eebb91
+Canvas: 1920x1080 logical, displayed 1780.99x1001.81 (scale 0.9276), DPR 1.078
+Viewport: 1766x1102
+
+Preview box geometry (logical canvas px), from source and confirmed by border pixels:
+  P1 box: x 720..800, y 40..120 (4x4 cells of 20 px)
+  P2 box: x 1120..1200, y 40..120
+  Border pixel samples (P1): top (720,40), right (799,40), bottom (720,119), left (720,79)
+    all = rgb(58,59,61)  (1 px #666 stroke, antialiased by the 0.927 canvas scale)
+  Inside sample (730,50) = rgb(15,17,21) background when empty
+
+Method: canvas getImageData pixel classification at cell centres.
+  - preview: 4x4 cells of 20 px, per-cell centre sample
+  - current piece: 10x20 board cells of 50 px, connected component (same colour) from the topmost filled cell
+  - preview recorded on the sample before the new piece appears at rows 0-1; spawn detected when
+    the current piece returns to the top of the board (cannot be skipped by fast soft drop)
+  - colour -> piece: I #00f0f0, O #f0f000, T #a000f0, S #00f000, Z #f00000, J #0000f0, L #f0a000
+
+RUN A — 7 spawns, one match (seed random)
+ idx | preview shown | piece that spawned | match | P1/P2 previews agree
+  1  | (empty during countdown; first spawn) | I 1111 | n/a | yes (L after spawn)
+  2  | L 001/111 | L 001/111 | yes | yes
+  3  | S 011/110 | S 011/110 | yes | yes
+  4  | T 010/111 | T 010/111 | yes | yes
+  5  | O 11/11   | O 11/11   | yes | yes
+  6  | Z 110/011 | Z 110/011 | yes | yes
+  7  | S 011/110 | S 011/110 | yes | yes
+Result: 6/6 comparable spawns matched. 183 samples over 6.6 s, 30 ms interval.
+
+EARLIER RUNS (same build): clean matches for J (100/111), L, S, O, T, I, Z across 4+4+5+6-lock
+batches. One apparent S->J mismatch was traced to a missed spawn between 50 ms samples (soft drop
+resumes at 10 ms/cell for a new piece); re-run with top-of-board detection gave no mismatches.
+
+FIRST PLAY FRAME
+  Preview pixels present 76 ms after board pixels at countdown end (30 ms sampling).
+  Before countdown ends (Main Menu / countdown) the preview box is empty; spec only requires it
+  on the Play screen.
+
+PIECE CENTERING IN THE 4x4 BOX (margins top/bottom/left/right in cells)
+  I 1111    -> 1/2/0/0
+  O 11/11   -> 1/1/0/0
+  T 010/111 -> 1/1/0/1
+  S 011/110 -> 1/1/0/1
+  Z 110/011 -> 1/1/0/1
+  J 100/111 -> 1/1/0/1
+  L 001/111 -> 1/1/0/1
+Odd dimensions are off by one cell on one axis (floor rounding). All pieces fit inside the box.
+
+SCREENSHOT
+  tests/reports/TC-008/play-preview-both-players.png
+  P1 current I falling, both NEXT boxes show J, both scores 0.

@@ -68,7 +68,7 @@ window.addEventListener('mousemove', e => { if (volumeDragging) { toLogical(e); 
 window.addEventListener('mouseup', () => { volumeDragging = false; });
 function updateHover() {
   if (screen === 'gameover') {
-    [0,1].forEach(i => {
+    [0,1,2].forEach(i => {
       const y = 500 + i * 60;
       if (mouseX >= 860 && mouseX <= 1060 && mouseY >= y - 30 && mouseY <= y + 10) gameOverIndex = i;
     });
@@ -96,7 +96,9 @@ function handleMouseClick() {
   } else if (screen === 'volume') {
     updateVolumeFromMouse();
   } else if (screen === 'gameover') {
-    if (gameOverIndex === 0) startMatch(); else { screen = 'menu'; gameOverIndex = 0; }
+    if (gameOverIndex === 0) startMatch();
+    else if (gameOverIndex === 1) screen = 'stats';
+    else { screen = 'menu'; gameOverIndex = 0; }
   } else if (screen === 'stats' || screen === 'controls') {
     // click anywhere back? keep esc; no
   }
@@ -480,7 +482,7 @@ function drawGameOver() {
   ctx.fillText(w, 960, 200);
   ctx.font = '32px monospace';
   ctx.fillText(`P1: ${match!.players[0].score}  P2: ${match!.players[1].score}`, 960, 300);
-  const opts = ['Restart', 'Main Menu'];
+  const opts = ['Restart', 'Stats', 'Main Menu'];
   opts.forEach((o, i) => {
     ctx.fillStyle = i === gameOverIndex ? '#0f0' : '#aaa';
     ctx.fillText(o, 960, 500 + i * 60);
@@ -556,10 +558,12 @@ window.addEventListener('keydown', e => {
       if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); }
       if (e.key === 'Escape') screen = 'menu';
     } else if (screen === 'gameover') {
-      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') gameOverIndex = 0;
-      else if (e.key === 'ArrowDown' || e.key === 's') gameOverIndex = 1;
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') gameOverIndex = Math.max(0, gameOverIndex - 1);
+      else if (e.key === 'ArrowDown' || e.key === 's') gameOverIndex = Math.min(2, gameOverIndex + 1);
       else if (e.key === 'Enter' || e.key === ' ') {
-        if (gameOverIndex === 0) startMatch(); else { screen = 'menu'; gameOverIndex = 0; }
+        if (gameOverIndex === 0) startMatch();
+        else if (gameOverIndex === 1) screen = 'stats';
+        else { screen = 'menu'; gameOverIndex = 0; }
       } else if (e.key === 'Escape') { screen = 'menu'; gameOverIndex = 0; }
     } else if (screen === 'play') {
       if (e.key === 'Escape') { pausedFromGame = true; pausedReturn = 'play'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
@@ -616,10 +620,12 @@ function handleGamepadMenus() {
         else if (opt === 'Controls') screen = 'controls';
       }
     } else if (screen === 'gameover') {
-      if (up && !prev.up) gameOverIndex = 0;
-      if (down && !prev.down) gameOverIndex = 1;
+      if (up && !prev.up) gameOverIndex = Math.max(0, gameOverIndex - 1);
+      if (down && !prev.down) gameOverIndex = Math.min(2, gameOverIndex + 1);
       if (a && !prev.a) {
-        if (gameOverIndex === 0) startMatch(); else { screen = 'menu'; gameOverIndex = 0; }
+        if (gameOverIndex === 0) startMatch();
+        else if (gameOverIndex === 1) screen = 'stats';
+        else { screen = 'menu'; gameOverIndex = 0; }
       }
       // B/Select returns to Main Menu
       if (b && !prev.b) { screen = 'menu'; gameOverIndex = 0; }
