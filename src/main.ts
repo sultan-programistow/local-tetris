@@ -359,10 +359,13 @@ function drawBoard(p: any, ox: number, oy: number, cell: number) {
     ctx.textAlign = 'left';
   }
   // cells
+  ctx.save();
+  if (over) ctx.globalAlpha = 0.35;
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
     const v = p.board.grid[r][c];
     if (v) { ctx.fillStyle = v; ctx.fillRect(ox + c*cell + 1, oy + r*cell + 1, cell-2, cell-2); }
   }
+  ctx.restore();
   // current piece
   if (p.current) {
     ctx.fillStyle = p.current.def.color;
