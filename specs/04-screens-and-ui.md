@@ -21,7 +21,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 ## Play Screen
 
 - Two 10×20 boards side by side.
-- Per player HUD: score, level, lines? (lines cleared optional display), next piece (1) preview.
+- Per player HUD: score, next piece (1) preview. (Level is internal state, not displayed; lines cleared optional.)
 - Next piece preview: rendered in a small preview box (e.g., 4×4 cell area) in the player's HUD, centered, using the same piece colors and cell size scaled to fit; shows the next piece in its spawn orientation. No hold slot (hold not implemented in v1).
 - Session stats not shown during play.
 - Per-player game over (soft): when a player tops out, their board is grayed out (tiles rendered semi-transparent/grayed) with a "GAME OVER" label overlaid on top (above tiles in z-order) that obscures the tiles (opaque/strong contrast, not blending). The other board stays active. Full match game over waits for the second player (or score beat).

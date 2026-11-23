@@ -420,8 +420,8 @@ function drawPlay(countdown: boolean) {
   drawBoard(p1, 1920 - 200 - COLS*CELL, 40, CELL);
   // HUD
   ctx.fillStyle = '#fff'; ctx.font = '24px monospace';
-  ctx.fillText(`P1 Score: ${p0.score}  Lvl ${p0.level}`, 200, 30);
-  ctx.fillText(`P2 Score: ${p1.score}  Lvl ${p1.level}`, 1920 - 200 - COLS*CELL, 30);
+  ctx.fillText(`P1 Score: ${p0.score}`, 200, 30);
+  ctx.fillText(`P2 Score: ${p1.score}`, 1920 - 200 - COLS*CELL, 30);
   // next piece preview
   function drawNext(p: any, ox: number, oy: number) {
     const cs = 20;

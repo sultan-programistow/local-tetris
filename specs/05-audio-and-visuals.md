@@ -39,6 +39,6 @@
 ## Responsive
 
 - Scale canvas to fit window preserving aspect ratio; letterbox if needed.
-- Board sizing: the two 10×20 playfields together take ~40–45% of the horizontal screen width; remaining space for HUD (score, level, next preview, stats). Scale cell size accordingly; target 1920×1080.
+- Board sizing: the two 10×20 playfields together take ~40–45% of the horizontal screen width; remaining space for HUD (score, next preview, stats). Scale cell size accordingly; target 1920×1080.
 - Board height must fit within screen height: if the 40–45% width would make the board taller than the available height, reduce the board/cell size so the full 20-row height fits on screen (no vertical overflow). Aspect ratio of cells remains square.
 - Target 1920×1080; no mobile-specific layout.
