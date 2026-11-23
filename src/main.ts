@@ -205,9 +205,9 @@ function update(dt: number) {
     // DAS repeat
     if (leftHeld && p.current) {
       p._dasL += dt * 1000;
-      if (p._dasL >= 250) {
+      if (p._dasL >= 350) {
         // repeat every 33ms
-        const repeats = Math.floor((p._dasL - 250) / 50);
+        const repeats = Math.floor((p._dasL - 350) / 50);
         // move one step per threshold crossing
         if (repeats > (p._dasLprev || 0)) {
           if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; }
@@ -217,8 +217,8 @@ function update(dt: number) {
     } else { p._dasL = 0; p._dasLprev = 0; }
     if (rightHeld && p.current) {
       p._dasR += dt * 1000;
-      if (p._dasR >= 250) {
-        const repeats = Math.floor((p._dasR - 250) / 50);
+      if (p._dasR >= 350) {
+        const repeats = Math.floor((p._dasR - 350) / 50);
         if (repeats > (p._dasRprev || 0)) {
           if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; }
         }
@@ -226,15 +226,15 @@ function update(dt: number) {
       }
     } else { p._dasR = 0; p._dasRprev = 0; }
 
-    // soft drop with 250ms initial delay then 10ms repeat
+    // soft drop with 350ms initial delay then 10ms repeat
     const gpSoft = (p._gp && p._gp.down) ? true : false;
     const softHeld = keys.has(downKey) || gpSoft;
     if (p._sdTimer === undefined) p._sdTimer = 0;
     if (softHeld && p.current) {
       p._sdTimer += dt * 1000;
-      if (p._sdTimer >= 250) {
+      if (p._sdTimer >= 350) {
         if (!collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
-        p._sdTimer = 240;
+        p._sdTimer = 340;
       }
     } else {
       p._sdTimer = 0;
@@ -291,7 +291,7 @@ function handleInput(p: any, idx: number, dt: number) {
   // movement with DAS
   if (keys.has(left)) {
     p.dasLeft += dt * 1000;
-    if (p.dasLeft >= 250) {
+    if (p.dasLeft >= 350) {
       // move
       if (p.dasLeft - dt*1000 < 133) {
         // initial
@@ -578,7 +578,7 @@ function loop(now: number) {
       // left
       if (keys.has(leftKey)) {
         p._dasL = (p._dasL || 0) + dt * 1000;
-        if (p._dasL >= 250 && (p._dasL - dt*1000 < 250 || (p._dasL % 50) < ( (p._dasL - dt*1000) % 33))) {
+        if (p._dasL >= 350 && (p._dasL - dt*1000 < 350 || (p._dasL % 50) < ( (p._dasL - dt*1000) % 33))) {
           // attempt move; on first, immediate
         }
       } else p._dasL = 0;
