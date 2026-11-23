@@ -1,0 +1,45 @@
+# 03 — Input & Controls
+
+## Keyboard
+
+- Player 1: A/D = move left/right, S = soft drop, W/Q? Actually: W not used; rotations: Q = rotate CCW, E = rotate CW (or Z/X). Final: use Z = rotate CCW, X = rotate CW. Space not used (soft drop only).
+  - Final mapping: A/D move, S soft drop, Z rotate CCW, X rotate CW.
+- Player 2: ←/→ move, ↓ soft drop, Z? Use , / . for rotations? Final: ←/→ move, ↓ soft drop, N rotate CCW, M rotate CW (or use / and .). Simpler: Player 2 uses arrow keys for move+drop, and [ ] for rotations. Developer to pick comfortable keys; document in Controls screen.
+- Global: Esc = pause/menu, M = volume? Volume via menu. Enter = confirm in menus.
+
+## Gamepad (Web Gamepad API)
+
+- D-pad / left stick: move left/right, down = soft drop.
+- A button: soft drop (redundant with down).
+- X + left trigger/bumper: rotate CCW.
+- B + right trigger/bumper: rotate CW.
+- Start: pause.
+- Select: back in menus.
+
+## DAS (Delayed Auto Shift)
+
+- Initial delay: 133ms before auto-repeat starts.
+- Repeat rate (ARR): 33ms.
+- Applies to left/right movement and soft drop.
+
+## Soft Drop
+
+- Accelerated drop: first cell 133ms, then 10ms repeat → effectively drops to bottom.
+- Lock delay still applies at landing; allows sideways squeeze/rotation before lock (~0.5s).
+- No hard drop in v1.
+
+## Rotation (SRS)
+
+- Standard SRS kick tables for I, O, T, S, Z, J, L and new pieces (approximate for non-standard).
+- Wall kicks: try offsets; if any valid, apply; else rotation fails.
+
+## Lock Delay
+
+- ~0.5s timer starts when piece lands (cannot move down).
+- Resets on successful move/rotation (with cap to prevent infinite stall; e.g., max 15 resets or 3s total).
+- Piece locks when timer expires.
+
+## Pause
+
+- Esc (keyboard) or Start (gamepad) toggles pause.
+- Opens pause menu.
