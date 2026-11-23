@@ -194,6 +194,7 @@ function updateHover() {
         mouseY >= y - 30 &&
         mouseY <= y + 10
       ) {
+        if (menuIndex !== i) playSfx("menu_select");
         hoveredMenu = i;
         menuIndex = i;
       }
@@ -346,6 +347,7 @@ function update(dt: number) {
         if (p.current && !collides(p.board, p.current, -1, 0)) {
           p.current.x -= 1;
           p.lockTimer = 0;
+          playSfx("move");
         }
         g._tL = 0;
         g._thL = 350;
@@ -372,6 +374,7 @@ function update(dt: number) {
         if (p.current && !collides(p.board, p.current, 1, 0)) {
           p.current.x += 1;
           p.lockTimer = 0;
+          playSfx("move");
         }
         g._tR = 0;
         g._thR = 350;
@@ -451,6 +454,7 @@ function update(dt: number) {
       if (p.current && !collides(p.board, p.current, -1, 0)) {
         p.current.x -= 1;
         p.lockTimer = 0;
+        playSfx("move");
       }
       p._dasL = 0;
       p._dasThresholdL = 350;
@@ -462,6 +466,7 @@ function update(dt: number) {
       if (p.current && !collides(p.board, p.current, 1, 0)) {
         p.current.x += 1;
         p.lockTimer = 0;
+        playSfx("move");
       }
       p._dasR = 0;
       p._dasThresholdR = 350;
@@ -475,6 +480,7 @@ function update(dt: number) {
         if (!collides(p.board, p.current, -1, 0)) {
           p.current.x -= 1;
           p.lockTimer = 0;
+          playSfx("move");
         }
         p._dasL = 0;
         p._dasThresholdL = 75;
@@ -489,6 +495,7 @@ function update(dt: number) {
         if (!collides(p.board, p.current, 1, 0)) {
           p.current.x += 1;
           p.lockTimer = 0;
+          playSfx("move");
         }
         p._dasR = 0;
         p._dasThresholdR = 75;
@@ -509,6 +516,7 @@ function update(dt: number) {
         if (!collides(p.board, p.current, 0, 1)) {
           p.current.y += 1;
           p.lockTimer = 0;
+          playSfx("soft_drop");
         }
         p._sdTimer = 0;
       } else {
@@ -587,6 +595,7 @@ function handleInput(p: any, idx: number, dt: number) {
         if (!collides(p.board, p.current, -1, 0)) {
           p.current.x -= 1;
           p.lockTimer = 0;
+          playSfx("move");
         }
       } else {
         // repeat every 33ms handled by accumulator threshold
@@ -982,7 +991,7 @@ window.addEventListener("keydown", (e) => {
         kbVol.thR = 300;
       }
     }
-    if (e.key === "Escape") screen = "menu";
+    if (e.key === "Escape") { screen = "menu"; playSfx("menu_back"); }
     return;
   }
   if (e.key !== lastKey) {
@@ -990,10 +999,14 @@ window.addEventListener("keydown", (e) => {
     // menu navigation
     if (screen === "menu") {
       const items = menuItems();
-      if (e.key === "ArrowDown" || e.key === "s")
+      if (e.key === "ArrowDown" || e.key === "s") {
         menuIndex = (menuIndex + 1) % items.length;
-      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W")
+        playSfx("menu_select");
+      }
+      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") {
         menuIndex = (menuIndex - 1 + items.length) % items.length;
+        playSfx("menu_select");
+      }
       if (e.key === "Escape") {
         if (pausedFromGame) {
           pausedFromGame = false;
@@ -1166,9 +1179,14 @@ function handleGamepadMenus(dt: number) {
     }
     if (screen === "menu") {
       const items = menuItems();
-      if (up && !prev.up)
+      if (up && !prev.up) {
         menuIndex = (menuIndex - 1 + items.length) % items.length;
-      if (down && !prev.down) menuIndex = (menuIndex + 1) % items.length;
+        playSfx("menu_select");
+      }
+      if (down && !prev.down) {
+        menuIndex = (menuIndex + 1) % items.length;
+        playSfx("menu_select");
+      }
       // B/Select acts as Back: resume when a game is in progress
       if (b && !prev.b && pausedFromGame) {
         pausedFromGame = false;
@@ -1210,6 +1228,7 @@ function handleGamepadMenus(dt: number) {
       if (b && !prev.b) {
         screen = "menu";
         gameOverIndex = 0;
+        playSfx("menu_back");
       }
     } else if (screen === "volume") {
       const v = volState[gi];
@@ -1263,7 +1282,7 @@ function handleGamepadMenus(dt: number) {
         v.thR = 300;
         v.heldR = false;
       }
-      if (b && !prev.b) screen = "menu";
+      if (b && !prev.b) { screen = "menu"; playSfx("menu_back"); }
     } else if (screen === "stats") {
       if (up && !prev.up) statsScroll = Math.max(0, statsScroll - 1);
       if (down && !prev.down)
@@ -1271,9 +1290,9 @@ function handleGamepadMenus(dt: number) {
           Math.max(0, stats.sessions.length - 12),
           statsScroll + 1,
         );
-      if (b && !prev.b) screen = "menu";
+      if (b && !prev.b) { screen = "menu"; playSfx("menu_back"); }
     } else if (screen === "controls") {
-      if (b && !prev.b) screen = "menu";
+      if (b && !prev.b) { screen = "menu"; playSfx("menu_back"); }
     }
     if (!gp.buttons[9]?.pressed) startOpenedMenu = false;
     gpPrev[gi] = { up, down, left, right, a, b, start: gp.buttons[9]?.pressed };
