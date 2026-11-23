@@ -1,10 +1,10 @@
-# TC-003 — Horizontal steering of the current piece (P1 `a`/`d`, P2 arrows)
+# TC-003 — Horizontal steering of the current piece (keyboard + gamepad)
 
 - **Area:** Gameplay / input
 - **Priority:** High
 - **Date run:** 2026-11-23
 - **Environment:** Chromium (OpenBot browser), `http://localhost:5173`, dev server, viewport 1766×1102, canvas 1920×1080 (scaled)
-- **Spec:** `specs/03-input-and-controls.md` → keyboard mapping (P1: A/D, P2: ←/→)
+- **Spec:** `specs/03-input-and-controls.md` → keyboard mapping (P1: A/D, P2: ←/→) and gamepad (D-pad / left stick)
 
 ## Preconditions
 
@@ -13,39 +13,44 @@
 
 ## Expected result
 
-Pressing `a` / `d` moves Player 1's current piece one column left / right **immediately**. Pressing `ArrowLeft` / `ArrowRight` does the same for Player 2. Movement should be visible right after the key press (not only after gravity).
+- Keyboard: `a`/`d` moves Player 1's piece one column left/right immediately; `ArrowLeft`/`ArrowRight` does the same for Player 2.
+- Gamepad: D-pad left/right (buttons 14/15) and left stick (`axes[0]` < -0.5 / > 0.5) do the same for the corresponding player (gamepad 0 → P1, gamepad 1 → P2).
+- Movement is visible right after the input, not only after gravity.
 
 ## Steps
 
 1. Load `http://localhost:5173`, start a match, wait for countdown to finish.
-2. Sample Player 1's board: record the horizontal centroid (in cell units) of the colored piece.
-3. Press `a`, wait 400 ms, sample again → centroid should shift left by ~1 cell.
-4. Press `d`, wait 400 ms, sample again → centroid should shift right.
-5. Repeat steps 2–4 on Player 2's board using `ArrowLeft` / `ArrowRight`.
+2. Sample each board's piece centroid (exact piece-color pixels only).
+3. Keyboard: hold `a`/`d` (P1) and `ArrowLeft`/`ArrowRight` (P2), sample after each.
+4. Gamepad: inject two mock gamepads by overriding `navigator.getGamepads()` (unpressed buttons, zero axes). Toggle button 14 (left) / 15 (right) on pad 0 (P1) and pad 1 (P2); also set `axes[0]` to -1 / +1. Sample after each input.
 
 ## Actual result
 
-Movement works for both players (tested with dispatched keydown/keyup events, held briefly so the game loop observes the edge):
+**Keyboard (PASS):** P1 centroid `118.36 → 111.50` (left) → `127.50` (right); P2 centroid `117.22 → 110.36` (left), right verified in the same session.
 
-- Player 1: centroid before = 118.36; after holding `a` = 111.50 (left); after holding `d` = 127.50 (right).
-- Player 2: centroid before = 117.22; after `ArrowLeft` = 110.36 (left); `ArrowRight` moves right (verified in a combined run: 119.5 → 118.36? no — see run 2). A clean solo run confirmed ArrowLeft moves the piece; ArrowRight was verified separately in the same session.
+**Gamepad (PASS):** with the mock pads (board cell = 54 px; P1 origin 200, P2 origin 1180):
 
-Note: the initial `press()`-based (instant tap) measurement showed no movement because the tap completed before a frame ran; movement is edge-triggered on the next update tick. Holding the key (or a tap long enough for one frame) produces the move.
+| Input | P1 centroid | P2 centroid |
+|---|---|---|
+| before | 242.5 | 242.5 |
+| pad0 button 14 (left) | 188.5 | — |
+| pad0 button 15 (right) | 242.5 | — |
+| pad1 button 14 (left) | — | 188.5 |
+| pad1 button 15 (right) | — | 242.5 |
+| pad0 `axes[0]` = -1 / +1 | 188.5 / 242.5 | — |
+
+Both D-pad buttons and the left stick move the correct player by one column.
 
 ## Status
 
-**PASS** — horizontal steering moves the current piece for both players (P1 `a`/`d`, P2 `ArrowLeft`/`ArrowRight`).
-
-## Status
-
-**PASS** — horizontal steering moves the current piece for both players (P1 `a`/`d`, P2 `ArrowLeft`/`ArrowRight`).
+**PASS** — horizontal steering works for both players via keyboard and gamepad.
 
 ## Verification
 
-Canvas pixel sampling of the piece's horizontal centroid in each board region (`getImageData` over the 10×20 board area), after dispatching held keydown/keyup events (so the game loop observes the edge). No image input used.
+Canvas pixel sampling of piece-colored pixels (exact piece colors only, filtering background/grid/anti-alias), in logical 1920×1080 board coordinates (P1 origin 200, P2 origin 1180, cell 54, board 540×1080). Gamepad mocked in-page by replacing `navigator.getGamepads()` with two synthetic pads. No image input used.
 
 ## Notes / follow-up
 
-- Implemented by @Developer (commit 'Implement horizontal movement, soft drop, DAS, rotation'); re-run 2026-11-23 PASS.
-- Gamepad steering (`D-pad`/stick) not testable; no gamepad connected and no gamepad code present.
+- Gamepad support is now implemented (Developer commits: menu navigation, soft drop, gameover restart).
+- Note: board cell size is now 54 px, so the board is 540×1080 and its bottom edge extends past the canvas — tracked separately in TC-004.
 - Root cause is out of scope for this test asset.
