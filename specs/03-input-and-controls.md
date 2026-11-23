@@ -47,7 +47,7 @@
 ## DAS (Delayed Auto Shift)
 
 - Initial delay: 350ms before auto-repeat starts.
-- Repeat rate (ARR): 50ms.
+- Repeat rate (ARR): 75ms.
 - Applies to left/right movement and soft drop (keyboard and gamepad).
 
 ## Soft Drop

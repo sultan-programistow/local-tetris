@@ -207,7 +207,7 @@ function update(dt: number) {
       p._dasL += dt * 1000;
       if (p._dasL >= 350) {
         // repeat every 33ms
-        const repeats = Math.floor((p._dasL - 350) / 50);
+        const repeats = Math.floor((p._dasL - 350) / 75);
         // move one step per threshold crossing
         if (repeats > (p._dasLprev || 0)) {
           if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; }
@@ -218,7 +218,7 @@ function update(dt: number) {
     if (rightHeld && p.current) {
       p._dasR += dt * 1000;
       if (p._dasR >= 350) {
-        const repeats = Math.floor((p._dasR - 350) / 50);
+        const repeats = Math.floor((p._dasR - 350) / 75);
         if (repeats > (p._dasRprev || 0)) {
           if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; }
         }
@@ -617,7 +617,7 @@ function loop(now: number) {
       // left
       if (keys.has(leftKey)) {
         p._dasL = (p._dasL || 0) + dt * 1000;
-        if (p._dasL >= 350 && (p._dasL - dt*1000 < 350 || (p._dasL % 50) < ( (p._dasL - dt*1000) % 33))) {
+        if (p._dasL >= 350 && (p._dasL - dt*1000 < 350 || (p._dasL % 75) < ( (p._dasL - dt*1000) % 33))) {
           // attempt move; on first, immediate
         }
       } else p._dasL = 0;
