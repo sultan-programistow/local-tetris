@@ -133,6 +133,35 @@ function update(dt: number) {
   if (screen !== 'play') return;
   if (match.status === 'paused') return;
 
+  // Gamepad polling
+  const gps = (navigator as any).getGamepads ? (navigator as any).getGamepads() : [];
+  for (let gi = 0; gi < 2; gi++) {
+    const gp = gps[gi];
+    if (!gp) continue;
+    const p = match.players[gi] as any;
+    if (p.gameOver || !p.current) continue;
+    // D-pad / left stick
+    const left = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
+    const right = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
+    const down = gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
+    // edge detection for left/right handled by keys set? We'll inject into keys via a virtual set? Instead handle movement directly.
+    // For simplicity, set virtual key flags by toggling a gamepad state on player
+    if (p._gp === undefined) p._gp = { left:false, right:false, down:false, a:false, x:false, b:false };
+    const g = p._gp;
+    // left
+    if (left && !g.left) { if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; } g._dasL = 0; }
+    if (right && !g.right) { if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; } g._dasR = 0; }
+    g.left = left; g.right = right; g.down = down;
+    // soft drop
+    if (down && p.current && !collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
+    // rotation buttons: X(2) CCW, B(1) CW, triggers
+    const ccw = gp.buttons[2]?.pressed || gp.buttons[4]?.pressed;
+    const cw = gp.buttons[1]?.pressed || gp.buttons[5]?.pressed;
+    if (ccw && !g.ccw) { tryRotate(p.board, p.current, -1); p.lockTimer = 0; }
+    if (cw && !g.cw) { tryRotate(p.board, p.current, 1); p.lockTimer = 0; }
+    g.ccw = ccw; g.cw = cw;
+  }
+
   for (let i = 0; i < 2; i++) {
     const p = match.players[i] as any;
     if (p.gameOver) continue;
