@@ -38,7 +38,10 @@ local-tetris/
 - Use a simple seeded PRNG (e.g., mulberry32 or xoshiro). Same seed → identical piece sequence for both boards.
 - Piece selection: bag randomizer? For simplicity, seeded random from piece pool (standard then expanded). Ensure fairness: maybe 7-bag for standard pieces, then random from expanded pool. Decision: use seeded random pick from current pool (simpler). Developer may refine.
 
-## Persistence (localStorage)
+## Build-time metadata
+
+- Inject the short git commit hash at build time (e.g., via Vite `define` reading `git rev-parse --short HEAD`) and expose as `import.meta.env.VITE_GIT_HASH`.
+- Displayed subtly (semi-transparent, small) in a corner on all screens.
 
 Keys:
 - `local-tetris:stats` — Stats object.

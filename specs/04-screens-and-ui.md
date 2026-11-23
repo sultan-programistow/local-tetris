@@ -53,3 +53,4 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 - Level up: silent (no banner, no sound).
 - Responsive scaling to fit window; target 1920×1080.
 - Main Menu and Game Over screen share the same screen height where possible (consistent layout).
+- Revision hash: display the short git commit hash in a subtle corner (semi-transparent, small font) on all screens, injected at build time (e.g., via Vite define/import.meta.env) so testers can verify they run the tip of main.

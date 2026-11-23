@@ -397,6 +397,7 @@ function decideWinner() {
 }
 
 // Rendering
+declare const __GIT_HASH__: string;
 function draw() {
   ctx.fillStyle = '#0f1115';
   ctx.fillRect(0, 0, 1920, 1080);
@@ -407,6 +408,12 @@ function draw() {
   else if (screen === 'stats') drawStats();
   else if (screen === 'controls') drawControls();
   else if (screen === 'volume') drawVolume();
+  // build hash
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.font = '12px monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText(__GIT_HASH__, 1910, 1070);
+  ctx.textAlign = 'left';
   requestAnimationFrame(draw);
 }
 
