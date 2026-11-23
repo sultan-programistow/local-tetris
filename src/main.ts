@@ -865,10 +865,10 @@ function drawStats() {
   ctx.font = "bold 48px sans-serif";
   ctx.textAlign = "center";
   ctx.fillText("STATS", 960, 120);
-  ctx.font = "20px monospace";
+  ctx.font = "28px monospace";
   ctx.textAlign = "left";
   ctx.fillText("Today", 500, 180);
-  ctx.fillText("Total", 900, 180);
+  ctx.fillText("Total", 700, 180);
   const rows = [
     ["Games", stats.sessionsToday, stats.sessionsPlayed],
     [
@@ -898,9 +898,9 @@ function drawStats() {
     ],
   ];
   rows.forEach((r, i) => {
-    ctx.fillText(String(r[0]), 200, 220 + i * 28);
-    ctx.fillText(String(r[1]), 500, 220 + i * 28);
-    ctx.fillText(String(r[2]), 900, 220 + i * 28);
+    ctx.fillText(String(r[0]), 200, 220 + i * 36);
+    ctx.fillText(String(r[1]), 500, 220 + i * 36);
+    ctx.fillText(String(r[2]), 700, 220 + i * 36);
   });
   ctx.fillStyle = "#aaa";
   ctx.fillText("Sessions (newest first):", 200, 420);
@@ -919,7 +919,7 @@ function drawStats() {
       200,
       y,
     );
-    y += 22;
+    y += 34;
   }
   ctx.textAlign = "center";
   ctx.fillText("W/S or D-pad to scroll, Esc to back", 960, 1000);
