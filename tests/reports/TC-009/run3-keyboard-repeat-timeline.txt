@@ -1,0 +1,41 @@
+TC-009 run 3 — keyboard volume slider, tap/hold/repeat timing
+Build: 3d58e25 (production build, vite preview 127.0.0.1:4173)
+Page rendering: ~60 fps, rAF interval ~16.7 ms, kept awake with tab recording
+Method: Storage.prototype.setItem hook for local-tetris:volume (timestamp + value);
+KeyboardEvent keydown/keyup on window, press/release scheduled in-page with setTimeout.
+Volume baseline 0.5 each sub-case. One recorded write = one 0.05 step.
+
+Expected (user request, 2026-11-23): one step on press; still one step during the first
+300 ms; then one step every ~50 ms until release; OS auto-repeat must not double-step.
+
+A. TAP 120 ms — plain down/up
+key        hold     steps  start -> end
+A          120 ms   1      0.50 -> 0.45
+D          120 ms   1      0.50 -> 0.55
+ArrowLeft  120 ms   1      0.50 -> 0.45
+ArrowRight 120 ms   1      0.50 -> 0.55
+=> PASS.
+
+B. HOLD 250 ms — plain down/up (below threshold)
+key        hold     steps  start -> end
+A          250 ms   1      0.50 -> 0.45
+D          250 ms   1      0.50 -> 0.55
+ArrowLeft  250 ms   1      0.50 -> 0.45
+ArrowRight 250 ms   1      0.50 -> 0.55
+=> PASS.
+
+C. HOLD 650 ms — plain down/up, app-side DAS
+key        press step  first repeat  interval range  steps  end
+A          ~0 ms       +291.6 ms       50-67 ms        8      0.10
+D          ~0 ms       +290.4 ms       49-67 ms        8      0.90
+ArrowLeft  ~0 ms       +290.2 ms       49-68 ms        8      0.10
+ArrowRight ~0 ms       +291.4 ms       50-67 ms        8      0.90
+No volume writes after release. => PASS.
+
+D. HOLD 650 ms — with OS-style auto-repeat (500 ms first delay, 33 ms interval)
+key        repeat events  steps  first repeat  end    note
+A          6              8      +310.7 ms     0.10   repeat events ignored
+D          6              8      +294.1 ms     0.90   repeat events ignored
+ArrowLeft  6              8      +294.7 ms     0.10   repeat events ignored
+ArrowRight 6              8      +292.3 ms     0.90   repeat events ignored
+=> PASS: same step count/schedule as the plain hold; no double-step.

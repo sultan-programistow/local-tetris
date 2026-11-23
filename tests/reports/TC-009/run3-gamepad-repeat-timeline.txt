@@ -1,0 +1,41 @@
+TC-009 run 3 — gamepad volume slider, tap/hold/repeat timing
+Build: 3d58e25 (production build, vite preview 127.0.0.1:4173)
+Page rendering: ~60 fps, rAF interval ~16.7 ms, kept awake with tab recording
+Method: navigator.getGamepads() mock (standard mapping, pad 0), Storage.prototype.setItem
+hook for local-tetris:volume (timestamp + value). Press/release scheduled in-page with
+setTimeout. Volume baseline 0.5 each sub-case. One recorded write = one 0.05 step.
+
+Expected (user request, 2026-11-23): one step on press; still one step during the first
+300 ms; then one step every ~50 ms until release; release stops repeat.
+
+A. TAP 120 ms
+input           hold    steps  start -> end   first step offset
+d-pad left      120 ms  1      0.50 -> 0.45   +11.1 ms
+d-pad right     120 ms  1      0.50 -> 0.55   +11.0 ms
+stick left      120 ms  1      0.50 -> 0.45   +11.5 ms
+stick right     120 ms  1      0.50 -> 0.55   +12.4 ms
+=> PASS.
+
+B. HOLD 250 ms (below the 300 ms threshold)
+input           hold    steps  start -> end   first step offset
+d-pad left      250 ms  1      0.50 -> 0.45   +11.2 ms
+d-pad right     250 ms  1      0.50 -> 0.55   +10.8 ms
+stick left      250 ms  1      0.50 -> 0.45   +10.7 ms
+stick right     250 ms  1      0.50 -> 0.55   +11.4 ms
+=> PASS.
+
+C. HOLD 650 ms
+input           press step  first repeat  interval range  steps  end
+d-pad left      +5.9 ms     +306.3 ms       50-66 ms        8      0.10
+d-pad right     +11.6 ms    +311.2 ms       50-67 ms        8      0.90
+stick left      +10.0 ms    +309.8 ms       50-67 ms        7      0.15
+stick right     +9.9 ms     +309.2 ms       50-66 ms        8      0.90
+No volume writes after release. => PASS (1 step, ~300 ms quiet, then ~50 ms repeats).
+
+D. CONTROL — vertical inputs, 250 ms each
+d-pad up: 0 volume events, 0.50 -> 0.50
+stick down: 0 volume events, 0.50 -> 0.50
+=> PASS.
+
+Raw event/mark data was read from the page after each sub-case; repeat interval is
+frame-quantised (3-4 rendered frames per 50 ms step).

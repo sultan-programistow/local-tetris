@@ -2,53 +2,53 @@
 
 - **Area:** Menus / volume / gamepad + keyboard input
 - **Priority:** High
-- **Date run:** 2026-11-23 (run 2: FAIL)
-- **Environment:** Chromium (OpenBot private browser), production build served statically at `http://127.0.0.1:4173` (`vite preview`, no HMR). Run 1 build `7ab789c`; run 2 build `7527f9a` (stats-screen-only diff after run 1).
+- **Date run:** 2026-11-23 (run 3: PASS)
+- **Environment:** Chromium (OpenBot private browser), production build served statically at `http://127.0.0.1:4173` (`vite preview`, no HMR), build commit `3d58e25`. Page rendered at ~60 fps (rAF interval ~16.7 ms), kept awake with tab recording; an earlier attempt at ~1 fps was discarded because the game loop could not run often enough to show DAS.
 - **Spec:** `specs/05-audio-and-visuals.md` → "Volume": slider 0.0–1.0, ±0.05 per keyboard / gamepad D-pad / left-stick input, live apply, persisted to `local-tetris:volume`.
-- **Spec pin:** `specs/05-audio-and-visuals.md` §"Volume" @ `7527f9a` (±0.05 per input; no repeat timing specified).
-- **Behaviour under test:** the repeat timing is **not in the spec**. It comes from the user's request of 2026-11-23 and the message of commit `d1b6e61` ("Volume gamepad: 300ms initial, 50ms repeat"): one step on press, no further step during the first 300 ms, then one step every ~50 ms while held. Applies to gamepad D-pad / left stick and keyboard `A`/`D` / left/right arrows. Needs a spec entry via the user's re-spec process.
+- **Spec pin:** `specs/05-audio-and-visuals.md` §"Volume" @ `3d58e25` (±0.05 per input; no repeat timing specified).
+- **Behaviour under test:** the repeat timing is **not in the spec**. It comes from the user's request of 2026-11-23: one step on press, no further step during the first 300 ms, then one step every ~50 ms while held; release stops the repeat. Applies to gamepad D-pad / left stick and keyboard `A`/`D` / left/right arrows. Still needs a spec entry via the user's re-spec process.
 
 ## Purpose
 
-Check that the volume slider behaves like game movement DAS: a single press changes the volume by one 5% step, a hold shorter than 300 ms still changes it by one step only, and after 300 ms it repeats one 5% step approximately every 50 ms until release — for both gamepad and keyboard.
+Check that the volume slider behaves like game movement DAS: a single press changes the volume by one 5% step, a hold shorter than 300 ms still changes it by one step only, and after 300 ms it repeats one 5% step approximately every 50 ms until release — for both gamepad and keyboard, without keyboard auto-repeat double-stepping.
 
 ## Preconditions
 
 1. Production build served at `http://127.0.0.1:4173`.
 2. `local-tetris:volume` set to `0.5` before each sub-case (headroom in both directions).
 3. Main menu open → Volume screen (`ArrowDown` ×2, `Enter`).
-4. For gamepad: a standard-mapping pad is exposed through `navigator.getGamepads()` as pad 0. This run uses a mock (buttons 12–15, axes 0–1), the same method as TC-005, because no physical pad was attached.
-5. For keyboard: keys are held with `KeyboardEvent` down/up dispatched on `window`, timed inside the page with `setTimeout`. Run 2 measures both a plain held key (no repeat events) and OS-style auto-repeat (500 ms first delay, 33 ms interval — typical desktop defaults). Synthetic events are used for sub-millisecond hold control; the volume handler does not distinguish them from trusted keys. Navigation to the screen uses trusted key presses.
+4. Page must be rendering continuously; if the tab is background-throttled (~1 fps), start a tab recording first, otherwise the DAS timings are not observable.
+5. For gamepad: a standard-mapping pad is exposed through `navigator.getGamepads()` as pad 0. This run uses a mock (buttons 12–15, axes 0–1), the same method as TC-005, because no physical pad was attached.
+6. For keyboard: keys are held with `KeyboardEvent` down/up dispatched on `window`, timed inside the page with `setTimeout`. Both a plain held key and OS-style auto-repeat (500 ms first delay, 33 ms interval) are measured; the auto-repeat variant checks that repeated `keydown` events do not cause extra steps.
 
 ## Method
 
 - `Storage.prototype.setItem` hook records every `local-tetris:volume` write with `performance.now()` and the new value; each recorded write is one volume step (0.05), including writes that clamp at 0 or 1.
-- `CanvasRenderingContext2D.fillText` hook confirms the `VOLUME` screen and its percentage text.
-- Press and release are scheduled inside the page with `setTimeout` (120 / 250 / 700 ms), so the hold length is not distorted by driver round-trips. Actual hold lengths measured from the input marks: 250.1–250.2 ms and 700.1–700.2 ms.
-- Display frame interval in this run was ~33 ms, which bounds the observable repeat granularity.
+- Press and release are scheduled inside the page with `setTimeout` (120 / 250 / 650 ms), so hold lengths are not distorted by driver round-trips. Actual hold lengths measured from the input marks: 250.1–250.3 ms and 649.8–650.3 ms.
+- One sub-case per input path, each from a fresh page load with volume 0.5.
 
 ## Sub-cases and results
 
-### Gamepad (run 1, `7ab789c`)
+### Gamepad (run 3)
 
 | # | Input | Hold | Expected | Actual | Status |
 |---|---|---|---|---|---|
-| A1 | D-pad left | 120 ms | one step: 0.50 → 0.45 | 4 steps: 0.50 → 0.30 | FAIL |
-| A2 | D-pad right | 120 ms | one step: 0.50 → 0.55 | 4 steps: 0.50 → 0.70 | FAIL |
-| A3 | Left stick left | 120 ms | one step: 0.50 → 0.45 | 4 steps: 0.50 → 0.30 | FAIL |
-| A4 | Left stick right | 120 ms | one step: 0.50 → 0.55 | 4 steps: 0.50 → 0.70 | FAIL |
-| B1 | D-pad left | 250 ms | one step only | 7 steps: 0.50 → 0.15 | FAIL |
-| B2 | D-pad right | 250 ms | one step only | 7 steps: 0.50 → 0.85 | FAIL |
-| B3 | Left stick left | 250 ms | one step only | 8 steps: 0.50 → 0.10 | FAIL |
-| B4 | Left stick right | 250 ms | one step only | 8 steps: 0.50 → 0.90 | FAIL |
-| C1 | D-pad left | 700 ms | 1 step, 300 ms quiet, then 5% / ~50 ms | first step at 28 ms, then every ~33 ms; bound reached (0.50 → 0.00) in 312 ms | FAIL |
-| C2 | D-pad right | 700 ms | same | first step at 25 ms, then every ~33 ms; bound reached (0.50 → 1.00) in 359 ms | FAIL |
-| C3 | Left stick left | 700 ms | same | first step at 28 ms, then every ~33 ms; bound reached (0.50 → 0.00) in 328 ms | FAIL |
-| C4 | Left stick right | 700 ms | same | first step at 11 ms, then every ~33 ms; bound reached (0.50 → 1.00) in 311 ms | FAIL |
+| A1 | D-pad left | 120 ms | one step: 0.50 → 0.45 | one step, first at +11.1 ms | PASS |
+| A2 | D-pad right | 120 ms | one step: 0.50 → 0.55 | one step, first at +11.0 ms | PASS |
+| A3 | Left stick left | 120 ms | one step: 0.50 → 0.45 | one step, first at +11.5 ms | PASS |
+| A4 | Left stick right | 120 ms | one step: 0.50 → 0.55 | one step, first at +12.4 ms | PASS |
+| B1 | D-pad left | 250 ms | one step only | one step only | PASS |
+| B2 | D-pad right | 250 ms | one step only | one step only | PASS |
+| B3 | Left stick left | 250 ms | one step only | one step only | PASS |
+| B4 | Left stick right | 250 ms | one step only | one step only | PASS |
+| C1 | D-pad left | 650 ms | 1 step, no repeat before 300 ms, then 5% / ~50 ms | 1 step; repeats from +306 ms at 50–66 ms; 0.50 → 0.10 | PASS |
+| C2 | D-pad right | 650 ms | same | 1 step; repeats from +311 ms at 50–67 ms; 0.50 → 0.90 | PASS |
+| C3 | Left stick left | 650 ms | same | 1 step; repeats from +310 ms at 50–67 ms; 0.50 → 0.15 | PASS |
+| C4 | Left stick right | 650 ms | same | 1 step; repeats from +309 ms at 50–66 ms; 0.50 → 0.90 | PASS |
 | D1 | D-pad up | 250 ms | no volume change | no writes, 0.50 unchanged | PASS |
 | D2 | Left stick down | 250 ms | no volume change | no writes, 0.50 unchanged | PASS |
 
-### Keyboard (run 2, `7527f9a`)
+### Keyboard (run 3)
 
 | # | Input | Hold | Expected | Actual | Status |
 |---|---|---|---|---|---|
@@ -56,49 +56,46 @@ Check that the volume slider behaves like game movement DAS: a single press chan
 | E2 | `D` | 120 ms | one step: 0.50 → 0.55 | one step | PASS |
 | E3 | `←` | 120 ms | one step: 0.50 → 0.45 | one step | PASS |
 | E4 | `→` | 120 ms | one step: 0.50 → 0.55 | one step | PASS |
-| F1 | `A` | 250 ms, no repeat events | one step only | one step only | PASS |
-| F2 | `D` | 250 ms, no repeat events | one step only | one step only | PASS |
-| F3 | `←` | 250 ms, no repeat events | one step only | one step only | PASS |
-| F4 | `→` | 250 ms, no repeat events | one step only | one step only | PASS |
-| G1 | `A` | 700 ms, no repeat events | 1 step, then 5% / ~50 ms after 300 ms | one step only, no repeat until release | FAIL |
-| G2 | `D` | 700 ms, no repeat events | same | one step only, no repeat until release | FAIL |
-| G3 | `←` | 700 ms, no repeat events | same | one step only, no repeat until release | FAIL |
-| G4 | `→` | 700 ms, no repeat events | same | one step only, no repeat until release | FAIL |
-| H1 | `A` | 700 ms, OS-style repeat 500/33 ms | 1 step, then 5% / ~50 ms after 300 ms | first repeat at 500 ms, then every ~33 ms; 0.50 → 0.15 | FAIL |
-| H2 | `D` | 700 ms, OS-style repeat 500/33 ms | same | first repeat at 500 ms, then every ~33 ms; 0.50 → 0.85 | FAIL |
-| H3 | `←` | 700 ms, OS-style repeat 500/33 ms | same | first repeat at 500 ms, then every ~33 ms; 0.50 → 0.15 | FAIL |
-| H4 | `→` | 700 ms, OS-style repeat 500/33 ms | same | first repeat at 500 ms, then every ~33 ms; 0.50 → 0.85 | FAIL |
+| F1 | `A` | 250 ms | one step only | one step only | PASS |
+| F2 | `D` | 250 ms | one step only | one step only | PASS |
+| F3 | `←` | 250 ms | one step only | one step only | PASS |
+| F4 | `→` | 250 ms | one step only | one step only | PASS |
+| G1 | `A` | 650 ms, no repeat events | 1 step, then 5% / ~50 ms after 300 ms | 1 step; repeats from +292 ms at 50–67 ms; 0.50 → 0.10 | PASS |
+| G2 | `D` | 650 ms, no repeat events | same | 1 step; repeats from +290 ms at 49–67 ms; 0.50 → 0.90 | PASS |
+| G3 | `←` | 650 ms, no repeat events | same | 1 step; repeats from +290 ms at 49–68 ms; 0.50 → 0.10 | PASS |
+| G4 | `→` | 650 ms, no repeat events | same | 1 step; repeats from +291 ms at 50–67 ms; 0.50 → 0.90 | PASS |
+| H1 | `A` | 650 ms, OS-style repeat 500/33 ms | same, without double-stepping | 8 steps, same schedule as G1; repeat events ignored | PASS |
+| H2 | `D` | 650 ms, OS-style repeat 500/33 ms | same | 8 steps, same schedule as G2; repeat events ignored | PASS |
+| H3 | `←` | 650 ms, OS-style repeat 500/33 ms | same | 8 steps, same schedule as G3; repeat events ignored | PASS |
+| H4 | `→` | 650 ms, OS-style repeat 500/33 ms | same | 8 steps, same schedule as G4; repeat events ignored | PASS |
 
-### Measured step offsets from press (ms)
+### Measured repeat timings
 
-- Gamepad 120 ms tap: `3.5, 36.6, 69.9, 103.3` (D-pad left); `9.3, 42.3, 76.3, 110.0` (D-pad right); `10.7, 43.9, 77.1, 110.9` (stick left); `23.1, 56.8, 89.7, 106.6` (stick right).
-- Gamepad 250 ms hold: 7–8 steps, first at 5–10 ms, then roughly every 33–50 ms: D-pad left `5.4, 38.4, 88.8, 138.4, 172.0, 204.9, 238.4`; stick right `10.1, 43.3, 76.6, 110.3, 127.0, 160.5, 193.6, 227.0`.
-- Gamepad 700 ms hold: 10 distinct steps to the 0/1 bound within 311–359 ms, then continued writes at the clamped value until release; no 300 ms gap after the press step on any input.
-- Keyboard 120 ms tap and 250 ms hold: exactly one write per press, on all four keys.
-- Keyboard 700 ms, plain hold: one write at press, none afterwards; no app-side repeat.
-- Keyboard 700 ms with OS-style repeat: writes at press `+0`, then `+500, +533, +567, +600, +633, +667` ms — driven by the repeat events, not by a 300/50 schedule.
+- Gamepad first repeat after press: 306, 311, 310, 309 ms (D-pad left/right, stick left/right). Intervals: 50–67 ms; 8 steps by 650 ms on three paths, 7 on stick left (one frame interval missed).
+- Keyboard plain first repeat after press: 292, 290, 290, 291 ms. Intervals: 49–68 ms; 8 steps by 650 ms on all four keys.
+- Keyboard OS-repeat variant: identical step count and timing to the plain hold — repeat `keydown` events are ignored, no double-step.
+- No volume writes occur after key/button release in any 650 ms sub-case.
 
 ## Status
 
-**FAIL** (run 2, build `7527f9a`) — gamepad: every horizontal input repeats 5% per rendered frame from the press, so a tap already changes the volume by ~20%, a 250 ms hold by 35–40%, and the slider reaches 0%/100% in ~0.31–0.36 s; no 300 ms delay, no 50 ms cadence. Keyboard: tap and 250 ms hold are correct (one 5% step), but a held key produces no repeat of its own, and with OS auto-repeat it follows the OS 500 ms/33 ms instead of 300 ms/50 ms. Vertical gamepad inputs correctly leave the volume unchanged.
-
-Tested: gamepad D-pad left/right and left stick left/right at 120/250/700 ms, both bounds; keyboard `A`/`D`/left/right arrows at 120/250/700 ms, with and without OS-style repeat; vertical controls. Not tested: a physical gamepad, physical keyboard auto-repeat settings other than the emulated 500/33 ms, mouse drag.
+**PASS** (run 3, build `3d58e25`) — gamepad and keyboard both produce exactly one 5% step on a tap and on a 250 ms hold; after a ~300 ms delay (measured 290–311 ms, within one frame) they repeat 5% every ~50 ms (50–67 ms, frame-quantised) until release. Keyboard auto-repeat events do not add extra steps. Vertical gamepad inputs leave the volume unchanged. A prior run on the same build at ~1 fps was discarded as invalid.
 
 ## Evidence
 
-- `tests/reports/TC-009/run1-gamepad-repeat-timeline.txt` — gamepad holds, step counts, offsets, intervals.
-- `tests/reports/TC-009/run2-keyboard-repeat-timeline.txt` — keyboard tap/hold, plain-hold and OS-repeat timings.
-- `tests/reports/TC-009/run1-volume-screen.png` — volume screen, 100%, build hash `7ab789c` bottom-right.
+- `tests/reports/TC-009/run3-gamepad-repeat-timeline.txt` — gamepad taps, 250/650 ms holds, offsets, intervals.
+- `tests/reports/TC-009/run3-keyboard-repeat-timeline.txt` — keyboard plain and OS-repeat timings.
+- `tests/reports/TC-009/run1-volume-screen.png` — volume screen and build hash (earlier build).
 
 ## Run history
 
 | Run | Date | Build | Result | Notes |
 |---|---|---|---|---|
-| 1 | 2026-11-23 | `7ab789c` | FAIL | Gamepad: tap and 250 ms hold repeat per frame; no 300 ms delay; vertical controls pass |
-| 2 | 2026-11-23 | `7527f9a` | FAIL | Keyboard added: tap/250 ms pass; hold repeats absent app-side and OS-driven at 500/33 ms |
+| 1 | 2026-11-23 | `7ab789c` | FAIL | Gamepad: tap and 250 ms hold repeated per frame; no 300 ms delay; vertical controls pass |
+| 2 | 2026-11-23 | `7527f9a` | FAIL | Keyboard added: tap/250 ms pass; hold had no app-side repeat and followed OS 500/33 ms |
+| 3 | 2026-11-23 | `3d58e25` | PASS | Gamepad tap/250 ms/650 ms and keyboard plain/OS-repeat all match 1 step, 300 ms, ~50 ms |
 
 ## Notes / follow-up
 
-- First-time failure of this case, reported to @Developer at the user's request (2026-11-23).
-- `specs/05-audio-and-visuals.md` has no repeat-timing requirement; the 300 ms / 50 ms values need a spec pin before this case can be cited as spec-derived.
-- Runnable coverage: gamepad repeat and keyboard tap/250 ms; keyboard hold repeat fails both with and without OS repeat.
+- Fixed by @Developer in `3d58e25`; re-tested on the production build of that commit.
+- `specs/05-audio-and-visuals.md` still has no repeat-timing requirement; the 300 ms / 50 ms values need a spec pin before this case can be cited as spec-derived.
+- Not tested: a physical gamepad, a physical keyboard (synthetic key events only), mouse drag, and OS repeat settings other than the emulated 500/33 ms.
