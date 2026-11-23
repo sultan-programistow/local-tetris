@@ -36,7 +36,7 @@ No piece is below the viewport.
 
 ## Verification
 
-Canvas pixel sampling of piece-colored pixels (filtering out background `#0f1115`, grid `#222`, and anti-aliased grid edges). No image input used.
+Canvas pixel sampling: sampled each board region (P1: x=200,y=80; P2: x=1480,y=80; 240×480 px in logical 1920×1080 coords) every 0.5 s for 4 s after start. Filtered out background `#0f1115`, grid `#222`, and their anti-aliased edges. The first piece-colored pixels appeared at t≈2.0 s with `minY` = 1 (top row), so the spawn is at the top of the board and visible. No image input used.
 
 ## Notes / follow-up
 
