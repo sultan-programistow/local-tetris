@@ -169,9 +169,6 @@ function update(dt: number) {
     // For simplicity, set virtual key flags by toggling a gamepad state on player
     if (p._gp === undefined) p._gp = { left:false, right:false, down:false, a:false, x:false, b:false };
     const g = p._gp;
-    // left
-    if (left && !g.left) { if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; } g._dasL = 0; }
-    if (right && !g.right) { if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; } g._dasR = 0; }
     g.left = left; g.right = right; g.down = softDropBtn;
     // D-pad up rotates CW (edge)
     if (upBtn && !g.up && p.current) { tryRotate(p.board, p.current, 1); p.lockTimer = 0; }
@@ -194,40 +191,37 @@ function update(dt: number) {
 
     // horizontal DAS
     if (p._leftHeld === undefined) { p._leftHeld = false; p._rightHeld = false; p._dasL = 0; p._dasR = 0; p._movedL = false; p._movedR = false; }
-    const leftHeld = keys.has(leftKey);
-    const rightHeld = keys.has(rightKey);
+    const gpLeft = (p._gp && p._gp.left) ? true : false;
+    const gpRight = (p._gp && p._gp.right) ? true : false;
+    const leftHeld = keys.has(leftKey) || gpLeft;
+    const rightHeld = keys.has(rightKey) || gpRight;
+    if (p._dasThresholdL === undefined) { p._dasThresholdL = 350; p._dasThresholdR = 350; }
     if (leftHeld && !p._leftHeld) { // just pressed
       if (p.current && !collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; }
-      p._dasL = 0; p._movedL = true;
+      p._dasL = 0; p._dasThresholdL = 350;
     }
     if (rightHeld && !p._rightHeld) {
       if (p.current && !collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; }
-      p._dasR = 0; p._movedR = true;
+      p._dasR = 0; p._dasThresholdR = 350;
     }
     p._leftHeld = leftHeld; p._rightHeld = rightHeld;
     // DAS repeat
     if (leftHeld && p.current) {
       p._dasL += dt * 1000;
-      if (p._dasL >= 350) {
-        // repeat every 33ms
-        const repeats = Math.floor((p._dasL - 350) / 75);
-        // move one step per threshold crossing
-        if (repeats > (p._dasLprev || 0)) {
-          if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; }
-        }
-        p._dasLprev = repeats;
+      if (p._dasL >= p._dasThresholdL) {
+        if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; }
+        p._dasL = 0;
+        p._dasThresholdL = 75;
       }
-    } else { p._dasL = 0; p._dasLprev = 0; }
+    } else { p._dasL = 0; p._dasThresholdL = 350; }
     if (rightHeld && p.current) {
       p._dasR += dt * 1000;
-      if (p._dasR >= 350) {
-        const repeats = Math.floor((p._dasR - 350) / 75);
-        if (repeats > (p._dasRprev || 0)) {
-          if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; }
-        }
-        p._dasRprev = repeats;
+      if (p._dasR >= p._dasThresholdR) {
+        if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; }
+        p._dasR = 0;
+        p._dasThresholdR = 75;
       }
-    } else { p._dasR = 0; p._dasRprev = 0; }
+    } else { p._dasR = 0; p._dasThresholdR = 350; }
 
     // soft drop with 350ms initial delay then 10ms repeat
     const gpSoft = (p._gp && p._gp.down) ? true : false;
