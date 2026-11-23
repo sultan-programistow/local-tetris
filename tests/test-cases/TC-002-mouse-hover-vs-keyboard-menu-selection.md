@@ -4,6 +4,7 @@
 - **Priority:** Medium
 - **Date run:** 2026-11-23 (run 4: PASS)
 - **Environment:** Chromium (OpenBot browser), `http://localhost:5173`, dev server, viewport 1766×1102, canvas 1920×1080 (scaled)
+- **Verification:** canvas pixel sampling (green pixels per menu band + total non-background pixels); no image input used
 - **Spec:** `specs/03-input-and-controls.md` → "Menu selection model (Option B)"
 
 ## Preconditions
