@@ -18,7 +18,7 @@ Options: Start, Stats, Volume, Controls.
 - Two 10×20 boards side by side.
 - Per player HUD: score, level, lines? (lines cleared optional display), next piece (1) preview.
 - Session stats not shown during play.
-- Per-player game over (soft): when a player tops out, their board is grayed out (tiles rendered semi-transparent/grayed) with a "GAME OVER" label overlaid on top (above tiles in z-order) on that board only; the other board stays active. Full match game over waits for the second player (or score beat).
+- Per-player game over (soft): when a player tops out, their board is grayed out (tiles rendered semi-transparent/grayed) with a "GAME OVER" label overlaid on top (above tiles in z-order) that obscures the tiles (opaque/strong contrast, not blending). The other board stays active. Full match game over waits for the second player (or score beat).
 - Pause indicator when paused.
 
 ## Pause Menu (Esc/Start)

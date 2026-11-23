@@ -352,10 +352,12 @@ function drawBoard(p: any, ox: number, oy: number, cell: number) {
   ctx.strokeStyle = '#ccc'; ctx.lineWidth = 2;
   ctx.strokeRect(ox, oy, COLS*cell, ROWS*cell);
   if (over) {
-    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.fillStyle = 'rgba(0,0,0,0.75)';
     ctx.fillRect(ox, oy, COLS*cell, ROWS*cell);
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 36px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 48px sans-serif'; ctx.textAlign = 'center';
+    ctx.shadowColor = '#000'; ctx.shadowBlur = 8;
     ctx.fillText('GAME OVER', ox + COLS*cell/2, oy + ROWS*cell/2);
+    ctx.shadowBlur = 0;
     ctx.textAlign = 'left';
   }
   // cells
