@@ -10,15 +10,18 @@ const STORAGE_STATS = 'local-tetris:stats';
 const STORAGE_VOLUME = 'local-tetris:volume';
 
 interface Session { date: string; winner: string; scores: [number, number]; pieces: [number, number]; }
-interface Stats { sessionsPlayed: number; totalPlayTimeMs: number; todayPlayTimeMs: number; todayDate: string; winsP1: number; winsP2: number; lastSessions: Session[]; }
+interface Stats { sessionsPlayed: number; sessionsToday: number; totalPlayTimeMs: number; todayPlayTimeMs: number; todayDate: string; winsP1: number; winsP2: number; winsP1Today: number; winsP2Today: number; lastSessions: Session[]; }
 
 function loadStats(): Stats {
   try {
     const s = JSON.parse(localStorage.getItem(STORAGE_STATS) || '');
     if (s.todayPlayTimeMs === undefined) s.todayPlayTimeMs = 0;
     if (!s.todayDate) s.todayDate = new Date().toISOString().slice(0,10);
+    if (s.sessionsToday === undefined) s.sessionsToday = 0;
+    if (s.winsP1Today === undefined) s.winsP1Today = 0;
+    if (s.winsP2Today === undefined) s.winsP2Today = 0;
     return s;
-  } catch { return { sessionsPlayed: 0, totalPlayTimeMs: 0, todayPlayTimeMs: 0, todayDate: new Date().toISOString().slice(0,10), winsP1: 0, winsP2: 0, lastSessions: [] }; }
+  } catch { return { sessionsPlayed: 0, sessionsToday: 0, totalPlayTimeMs: 0, todayPlayTimeMs: 0, todayDate: new Date().toISOString().slice(0,10), winsP1: 0, winsP2: 0, winsP1Today: 0, winsP2Today: 0, lastSessions: [] }; }
 }
 function saveStats(s: Stats) { localStorage.setItem(STORAGE_STATS, JSON.stringify(s)); }
 function loadVolume(): number { const v = parseFloat(localStorage.getItem(STORAGE_VOLUME) || '0.7'); return isNaN(v) ? 0.7 : v; }
@@ -377,13 +380,14 @@ function decideWinner() {
   // stats
   const sess: Session = { date: new Date().toISOString(), winner: w, scores: [p0.score, p1.score], pieces: [p0.piecesPlaced, p1.piecesPlaced] };
   stats.sessionsPlayed++;
+  const today = new Date().toISOString().slice(0,10);
+  if (stats.todayDate !== today) { stats.todayDate = today; stats.todayPlayTimeMs = 0; stats.sessionsToday = 0; stats.winsP1Today = 0; stats.winsP2Today = 0; }
+  stats.sessionsToday++;
   const playMs = Date.now() - sessionStart;
   stats.totalPlayTimeMs += playMs;
-  const today = new Date().toISOString().slice(0,10);
-  if (stats.todayDate !== today) { stats.todayDate = today; stats.todayPlayTimeMs = 0; }
   stats.todayPlayTimeMs += playMs;
-  if (w === 'p1') stats.winsP1++;
-  if (w === 'p2') stats.winsP2++;
+  if (w === 'p1') { stats.winsP1++; stats.winsP1Today++; }
+  if (w === 'p2') { stats.winsP2++; stats.winsP2Today++; }
   stats.lastSessions.unshift(sess);
   if (stats.lastSessions.length > 5) stats.lastSessions.pop();
   saveStats(stats);
@@ -508,9 +512,9 @@ function drawStats() {
   ctx.fillStyle = '#fff'; ctx.font = 'bold 48px sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('STATS', 960, 120);
   ctx.font = '24px monospace'; ctx.textAlign = 'left';
-  ctx.fillText(`Sessions: ${stats.sessionsPlayed}  Play time: ${Math.round(stats.totalPlayTimeMs/60000)}m`, 200, 220);
-  ctx.fillText(`Time played today: ${Math.round(stats.todayPlayTimeMs/60000)}m`, 200, 260);
-  ctx.fillText(`P1 wins: ${stats.winsP1}  P2 wins: ${stats.winsP2}`, 200, 300);
+  ctx.fillText(`Sessions: ${stats.sessionsPlayed} (today ${stats.sessionsToday})`, 200, 220);
+  ctx.fillText(`Play time: ${Math.round(stats.totalPlayTimeMs/60000)}m (today ${Math.round(stats.todayPlayTimeMs/60000)}m)`, 200, 260);
+  ctx.fillText(`P1 wins: ${stats.winsP1} (today ${stats.winsP1Today})  P2 wins: ${stats.winsP2} (today ${stats.winsP2Today})`, 200, 300);
   let y = 320;
   for (const s of stats.lastSessions) {
     ctx.fillText(`${s.date.slice(0,10)}  ${s.winner}  P1:${s.scores[0]} P2:${s.scores[1]}`, 200, y); y += 32;

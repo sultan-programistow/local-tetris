@@ -41,7 +41,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 
 ## Stats Screen
 
-- Sessions played, total play time, time played today, P1 wins, P2 wins, win %.
+- Aggregate stats shown as both "total" and "today" where applicable: sessions played, play time, P1 wins, P2 wins, win %.
 - Scrollable list of all play sessions (date, winner, scores, pieces).
 - Back via B/Esc/Select.
 - Height: should occupy the same screen height as the Main Menu where possible.
