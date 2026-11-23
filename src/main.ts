@@ -30,9 +30,10 @@ window.addEventListener('resize', scaleCanvas); scaleCanvas();
 
 // Input
 const keys = new Set<string>();
+const keyEdges = new Set<string>();
 const USED_KEYS = new Set(['a','d','s','z','x','w','W','ArrowLeft','ArrowRight','ArrowDown','ArrowUp','[',']','Escape','Enter',' ']);
 window.addEventListener('keydown', e => {
-  if (USED_KEYS.has(e.key)) { keys.add(e.key); e.preventDefault(); }
+  if (USED_KEYS.has(e.key)) { keys.add(e.key); keyEdges.add(e.key); e.preventDefault(); }
   // rotation edge handling during play
   if (screen === 'play' && match && match.status === 'playing') {
     let idx = -1, dir = 0;
@@ -196,11 +197,12 @@ function update(dt: number) {
     const leftHeld = keys.has(leftKey) || gpLeft;
     const rightHeld = keys.has(rightKey) || gpRight;
     if (p._dasThresholdL === undefined) { p._dasThresholdL = 350; p._dasThresholdR = 350; }
-    if (leftHeld && !p._leftHeld) { // just pressed
+    if (p._currentRef !== p.current) { p._dasL = 0; p._dasThresholdL = 350; p._dasR = 0; p._dasThresholdR = 350; p._currentRef = p.current; }
+    if ((leftHeld && !p._leftHeld) || keyEdges.has(leftKey)) { // just pressed
       if (p.current && !collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; }
       p._dasL = 0; p._dasThresholdL = 350;
     }
-    if (rightHeld && !p._rightHeld) {
+    if ((rightHeld && !p._rightHeld) || keyEdges.has(rightKey)) {
       if (p.current && !collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; }
       p._dasR = 0; p._dasThresholdR = 350;
     }
@@ -627,6 +629,7 @@ function loop(now: number) {
     }
   }
   update(dt);
+  keyEdges.clear();
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(draw);
