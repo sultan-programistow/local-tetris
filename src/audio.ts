@@ -26,9 +26,9 @@ export function preload() {
 
 export function play(name: string) {
   if (volume <= 0) return;
-  const base = cache[name];
-  if (!base) return;
-  const a = base.cloneNode() as HTMLAudioElement;
+  const a = cache[name];
+  if (!a) return;
   a.volume = volume;
-  a.play().catch(() => {});
+  a.currentTime = 0;
+  a.play().catch((e) => { console.warn('audio play failed', name, e); });
 }
