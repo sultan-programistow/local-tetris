@@ -17,7 +17,7 @@ let ctx: AudioContext | null = null;
 
 function getCtx(): AudioContext {
   if (!ctx) ctx = new (window as any).AudioContext();
-  return ctx;
+  return ctx as AudioContext;
 }
 
 export function setVolume(v: number) { volume = Math.max(0, Math.min(1, v)); }

@@ -597,7 +597,7 @@ function handleInput(p: any, idx: number, dt: number) {
         if (!collides(p.board, p.current, -1, 0)) {
           p.current.x -= 1;
           p.lockTimer = 0;
-          playSfx("move", i === 0 ? -0.85 : 0.85);
+          playSfx("move", idx === 0 ? -0.85 : 0.85);
         }
       } else {
         // repeat every 33ms handled by accumulator threshold
