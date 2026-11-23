@@ -230,15 +230,23 @@ function update(dt: number) {
     const gpSoft = (p._gp && p._gp.down) ? true : false;
     const softHeld = keys.has(downKey) || gpSoft;
     if (p._sdTimer === undefined) p._sdTimer = 0;
+    if (p._sdHeldPrev === undefined) p._sdHeldPrev = false;
     if (softHeld && p.current) {
-      p._sdTimer += dt * 1000;
-      if (p._sdTimer >= 350) {
+      if (!p._sdHeldPrev) {
+        // tap: immediate single cell
         if (!collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
-        p._sdTimer = 340;
+        p._sdTimer = 0;
+      } else {
+        p._sdTimer += dt * 1000;
+        if (p._sdTimer >= 350) {
+          if (!collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
+          p._sdTimer = 340;
+        }
       }
     } else {
       p._sdTimer = 0;
     }
+    p._sdHeldPrev = softHeld;
 
     // gravity
     if (p.dropAcc === undefined) p.dropAcc = 0;
