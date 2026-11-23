@@ -17,6 +17,10 @@ Test assets for the Tetris Duel app (Vite dev server at `http://localhost:5173`)
 - The app renders to a single `<canvas>`, so checks use canvas pixel state and
   keyboard/mouse input rather than DOM selectors.
 - Keep `Actual result` and `Status` filled in from a real run; do not guess.
+- Spec-derived values (delays, sizes, amounts) are quoted only with a **Spec pin**
+  line in the case header: spec file, section, and the commit the value was read
+  from. When a spec changes, update the pins in the cases that quote it and re-run
+  them, so a stale expectation is visible instead of silently passing.
 
 ## Running
 

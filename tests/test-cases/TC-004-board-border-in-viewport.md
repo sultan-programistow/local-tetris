@@ -17,7 +17,7 @@ The board border of both players is fully visible inside the browser viewport �
 ## Steps
 
 1. Load `http://localhost:5173`, start a match, wait for the countdown to finish.
-2. Compute each board's displayed bounding box from `canvas.getBoundingClientRect()`, the scale factor, and the board geometry (cell 54 → board 540×1080; P1 origin (200,80), P2 origin (1180,80)).
+2. Compute each board's displayed bounding box from `canvas.getBoundingClientRect()`, the scale factor, and the board's **rendered** border rectangle (measure the drawn border instead of hard-coding a cell size or origin).
 3. Compare the displayed bottom/right against the viewport.
 
 ## Actual result

@@ -5,6 +5,7 @@
 - **Date run:** 2026-11-23 (run 4: PASS)
 - **Environment:** Chromium (OpenBot browser), production build served statically at `http://127.0.0.1:4173` (`vite preview`, no HMR), canvas 1920×1080, cell 50 px
 - **Spec:** `specs/03-input-and-controls.md` → "Soft Drop": first cell 350 ms, then 10 ms repeat (effectively drops to the bottom); keyboard `S`/`↓`, gamepad D-pad down / A.
+- **Spec pin:** `specs/03-input-and-controls.md` §"Soft Drop" @ `10aa6a0` (350 ms initial, 10 ms repeat). Re-check the pin when the spec changes.
 
 ## Preconditions
 
