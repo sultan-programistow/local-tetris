@@ -2,7 +2,7 @@
 
 - **Area:** Menus / audio / gameplay SFX
 - **Priority:** Medium
-- **Date run:** 2026-11-24 (run 1: FAIL — no navigation sounds at all; run 2: FAIL — 16/18 sub-cases pass, keyboard Esc back from Stats and Controls is silent; run 3: PASS on the Web Audio engine)
+- **Date run:** 2026-11-24 (run 1: FAIL — no navigation sounds at all; run 2: FAIL — 16/18 sub-cases pass, keyboard Esc back from Stats and Controls is silent; run 3: PASS on the Web Audio engine; run 4: PASS — 19/19)
 - **Spec:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" — "Move (left/right)", "Soft drop", "Menu navigation (select/back)" are listed SFX events. The spec does not name the files; `src/audio.ts` maps the events to `move.ogg`, `soft_drop.ogg`, `menu_select.ogg`, `menu_back.ogg`.
 - **Spec pin:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" and §"Sound Design (Panning)" @ `bb71dc0` (sound-file mapping and panning are implementation details read from `src/audio.ts`).
 - **Engine note:** from `bb71dc0` sounds play through the Web Audio API (`AudioBufferSourceNode` → `StereoPannerNode` → `GainNode`), not `HTMLAudioElement.play()`. The run 1–2 method no longer observes anything; run 3 uses the Web Audio hook described below.
@@ -50,6 +50,7 @@ Run 1 used real audio capture from a private PipeWire null sink. That rig was dr
 | C6 | In play, P2 `→` (move right) | `move` ×1 | `move` ×1 | PASS |
 | C7 | In play, P2 `↓` again | `soft_drop` ×1 | `soft_drop` ×1 | PASS |
 | D1 | All 10 sound assets fetched + decoded | all load, no decode warning | 10/10 fetched (4.1–7.3 kB), no `audio preload failed` | PASS |
+| A8 | `s`, `Shift+S`, `w`, `Shift+W` in the menu (case-insensitive navigation, spec `8b4c2ef`) | `menu_select` ×4 | `menu_select` ×4 | PASS (run 4) |
 
 Note on C3–C7: soft drop and move only sound when the piece actually moves, so those steps are performed immediately after the countdown. A soft-drop tap on a piece already resting on the stack is silent by design of the check (`!collides(...)`), which is not scored as a failure.
 
@@ -61,8 +62,12 @@ Extra checks recorded in the same run (not part of the original 18): P1 `x` / P2
 
 Run 2 (superseded): **FAIL — 2 of 18** — `Esc` back from Stats/Controls was silent.
 
+Run 4 (2026-11-24, `cb935ae`): **PASS — 19 of 19**, same Web Audio hook plus one added sub-case, A8, for the case-insensitive `s`/`Shift+S`/`w`/`Shift+W` menu navigation added to the spec in `8b4c2ef`. All menu-select, back-key, move and soft-drop sub-cases still pass; the three commits after `bb71dc0` only change screen layout.
+
 ## Evidence
 
+- `tests/reports/TC-010/run4-results.json` — run 4 (`cb935ae`): every sub-case with expected/actual sound names, the decode table, and A8.
+- `tests/reports/TC-010/run4-*.png` — run 4 screenshots: Stats/Controls/Volume screens, game start and after the move/soft-drop steps.
 - `tests/reports/TC-010/run3-screens-and-sfx.json` — back-key screens and move/rotate/soft-drop sub-cases with the recorded sound names.
 - `tests/reports/TC-010/run3-hover.json` — A1–A4, C7 and the hover coordinates.
 - `tests/reports/TC-010/run3-menu-repeat.json` — A5/A6 ×4 and A7 gamepad repeats.
@@ -83,3 +88,4 @@ Run 2 (superseded): **FAIL — 2 of 18** — `Esc` back from Stats/Controls was 
 | 1 | 2026-11-24 | — | FAIL | No navigation sounds at all (null-sink capture) |
 | 2 | 2026-11-24 | `8da9d1f` | FAIL | 16/18; `Esc` back from Stats and Controls silent |
 | 3 | 2026-11-24 | `bb71dc0` | PASS | Web Audio hook; all 18 pass, both run 2 failures fixed |
+| 4 | 2026-11-24 | `cb935ae` | PASS | 19/19; adds A8 case-insensitive `w`/`s` navigation |
