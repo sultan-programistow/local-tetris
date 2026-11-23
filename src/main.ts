@@ -534,8 +534,8 @@ window.addEventListener('keydown', e => {
     } else if (screen === 'stats' || screen === 'controls') {
       if (e.key === 'Escape') screen = 'menu';
     } else if (screen === 'volume') {
-      if (e.key === 'ArrowLeft') { volume = Math.max(0, volume - 0.05); saveVolume(volume); }
-      if (e.key === 'ArrowRight') { volume = Math.min(1, volume + 0.05); saveVolume(volume); }
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { volume = Math.max(0, volume - 0.05); saveVolume(volume); }
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); }
       if (e.key === 'Escape') screen = 'menu';
     } else if (screen === 'gameover') {
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') gameOverIndex = 0;
