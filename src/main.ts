@@ -11,7 +11,7 @@ const STORAGE_STATS = 'local-tetris:stats';
 const STORAGE_VOLUME = 'local-tetris:volume';
 
 interface Session { date: string; winner: string; scores: [number, number]; pieces: [number, number]; }
-interface Stats { sessionsPlayed: number; sessionsToday: number; totalPlayTimeMs: number; todayPlayTimeMs: number; todayDate: string; winsP1: number; winsP2: number; winsP1Today: number; winsP2Today: number; lastSessions: Session[]; }
+interface Stats { sessionsPlayed: number; sessionsToday: number; totalPlayTimeMs: number; todayPlayTimeMs: number; todayDate: string; winsP1: number; winsP2: number; winsP1Today: number; winsP2Today: number; sessions: Session[]; }
 
 function loadStats(): Stats {
   try {
@@ -21,8 +21,9 @@ function loadStats(): Stats {
     if (s.sessionsToday === undefined) s.sessionsToday = 0;
     if (s.winsP1Today === undefined) s.winsP1Today = 0;
     if (s.winsP2Today === undefined) s.winsP2Today = 0;
+    if (!Array.isArray(s.sessions)) s.sessions = s.lastSessions || [];
     return s;
-  } catch { return { sessionsPlayed: 0, sessionsToday: 0, totalPlayTimeMs: 0, todayPlayTimeMs: 0, todayDate: new Date().toISOString().slice(0,10), winsP1: 0, winsP2: 0, winsP1Today: 0, winsP2Today: 0, lastSessions: [] }; }
+  } catch { return { sessionsPlayed: 0, sessionsToday: 0, totalPlayTimeMs: 0, todayPlayTimeMs: 0, todayDate: new Date().toISOString().slice(0,10), winsP1: 0, winsP2: 0, winsP1Today: 0, winsP2Today: 0, sessions: [] }; }
 }
 function saveStats(s: Stats) { localStorage.setItem(STORAGE_STATS, JSON.stringify(s)); }
 function loadVolume(): number { const v = parseFloat(localStorage.getItem(STORAGE_VOLUME) || '0.7'); return isNaN(v) ? 0.7 : v; }
@@ -129,6 +130,7 @@ let pausedFromGame = false;
 let pausedReturn: 'play' | 'countdown' = 'play';
 let menuIndex = 0;
 let gameOverIndex = 0;
+let statsScroll = 0;
 function menuItems(): string[] {
   const items = pausedFromGame
     ? ['Resume', 'Restart', 'Stats', 'Volume', 'Controls']
@@ -392,8 +394,7 @@ function decideWinner() {
   stats.todayPlayTimeMs += playMs;
   if (w === 'p1') { stats.winsP1++; stats.winsP1Today++; }
   if (w === 'p2') { stats.winsP2++; stats.winsP2Today++; }
-  stats.lastSessions.unshift(sess);
-  if (stats.lastSessions.length > 5) stats.lastSessions.pop();
+  stats.sessions.unshift(sess);
   saveStats(stats);
 }
 
@@ -511,6 +512,11 @@ function drawGameOver() {
   ctx.fillText(w, 960, 200);
   ctx.font = '32px monospace';
   ctx.fillText(`P1: ${match!.players[0].score}  P2: ${match!.players[1].score}`, 960, 300);
+  ctx.font = '16px monospace';
+  let gy = 360;
+  for (const s of stats.sessions.slice(0, 5)) {
+    ctx.fillText(`${s.date.slice(0,16)}  ${s.winner}  P1:${s.scores[0]} P2:${s.scores[1]}`, 960, gy); gy += 22;
+  }
   const opts = ['Restart', 'Stats', 'Main Menu'];
   opts.forEach((o, i) => {
     ctx.fillStyle = i === gameOverIndex ? '#0f0' : '#aaa';
@@ -522,15 +528,32 @@ function drawGameOver() {
 function drawStats() {
   ctx.fillStyle = '#fff'; ctx.font = 'bold 48px sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('STATS', 960, 120);
-  ctx.font = '24px monospace'; ctx.textAlign = 'left';
-  ctx.fillText(`Sessions: ${stats.sessionsPlayed} (today ${stats.sessionsToday})`, 200, 220);
-  ctx.fillText(`Play time: ${Math.round(stats.totalPlayTimeMs/60000)}m (today ${Math.round(stats.todayPlayTimeMs/60000)}m)`, 200, 260);
-  ctx.fillText(`P1 wins: ${stats.winsP1} (today ${stats.winsP1Today})  P2 wins: ${stats.winsP2} (today ${stats.winsP2Today})`, 200, 300);
-  let y = 320;
-  for (const s of stats.lastSessions) {
-    ctx.fillText(`${s.date.slice(0,10)}  ${s.winner}  P1:${s.scores[0]} P2:${s.scores[1]}`, 200, y); y += 32;
+  ctx.font = '20px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('Today', 500, 180);
+  ctx.fillText('Total', 900, 180);
+  const rows = [
+    ['Games', stats.sessionsToday, stats.sessionsPlayed],
+    ['Time (m)', Math.round(stats.todayPlayTimeMs/60000), Math.round(stats.totalPlayTimeMs/60000)],
+    ['P1 wins', stats.winsP1Today, stats.winsP1],
+    ['P2 wins', stats.winsP2Today, stats.winsP2],
+    ['P1 win %', stats.sessionsToday ? Math.round(stats.winsP1Today/stats.sessionsToday*100) : 0, stats.sessionsPlayed ? Math.round(stats.winsP1/stats.sessionsPlayed*100) : 0],
+    ['P2 win %', stats.sessionsToday ? Math.round(stats.winsP2Today/stats.sessionsToday*100) : 0, stats.sessionsPlayed ? Math.round(stats.winsP2/stats.sessionsPlayed*100) : 0],
+  ];
+  rows.forEach((r, i) => {
+    ctx.fillText(String(r[0]), 200, 220 + i*28);
+    ctx.fillText(String(r[1]), 500, 220 + i*28);
+    ctx.fillText(String(r[2]), 900, 220 + i*28);
+  });
+  ctx.fillStyle = '#aaa'; ctx.fillText('Sessions (newest first):', 200, 420);
+  ctx.fillStyle = '#fff';
+  const visible = 12;
+  const start = statsScroll;
+  let y = 450;
+  for (let i = start; i < Math.min(stats.sessions.length, start + visible); i++) {
+    const s = stats.sessions[i];
+    ctx.fillText(`${s.date.slice(0,16)}  ${s.winner}  P1:${s.scores[0]} P2:${s.scores[1]}`, 200, y); y += 22;
   }
-  ctx.textAlign = 'center'; ctx.fillText('Press Esc to back', 960, 1000); ctx.textAlign = 'left';
+  ctx.textAlign = 'center'; ctx.fillText('W/S or D-pad to scroll, Esc to back', 960, 1000); ctx.textAlign = 'left';
 }
 
 function drawControls() {
@@ -587,7 +610,11 @@ window.addEventListener('keydown', e => {
         else if (opt === 'Volume') screen = 'volume';
         else if (opt === 'Controls') screen = 'controls';
       }
-    } else if (screen === 'stats' || screen === 'controls') {
+    } else if (screen === 'stats') {
+      if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') statsScroll = Math.max(0, statsScroll - 1);
+      if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') statsScroll = Math.min(Math.max(0, stats.sessions.length - 12), statsScroll + 1);
+      if (e.key === 'Escape') screen = 'menu';
+    } else if (screen === 'controls') {
       if (e.key === 'Escape') screen = 'menu';
     } else if (screen === 'gameover') {
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') gameOverIndex = Math.max(0, gameOverIndex - 1);
@@ -665,7 +692,11 @@ function handleGamepadMenus(dt: number) {
       if (left && !prev.left) { volume = Math.max(0, volume - 0.05); saveVolume(volume); audio.setVolume(volume); audio.play('menu_select'); }
       if (right && !prev.right) { volume = Math.min(1, volume + 0.05); saveVolume(volume); audio.setVolume(volume); audio.play('menu_select'); }
       if (b && !prev.b) screen = 'menu';
-    } else if (screen === 'stats' || screen === 'controls') {
+    } else if (screen === 'stats') {
+      if (up && !prev.up) statsScroll = Math.max(0, statsScroll - 1);
+      if (down && !prev.down) statsScroll = Math.min(Math.max(0, stats.sessions.length - 12), statsScroll + 1);
+      if (b && !prev.b) screen = 'menu';
+    } else if (screen === 'controls') {
       if (b && !prev.b) screen = 'menu';
     }
     if (!gp.buttons[9]?.pressed) startOpenedMenu = false;
