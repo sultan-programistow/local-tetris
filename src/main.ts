@@ -876,8 +876,8 @@ function drawStats() {
   ctx.fillText("STATS", 960, 120);
   ctx.font = "28px monospace";
   ctx.textAlign = "left";
-  ctx.fillText("Today", 1000, 180);
-  ctx.fillText("Total", 1200, 180);
+  ctx.fillText("Today", 850, 180);
+  ctx.fillText("Total", 1000, 180);
   const rows = [
     ["Games", stats.sessionsToday, stats.sessionsPlayed],
     [
@@ -898,15 +898,16 @@ function drawStats() {
   ];
   rows.forEach((r, i) => {
     ctx.fillText(String(r[0]), 700, 220 + i * 36);
-    ctx.fillText(String(r[1]), 1000, 220 + i * 36);
-    ctx.fillText(String(r[2]), 1200, 220 + i * 36);
+    ctx.fillText(String(r[1]), 850, 220 + i * 36);
+    ctx.fillText(String(r[2]), 1000, 220 + i * 36);
   });
   ctx.fillStyle = "#aaa";
   ctx.fillText("Sessions:", 700, 440);
+  ctx.fillText("Date            Winner  Score", 700, 470);
   ctx.fillStyle = "#fff";
   const visible = 12;
   const start = statsScroll;
-  let y = 470;
+  let y = 500;
   for (
     let i = start;
     i < Math.min(stats.sessions.length, start + visible);
@@ -934,13 +935,13 @@ function drawControls() {
   ctx.textAlign = "center";
   ctx.fillText("CONTROLS", 960, 120);
   ctx.font = "22px monospace";
-  ctx.textAlign = "left";
+  ctx.textAlign = "center";
   const lines = [
     "P1: A/D move, S soft drop, Z rotate CCW, X rotate CW",
     "P2: Arrow Left/Right move, Arrow Down soft drop, [ rotate CCW, ] rotate CW",
     "Global: Esc pause/menu, Enter confirm",
   ];
-  lines.forEach((l, i) => ctx.fillText(l, 200, 260 + i * 40));
+  lines.forEach((l, i) => ctx.fillText(l, 960, 260 + i * 40));
   ctx.textAlign = "center";
   ctx.fillText("Press Esc to back", 960, 1000);
   ctx.textAlign = "left";
