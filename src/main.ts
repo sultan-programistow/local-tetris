@@ -261,11 +261,14 @@ function draw() {
 }
 
 function drawBoard(p: any, ox: number, oy: number, cell: number) {
-  // grid
-  ctx.strokeStyle = '#222';
+  // grid lines (brighter)
+  ctx.strokeStyle = '#444';
   ctx.lineWidth = 1;
   for (let r = 0; r <= ROWS; r++) { ctx.beginPath(); ctx.moveTo(ox, oy + r*cell); ctx.lineTo(ox + COLS*cell, oy + r*cell); ctx.stroke(); }
   for (let c = 0; c <= COLS; c++) { ctx.beginPath(); ctx.moveTo(ox + c*cell, oy); ctx.lineTo(ox + c*cell, oy + ROWS*cell); ctx.stroke(); }
+  // board border
+  ctx.strokeStyle = '#ccc'; ctx.lineWidth = 2;
+  ctx.strokeRect(ox, oy, COLS*cell, ROWS*cell);
   // cells
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
     const v = p.board.grid[r][c];

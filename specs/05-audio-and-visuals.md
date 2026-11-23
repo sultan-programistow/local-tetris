@@ -30,6 +30,7 @@
 
 - Background: dark (e.g., #0f1115).
 - Grid lines: subtle gray.
+- Board border: clearly visible outline (distinct color, e.g. light gray/white, 2px) around each 10×20 playfield so players can easily see board edges; cell borders slightly brighter than background for readability.
 - Classic 7 pieces: standard Tetris colors (I cyan, O yellow, T purple, S green, Z red, J blue, L orange).
 - New pieces: distinct vibrant colors (pink, teal, lime, etc.), assigned per shape.
 
