@@ -854,17 +854,8 @@ function drawGameOver() {
     960,
     300,
   );
-  ctx.font = "16px monospace";
-  let gy = 360;
-  for (const s of stats.sessions.slice(0, 5)) {
-    ctx.fillText(
-      `${s.date.slice(0, 16)}  ${s.winner}  P1:${s.scores[0]} P2:${s.scores[1]}`,
-      960,
-      gy,
-    );
-    gy += 22;
-  }
   const opts = ["Restart", "Stats", "Main Menu"];
+  ctx.font = "36px sans-serif";
   opts.forEach((o, i) => {
     ctx.fillStyle = i === gameOverIndex ? "#0f0" : "#aaa";
     ctx.fillText(o, 960, 500 + i * 60);
@@ -951,7 +942,7 @@ function drawControls() {
     "P2: Arrow Left/Right move, Arrow Down soft drop, [ rotate CCW, ] rotate CW",
     "Global: Esc pause/menu, Enter confirm",
   ];
-  lines.forEach((l, i) => ctx.fillText(l, 960, 260 + i * 40));
+  lines.forEach((l, i) => ctx.fillText(l, 960, 500 + i * 40));
   ctx.textAlign = "center";
   ctx.fillText("Press Esc to back", 960, 1000);
   ctx.textAlign = "left";
@@ -1049,9 +1040,9 @@ window.addEventListener("keydown", (e) => {
           Math.max(0, stats.sessions.length - 12),
           statsScroll + 1,
         );
-      if (e.key === "Escape") screen = "menu";
+      if (e.key === "Escape") { screen = "menu"; playSfx("menu_back"); }
     } else if (screen === "controls") {
-      if (e.key === "Escape") screen = "menu";
+      if (e.key === "Escape") { screen = "menu"; playSfx("menu_back"); }
     } else if (screen === "gameover") {
       if (e.key === "ArrowUp" || e.key === "w" || e.key === "W")
         gameOverIndex = Math.max(0, gameOverIndex - 1);
@@ -1067,6 +1058,7 @@ window.addEventListener("keydown", (e) => {
       } else if (e.key === "Escape") {
         screen = "menu";
         gameOverIndex = 0;
+        playSfx("menu_back");
       }
     } else if (screen === "play") {
       if (e.key === "Escape") {

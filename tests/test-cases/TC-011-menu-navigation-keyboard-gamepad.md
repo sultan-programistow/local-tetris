@@ -2,10 +2,9 @@
 
 - **Area:** Menus / input / navigation
 - **Priority:** High
-- **Date run:** 2026-11-24 (run 2: FAIL — Shift+S does not navigate; all other sub-cases PASS)
-- **Environment:** Chromium (headless `--headless=new`, Chrome 158) at 1920×1080, production build served with `vite preview` at `http://127.0.0.1:4176`, commit `0c25ff9`, canvas 1920×1080 with no CSS scaling
-- **Spec pins:** `specs/03-input-and-controls.md` §"Keyboard" (`Enter/Space = confirm in menus`, `Esc = pause/menu`; `ArrowUp/W (both cases) = up`, `ArrowDown/S (lowercase only) = down`) and §"Menu navigation" (`ArrowUp or W (both cases) = previous item`) — W/S wording is the Architekt edit of 2026-11-24, **uncommitted** in the working tree at `0c25ff9`; §"Menu navigation (gamepad)" (`D-pad / left stick: navigate up/down/left/right`, `A: select/confirm`, `B: back`) @ `ceabcd2`; `specs/04-screens-and-ui.md` §"Main Menu" and §"Game Over" (`Navigation: D-pad/arrows or W/S, A/Enter/Space select, B/Esc/Select back`, W/w up, s down) — same uncommitted edit.
-- **User decision (2026-11-24):** W/S are permanent menu keys, and `w`/`W` and `s`/`S` must behave identically. The current spec's "lowercase only" wording is expected to change after the Developer fix; sub-case K13 tests the user requirement and currently FAILS.
+- **Date run:** 2026-11-24 (run 4: PASS — spec re-pinned after W/S case-insensitive update)
+- **Environment:** Chromium (headless `--headless=new`, Chrome 158) at 1920×1080, production build served with `vite preview` at `http://127.0.0.1:4176`, commit `8b4c2ef`, canvas 1920×1080 with no CSS scaling
+- **Spec pins:** `specs/03-input-and-controls.md` §"Keyboard" (`Enter/Space = confirm in menus`, `Esc = pause/menu`; `ArrowUp/W/w = up, ArrowDown/S/s = down (case-insensitive)`) and §"Menu navigation" (`ArrowUp or W/w = previous item`, `ArrowDown or S/s = next item`, both case-insensitive) @ `8b4c2ef`; §"Menu navigation (gamepad)" (`D-pad / left stick: navigate up/down/left/right`, `A: select/confirm`, `B: back`) @ `ceabcd2`; `specs/04-screens-and-ui.md` §"Main Menu" and §"Game Over" (`Navigation: D-pad/arrows or W/S, A/Enter/Space select, B/Esc/Select back`, W/w up, S/s down, case-insensitive) @ `8b4c2ef`.
 
 ## Purpose
 
@@ -35,7 +34,7 @@ Expected sequences are from the menu order Start → Stats → Volume → Contro
 |---|---|---|---|---|
 | K1 | `↓` ×4 from Start | Stats, Volume, Controls, Start (wrap) | Stats, Volume, Controls, Start | PASS |
 | K2 | `↑` ×4 from Start | Controls, Volume, Stats, Start (wrap) | Controls, Volume, Stats, Start | PASS |
-| K3 | `s` ×4 / `w` ×4 | same as K1 / K2 (user requirement, not spec) | Stats, Volume, Controls, Start / Controls, Volume, Stats, Start | PASS |
+| K3 | `s` ×4 / `w` ×4 | same as K1 / K2 | Stats, Volume, Controls, Start / Controls, Volume, Stats, Start | PASS |
 | K4 | `Space` on Volume | Volume screen opens | VOLUME screen; `Esc` returns to menu with Volume still selected | PASS |
 | K5 | `Enter` on Controls | Controls screen opens | CONTROLS screen; `Esc` returns to menu with Controls still selected | PASS |
 | K6 | `←`, `→`, `x` (negative control) | selection does not move | stays on Start for all three | PASS |
@@ -46,11 +45,13 @@ Expected sequences are from the menu order Start → Stats → Volume → Contro
 | K11 | `Esc` in play; `Esc` in the paused menu | menu shows Resume; second Esc resumes play | menu with Resume selected; play screen returns with scores | PASS |
 | K12 | `B` in the paused menu | resumes play | play screen returns | PASS |
 | K13a | `W` ×2 with Shift held | Controls, then Volume | Controls, then Volume | PASS |
-| K13b | `S` ×2 with Shift held | Stats, then Volume (user decision; spec says lowercase only) | stays on Start — no move | FAIL |
+| K13b | `S` ×2 with Shift held | Stats, then Volume (case-insensitive per spec) | Stats, then Volume | PASS |
 
 ## Result
 
-**PASS** (run 1, commit `41b3faa`) — all 12 sub-cases match. Every direction path moves exactly one item per discrete press and wraps at both ends; Enter, Space and A activate the selected item; Esc and B go back both from sub-screens and from a game-paused menu. The same script also passed unchanged on `8da9d1f`; the two commits differ only in stats/session code.
+**PASS** (run 4, commit `8b4c2ef`) — all 14 checks pass. Every direction path moves exactly one item per discrete press and wraps at both ends; Enter, Space and A activate the selected item; Esc and B go back both from sub-screens and from a game-paused menu; `W`/`w` and `S`/`s` all navigate, including with Shift held.
+
+Run 2 (`0c25ff9`) failed K13b (Shift+S ignored); Developer fixed it in `a45c99b` and Architekt aligned the spec wording in `8b4c2ef`. Code is unchanged between those two commits, and both runs pass. The pre-W/S sub-cases passed unchanged on `8da9d1f`, `41b3faa` and `0c25ff9`.
 
 ## Evidence
 
@@ -64,9 +65,18 @@ Expected sequences are from the menu order Start → Stats → Volume → Contro
 - `F1-dpad-cycle.png`, `F3-A-controls.png`, `F4-B-back.png` — D-pad cycle, A, B.
 - `G1-stick-cycle.png`, `G3-A-controls.png` — left-stick cycle and A.
 - `H2-esc-resume.png`, `H4-B-resume.png` — Esc/B resuming a game-paused menu.
+- `I1-W-uppercase.png` — Shift+W moving the selection.
+
+## Run history
+
+| Run | Date | Build | Result |
+|---|---|---|---|
+| 1 | 2026-11-24 | `41b3faa` | PASS (before W/S case-sensitivity added) |
+| 2 | 2026-11-24 | `0c25ff9` | FAIL — Shift+S does not navigate |
+| 3 | 2026-11-24 | `a45c99b` | PASS — Shift+S fixed, all paths |
+| 4 | 2026-11-24 | `8b4c2ef` | PASS — spec re-pinned; code unchanged |
 
 ## Notes
 
-- W/S are handled in the implementation but absent from the spec; if they are intended as permanent menu keys, the spec should say so, otherwise this sub-case pins undocumented behaviour.
-- Upper-case `S` (Shift+S) was not exercised; the implementation matches only lower-case `s` for menu-down.
+- Root cause observation (not a diagnosis): before `a45c99b`, the menu and Game Over handlers compared `e.key` against `"s"` only for down but against `"w"` and `"W"` for up; the Stats handler already accepted both cases. Fixed by Developer in `a45c99b`; Shift+S now moves down in the main menu and Game Over.
 - Root cause and code changes are out of scope for this test asset.

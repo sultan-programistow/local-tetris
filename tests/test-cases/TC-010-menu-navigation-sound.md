@@ -1,63 +1,68 @@
-# TC-010 — Menu navigation: does moving the selection play a sound?
+# TC-010 — Menu navigation and movement sounds
 
-- **Area:** Menus / audio
+- **Area:** Menus / audio / gameplay SFX
 - **Priority:** Medium
-- **Date run:** 2026-11-24 (run 1: FAIL)
-- **Environment:** Chromium (headless, `--headless=new`), production build served with `vite preview` at `http://127.0.0.1:4173`, commit `f12ecbf`. Audio captured from a private PipeWire null sink (`opencode_test`): Chrome launched with `PULSE_SINK=opencode_test`, monitor recorded with `parec` (48 kHz, s16le, stereo), analysed at 25 ms window RMS with `-50 dB` detection threshold.
-- **Spec:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" → "Menu navigation (select/back)" is listed as an SFX event; `specs/04-screens-and-ui.md` for the menu items.
-- **Behaviour under test:** moving the menu selection — by mouse hover, Up/Down arrow keys, or gamepad D-pad — either plays a sound or it does not. The spec does not name which file; `sounds/menu_select.ogg` is the blip the app uses for menu selection elsewhere (volume slider).
+- **Date run:** 2026-11-24 (run 1: FAIL — no navigation sounds at all; run 2: FAIL — 16/18 sub-cases pass, keyboard Esc back from Stats and Controls is silent)
+- **Spec:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" — "Move (left/right)", "Soft drop", "Menu navigation (select/back)" are listed SFX events. The spec does not name the files; `src/audio.ts` maps the events to `move.ogg`, `soft_drop.ogg`, `menu_select.ogg`, `menu_back.ogg`.
+- **Behaviour under test:** each listed event causes exactly one `HTMLMediaElement.play()` for the expected sound file, on the expected input path, and not otherwise.
 
-## Purpose
+## Method (run 2 onward — mocked audio)
 
-Determine whether a selection change in the main menu produces any sound, and which sound, per input path.
+- `HTMLMediaElement.prototype.play` is wrapped in the page and every call recorded as `{src, time}`; nothing is recorded when no call happens.
+- Each action is followed by a wait and then a read of the recorded list, so a sub-case asserts the exact sequence of sound files a step must produce (usually one, sometimes four or five, sometimes none).
+- Sound files are separately fetched and decoded with `decodeAudioData` to prove the assets exist and are valid — this replaces listening to the audio without needing a sink or loopback capture.
+- `play()` rejections are collected; none occurred.
+- Screenshots confirm which screen each back-key sub-case ran on.
+
+Run 1 used real audio capture from a private PipeWire null sink. That rig was dropped: it needed rewiring, and frame loss in the sink monitor made results unreliable. Run 1 audio evidence is kept for the record but not used for the run 2 verdict.
 
 ## Preconditions
 
-1. Production build at `http://127.0.0.1:4173`.
-2. Main menu visible (`Esc` from any screen), volume at default `0.7` (`local-tetris:volume` unset).
-3. Page has a real user activation (trusted click) so media playback is not auto-blocked.
-4. Capture rig validated by a positive control in the same run (volume-slider step, which the app does play `menu_select.ogg` for).
+1. Production build served at `http://127.0.0.1:4174` (`vite preview`), headless Chromium driven over CDP.
+2. Fresh page load before each group; volume `0.7` (`local-tetris:volume`), so `playSfx` is not short-circuited by zero volume.
+3. A trusted click for user activation.
+4. Gamepad path uses a standard-mapping mock exposed through `navigator.getGamepads()`; buttons 12/13 = D-pad up/down, button 1 = B.
 
-## Method
+## Sub-cases and results (run 2, commit 8da9d1f)
 
-- `HTMLMediaElement.prototype.play` wrapped in the page to record `{time, src, volume}` for every requested sound.
-- Null-sink monitor recorded per phase; each phase has page-clock timestamps for every input; audio intervals above `-50 dB` are matched to those timestamps.
-- Gamepad path uses a standard-mapping mock exposed through `navigator.getGamepads()` (same method as TC-005/TC-009), buttons 12/13 = D-pad up/down, button 0 = A.
-- The navigation path itself was verified independently of sound: after hovering "Controls" the page showed the Controls screen on `Enter`, and after 3 × D-pad down the page showed the Controls screen on `A`.
-
-## Sub-cases and results
-
-| # | Input path | Expected (spec) | Actual | Status |
+| # | Action | Expected | Actual | Status |
 |---|---|---|---|---|
-| P1 | Volume screen, `→` once (positive control) | `menu_select.ogg` blip | `menu_select.ogg`, captured peak −22.9 dB | PASS (rig) |
-| P2 | Volume screen, `←` once (positive control) | `menu_select.ogg` blip | `menu_select.ogg`, captured peak −22.5 dB | PASS (rig) |
-| A1 | Hover Start → Stats | navigation sound | no `play()` call, silence | FAIL |
-| A2 | Hover Stats → Volume | navigation sound | no `play()` call, silence | FAIL |
-| A3 | Hover Volume → Controls | navigation sound | no `play()` call, silence | FAIL |
-| A4 | Hover Controls → empty area → Start | navigation sound on re-entry | no `play()` call, silence | FAIL |
-| B1 | `↓` ×4 (full cycle incl. wrap) | navigation sound | no `play()` call, silence | FAIL |
-| B2 | `↑` ×4 | navigation sound | no `play()` call, silence | FAIL |
-| C1 | D-pad `↓` ×3, `↑` ×2 | navigation sound | no `play()` call, silence | FAIL |
+| A1 | Hover Start → Stats | `menu_select.ogg` ×1 | `menu_select.ogg` ×1 | PASS |
+| A2 | Hover the same item again | no call | no call | PASS |
+| A3 | Hover the empty row below Controls | no call | no call | PASS |
+| A4 | Hover from empty back onto Start | `menu_select.ogg` ×1 | `menu_select.ogg` ×1 | PASS |
+| A5 | `↓` ×4 (wraps past Controls) | `menu_select.ogg` ×4 | `menu_select.ogg` ×4 | PASS |
+| A6 | `↑` ×4 | `menu_select.ogg` ×4 | `menu_select.ogg` ×4 | PASS |
+| A7 | D-pad ↓ ×3, ↑ ×2 | `menu_select.ogg` ×5 | `menu_select.ogg` ×5 | PASS |
+| B1 | Volume screen, `Esc` → menu | `menu_back.ogg` ×1 | `menu_back.ogg` ×1 | PASS |
+| B2 | Stats screen, `Esc` → menu | `menu_back.ogg` ×1 | no call | **FAIL** |
+| B3 | Controls screen, `Esc` → menu | `menu_back.ogg` ×1 | no call | **FAIL** |
+| B4 | Volume screen, gamepad `B` → menu | `menu_back.ogg` ×1 | `menu_back.ogg` ×1 | PASS |
+| C1 | In play, P1 `a` (move left) | `move.ogg` ×1 | `move.ogg` ×1 | PASS |
+| C2 | In play, P1 `d` (move right) | `move.ogg` ×1 | `move.ogg` ×1 | PASS |
+| C3 | In play, P1 `s` (soft drop tap) | `soft_drop.ogg` ×1 | `soft_drop.ogg` ×1 | PASS |
+| C4 | In play, P2 `ArrowDown` (soft drop tap) | `soft_drop.ogg` ×1 | `soft_drop.ogg` ×1 | PASS |
+| C5 | In play, P2 `ArrowLeft` (move left) | `move.ogg` ×1 | `move.ogg` ×1 | PASS |
+| C6 | In play, P2 `ArrowRight` (move right) | `move.ogg` ×1 | `move.ogg` ×1 | PASS |
+| C7 | In play, P2 `ArrowDown` again | `soft_drop.ogg` ×1 | `soft_drop.ogg` ×1 | PASS |
+| D1 | All 10 sound assets fetched + decoded | all decode | all decode, 0.042–0.617 s each | PASS |
 
-Supplementary observation (not a sub-case): `menu_back`, `move` and `soft_drop` assets exist in `src/audio.ts` but no `playSfx("menu_back"|"move"|"soft_drop")` call exists in `src/main.ts`; the spec lists Move, Soft drop and menu back among the audio events.
+Note on C3–C7: soft drop and move only sound when the piece actually moves, so those steps are performed immediately after the countdown. A soft-drop tap on a piece already resting on the stack is silent by design of the check (`!collides(...)`), which is not scored as a failure.
 
-## Result
+## Result (run 2)
 
-**FAIL** — no sound is produced when the menu selection moves by hover, arrow keys, or D-pad. The only menu sound observed is `menu_select.ogg`, and it is played on volume-slider steps, not on navigation. The capture rig is proven by the positive controls, so this is not a measurement gap.
-
-The "which sound" answer for the current build: none, on all three paths.
+**FAIL — 2 of 18 sub-cases.** Menu selection, Move, Soft drop and the Volume-screen back key all play the expected sound now. `Esc` back from the **Stats** and **Controls** screens plays nothing, although both screens show "Esc to back" and the gamepad `B` path on those screens does play `menu_back.ogg`.
 
 ## Evidence
 
-- `tests/reports/TC-010/run1-control-volume-step.ogg` — positive control, two `menu_select` blips at 2350 ms and 3575 ms.
-- `tests/reports/TC-010/run1-hover.ogg` — silent across six hover marks.
-- `tests/reports/TC-010/run1-arrows.ogg` — silent across eight arrow marks.
-- `tests/reports/TC-010/run1-dpad.ogg` — silent across five D-pad marks.
-- `tests/reports/TC-010/run1-timeline.txt` — per-phase marks, audio intervals, and the `play()` log.
-- `tests/reports/TC-010/run1-hover-start.png`, `run1-hover-controls.png` — hover highlight moves with the pointer.
-- `tests/reports/TC-010/run1-hover-then-enter.png` — hover on Controls, `Enter` opens Controls (hover path works, silently).
-- `tests/reports/TC-010/run1-pad-then-A.png` — 3 × D-pad down, `A` opens Controls (D-pad path works, silently).
+- `tests/reports/TC-010/run2-results.json` — every sub-case with expected and actual call lists, plus the decode table.
+- `tests/reports/TC-010/run2-b2-stats-screen.png` — Stats screen open, showing "Esc to back".
+- `tests/reports/TC-010/run2-b3-controls-screen.png` — Controls screen open, showing "Press Esc to back".
+- `tests/reports/TC-010/run2-b1-volume-screen.png` — Volume screen (passing back key, for contrast).
+- `tests/reports/TC-010/run2-game-start.png`, `run2-game-after-input.png` — play screen before/after the move and soft-drop steps.
+- Run 1 (real audio capture) files: `run1-*.ogg`, `run1-timeline.txt`, `run1-*.png`.
 
 ## Notes
 
-- The OpenBot private browser instance available to the Tester produced no system audio at all: a 2 s, full-scale 1 kHz WebAudio tone left the default sink monitor at peak `-inf`, and no Chrome sink-input ever appeared. Audio tests therefore run in a separate headless Chrome launched with `PULSE_SINK` pointed at the private sink. This is an environment limitation, not an app result.
+- What the mock cannot show: that a blip is audible, its loudness, or that the OS output route works. Asset decode plus a successful `play()` is the proxy used here; volume behaviour is checked separately in TC-009.
+- Run 1 environment limitation (kept for the record): the OpenBot private browser produced no system audio, and `parec` on a null-sink monitor delivered only ~60% of real-time frames, so audio-capture timings were unreliable. `pw-record` captured correctly (4.9 s per 5 s wall) before the rig was retired.
