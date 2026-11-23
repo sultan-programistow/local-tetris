@@ -905,7 +905,9 @@ function drawStats() {
     ctx.fillText(String(r[2]), 1000, 220 + i * 36);
   });
   ctx.fillStyle = "#aaa";
-  ctx.fillText("Sessions:", 700, 440);
+  ctx.textAlign = "center";
+  ctx.fillText("Sessions", 960, 420);
+  ctx.textAlign = "left";
   ctx.fillText("Date".padEnd(18) + "Winner".padEnd(8) + "Score  Dur", 700, 470);
   ctx.fillStyle = "#fff";
   const visible = 12;
