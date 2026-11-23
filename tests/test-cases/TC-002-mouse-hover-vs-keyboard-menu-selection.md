@@ -2,7 +2,7 @@
 
 - **Area:** Main menu / input
 - **Priority:** Medium
-- **Date run:** 2026-11-23 (last observed run: pre-implementation)
+- **Date run:** 2026-11-23 (run 4: PASS)
 - **Environment:** Chromium (OpenBot browser), `http://localhost:5173`, dev server, viewport 1766×1102, canvas 1920×1080 (scaled)
 - **Spec:** `specs/03-input-and-controls.md` → "Menu selection model (Option B)"
 
@@ -28,18 +28,36 @@
 6. Hover "Stats", then press `Enter` → the Stats screen opens.
 7. Return to the menu and click a non-selected item → that item is activated.
 
-## Actual result (last run, before implementation)
+## Actual result (run 4, post-implementation)
 
-The pre-Option-B behavior was still present: keyboard selection stayed green and the hovered item was also drawn green, so two items appeared selected at once (e.g. "Start" + "Stats"). Pressing `Enter` activated the keyboard selection.
+- `ArrowDown` → only "Stats" green (single selection).
+- Hover "Start" → only "Start" green; "Stats" no longer green.
+- Hover "Volume" → only "Volume" green.
+- Pointer away → selection stays on the last hovered item ("Volume").
+- `Enter` after hovering "Stats" → Stats screen opens (pixels 15,566 → 7,627).
+- Click after hovering "Controls" → Controls screen opens (pixels → 17,221).
+
+All steps pass.
 
 ## Status
 
-**PENDING** — spec updated to Option B; awaiting Developer implementation. Re-run after the change lands.
+**PASS** (run 4) — single selected item; hover moves the selection; selection persists; Enter/click activates.
 
-## Evidence (pre-implementation baseline)
+## Run history
 
-- Keyboard selection on "Stats": `tests/reports/TC-002/keyboard-stats.png`
-- Hover "Start" while "Stats" selected (dual highlight): `tests/reports/TC-002/hover-start-dual.png`
+| Run | Date | Result | Key evidence |
+|---|---|---|---|
+| 1 | 2026-11-23 | FAIL | dual highlight (Start + Stats green) |
+| 2 | 2026-11-23 | FAIL | dual highlight; Enter still activated keyboard selection |
+| 3 | 2026-11-23 | FAIL | dual highlight (hover did not move selection) |
+| 4 | 2026-11-23 | PASS | single highlight; hover moves selection; Enter/click activates |
+
+## Evidence (run 4)
+
+- `tests/reports/TC-002/run4-keyboard-stats.png` (keyboard selection on Stats)
+- `tests/reports/TC-002/run4-hover-start.png` (hover Start → only Start green)
+- `tests/reports/TC-002/run4-hover-away.png` (pointer away → selection stays)
+- Pre-implementation baseline: `tests/reports/TC-002/keyboard-stats.png`, `hover-start-dual.png`
 
 ## Notes / follow-up
 
