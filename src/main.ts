@@ -585,8 +585,8 @@ function drawVolume() {
 let lastKey = '';
 window.addEventListener('keydown', e => {
   if (screen === 'volume') {
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); }
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); }
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); playSfx('menu_select'); }
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); playSfx('menu_select'); }
     if (e.key === 'Escape') screen = 'menu';
     return;
   }
