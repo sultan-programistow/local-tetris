@@ -21,7 +21,11 @@
 - When adjusting the slider, play a short test sound (e.g., menu blip) so the player can judge the volume level.
 - Applies to all SFX.
 
-## Visual Effects
+## Sound Design (Panning)
+
+- Player-related sounds (piece lock, soft drop, rotate, move, line clear, game over for that player) are panned: P1 = 85% left, P2 = 85% right.
+- Non-player sounds (menu navigation, menu select/back, volume test blip, countdown, global game over fanfare) are centered (pan 0).
+- Implementation should use Web Audio API (stereo panner) rather than simple HTMLAudio to support panning; HTMLAudio fallback can be centered.
 
 - Line clear: flash affected rows + brief particle burst before removal.
 - Piece lock: subtle (optional).
