@@ -332,7 +332,7 @@ function drawBoard(p: any, ox: number, oy: number, cell: number) {
   }
 }
 
-const CELL = 72;
+const CELL = 54;
 function drawPlay(countdown: boolean) {
   const p0 = match!.players[0], p1 = match!.players[1];
   drawBoard(p0, 200, 80, CELL);
