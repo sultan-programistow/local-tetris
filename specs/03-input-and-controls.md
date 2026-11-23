@@ -12,6 +12,14 @@
 - During gameplay, mouse is not used (keyboard/gamepad only for play).
 - Cursor may be hidden during play and shown in menus.
 
+### Menu selection model (Option B)
+
+- There is exactly ONE selected item at any time.
+- Mouse hover UPDATES the keyboard selection (hovered item becomes the selected item).
+- No separate hover highlight; selected item uses the single green style.
+- Enter (keyboard) / A (gamepad) / click activates the selected item.
+- Moving the pointer away does NOT revert the selection; last hovered (or last keyboard) item stays selected.
+
 ## Keyboard
 
 - Player 1: A/D = move left/right, S = soft drop, W/Q? Actually: W not used; rotations: Q = rotate CCW, E = rotate CW (or Z/X). Final: use Z = rotate CCW, X = rotate CW. Space not used (soft drop only).

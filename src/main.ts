@@ -52,7 +52,7 @@ function updateHover() {
     hoveredMenu = -1;
     MENU.forEach((_, i) => {
       const y = 400 + i * 60;
-      if (mouseX >= 800 && mouseX <= 1120 && mouseY >= y - 30 && mouseY <= y + 10) hoveredMenu = i;
+      if (mouseX >= 800 && mouseX <= 1120 && mouseY >= y - 30 && mouseY <= y + 10) { hoveredMenu = i; menuIndex = i; }
     });
   }
 }
@@ -313,8 +313,7 @@ function drawMenu() {
   ctx.fillText('TETRIS DUEL', 960, 200);
   ctx.font = '36px sans-serif';
   MENU.forEach((m, i) => {
-    const active = i === menuIndex || i === hoveredMenu;
-    ctx.fillStyle = active ? '#0f0' : '#aaa';
+    ctx.fillStyle = i === menuIndex ? '#0f0' : '#aaa';
     ctx.fillText(m, 960, 400 + i * 60);
   });
   ctx.textAlign = 'left';
