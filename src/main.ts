@@ -1,4 +1,5 @@
 import './style.css';
+import * as audio from './audio';
 import { MatchState } from './game/state';
 import { collides, tryRotate } from './game/collision';
 import { Board } from './game/board';
@@ -119,7 +120,7 @@ function updateVolumeFromMouse() {
   if (screen !== 'volume') return;
   // slider region
   const v = Math.min(1, Math.max(0, (mouseX - 400) / 1120));
-  volume = v; saveVolume(volume); setAudioVolume(volume);
+  volume = v; saveVolume(volume); audio.setVolume(volume); audio.play('menu_select');
 }
 
 let match: MatchState | null = null;
@@ -135,8 +136,8 @@ function menuItems(): string[] {
   return items;
 }
 let volume = loadVolume();
-preloadAudio();
-setAudioVolume(volume);
+audio.setVolume(volume);
+audio.preload();
 let sessionStart = 0;
 let stats = loadStats();
 
@@ -583,8 +584,8 @@ window.addEventListener('keydown', e => {
     } else if (screen === 'stats' || screen === 'controls') {
       if (e.key === 'Escape') screen = 'menu';
     } else if (screen === 'volume') {
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); }
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); }
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { volume = Math.max(0, volume - 0.05); saveVolume(volume); audio.setVolume(volume); audio.play('menu_select'); }
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { volume = Math.min(1, volume + 0.05); saveVolume(volume); audio.setVolume(volume); audio.play('menu_select'); }
       if (e.key === 'Escape') screen = 'menu';
     } else if (screen === 'gameover') {
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') gameOverIndex = Math.max(0, gameOverIndex - 1);
@@ -659,8 +660,8 @@ function handleGamepadMenus() {
       // B/Select returns to Main Menu
       if (b && !prev.b) { screen = 'menu'; gameOverIndex = 0; }
     } else if (screen === 'volume') {
-      if (left && !prev.left) { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); }
-      if (right && !prev.right) { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); }
+      if (left && !prev.left) { volume = Math.max(0, volume - 0.05); saveVolume(volume); audio.setVolume(volume); audio.play('menu_select'); }
+      if (right && !prev.right) { volume = Math.min(1, volume + 0.05); saveVolume(volume); audio.setVolume(volume); audio.play('menu_select'); }
       if (b && !prev.b) screen = 'menu';
     } else if (screen === 'stats' || screen === 'controls') {
       if (b && !prev.b) screen = 'menu';
