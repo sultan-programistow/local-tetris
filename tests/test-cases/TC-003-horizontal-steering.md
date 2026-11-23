@@ -2,8 +2,8 @@
 
 - **Area:** Gameplay / input
 - **Priority:** High
-- **Date run:** 2026-11-23 (run 7)
-- **Environment:** Chromium (OpenBot browser), production build served statically at `http://127.0.0.1:4174` (`vite preview`, no HMR), build from `4a16841`, canvas 1920×1080, cell 50 px, P1 board origin (200,40), P2 origin (1220,40)
+- **Date run:** 2026-11-23 (run 8)
+- **Environment:** Chromium (OpenBot browser), production build served statically at `http://127.0.0.1:4174` (`vite preview`, no HMR), build from `557f95b`, canvas 1920×1080, cell 50 px, P1 board origin (200,40), P2 origin (1220,40)
 - **Spec:** `specs/03-input-and-controls.md` → Keyboard, Gamepad, DAS (initial delay 350 ms, repeat 75 ms, keyboard and gamepad)
 - **Spec pin:** `specs/03-input-and-controls.md` §DAS @ `a27d32b` (350 ms initial delay, 75 ms repeat). Re-check the pin when the spec changes.
 
@@ -30,12 +30,12 @@ Same inputs as TC-005's soft-drop matrix: keyboard and gamepad must both honour 
 
 | Input | Press → first move | Move | Extra moves |
 |---|---|---|---|
-| P1 `a` | +44 ms | one column (3 → 2) | none |
-| P1 `d` | +57 ms | one column (3 → 4) | none |
-| P2 `ArrowLeft` | +66 ms | one column (3 → 2) | none |
+| P1 `a` | +43 ms | one column (3 → 2) | none |
+| P1 `d` | +43 ms | one column (3 → 4) | none |
+| P2 `ArrowLeft` | +50 ms | one column (3 → 2) | none |
 | P2 `ArrowRight` (run 6) | +49 ms | one column (3 → 4) | none |
-| pad0 D-pad left | +66 ms | one column (3 → 2) | none |
-| pad0 left stick −1 | +50 ms | one column (3 → 2) | none |
+| pad0 D-pad left | +38 ms | one column (3 → 2) | none |
+| pad0 left stick −1 | +33 ms | one column (3 → 2) | none |
 
 ### Sub-case B — hold 900 ms: FAIL (left fails, right passes)
 
@@ -45,26 +45,25 @@ Frames are drawn every ~33 ms, so repeat gaps carry about ±33 ms resolution.
 
 | Input | Press → first cell | Repeat starts | Gaps after first cell |
 |---|---|---|---|
-| P1 `d` | +57 ms | +407 ms | 350, 100, 100 ms |
-| pad0 D-pad right | +39 ms | +372 ms | 333, 101, 100 ms |
-
-(Run 6 also passed `ArrowRight`, pad1 D-pad right and left stick +1 with the same timings.)
+| P1 `d` | +43 ms | +377 ms | 334, 83, 83 ms |
+| pad0 D-pad right | +63 ms | +380 ms | 317, 100, 100 ms |
+| pad0 left stick +1 | +59 ms | +392 ms | 333, 84, 83, 83 ms |
 
 **Left — FAIL**
 
 | Input | Press → first cell | Repeat starts | Gaps after first cell | Then |
 |---|---|---|---|---|
-| P1 `a` | +49 ms | +233 ms | **184 ms** | +299 ms, wall |
-| P2 `ArrowLeft` | +66 ms | +233 ms | **167 ms** | +299 ms, wall |
-| pad0 D-pad left | +40 ms | **never** | — | no move in 900 ms |
-| pad1 D-pad left | +38 ms | **never** | — | no move in 900 ms |
-| pad0 left stick −1 | +50 ms | **never** | — | no move in 900 ms |
+| P1 `a` | +52 / +47 ms | +235 / +213 ms | **183 / 166 ms** | +302 / +263 ms, wall |
+| P2 `ArrowLeft` | +50 ms | +217 ms | **167 ms** | +283 ms, wall |
+| pad0 D-pad left | +46 ms | **never** | — | no move in 900 ms |
+| pad1 D-pad left | +41 ms | **never** | — | no move in 900 ms |
+| pad0 left stick −1 | +33 ms | **never** | — | no move in 900 ms |
 
-Right inputs match the spec (~350 ms initial delay, then ~75 ms ARR within frame resolution). Left inputs are unchanged from run 6: keyboard-left starts repeating after ~167–184 ms instead of 350 ms (repeat spacing ~66 ms, faster than the right side's ~100 ms), and gamepad D-pad/stick left never auto-repeat.
+Right inputs match the spec (~350 ms initial delay, then ~75 ms ARR within frame resolution). Left inputs are unchanged from runs 6–7: keyboard-left starts repeating after ~166–183 ms instead of 350 ms (repeat spacing ~50–67 ms, faster than the right side's ~83–100 ms), and gamepad D-pad/stick left never auto-repeat.
 
 ## Status
 
-**FAIL** (run 7) — tap moves exactly one column for every input; right-hold meets the spec for keyboard and gamepad; **left-hold still does not**: keyboard-left delay ~167–184 ms instead of 350 ms, and gamepad-left (D-pad and left stick) never auto-repeats.
+**FAIL** (run 8) — tap moves exactly one column for every input; right-hold meets the spec for keyboard and gamepad; **left-hold still does not**: keyboard-left delay ~166–183 ms instead of 350 ms, and gamepad-left (D-pad and left stick) never auto-repeats.
 
 ## Run history
 
@@ -74,14 +73,16 @@ Right inputs match the spec (~350 ms initial delay, then ~75 ms ARR within frame
 | 2–4 | 2026-11-23 | PASS | re-checks after input/gamepad changes (dev server) |
 | 5 | 2026-11-23 | FAIL | hold timing added; keyboard-left delay ~200 ms; gamepad hold never repeats |
 | 6 | 2026-11-23 | FAIL | after DAS fix `8c932b1`: right passes (350 ms then 75 ms); left fails (keyboard ~167 ms, gamepad no repeat) |
-| 7 | 2026-11-23 | FAIL | after left-DAS fix `4a16841`: left values identical to run 6 (keyboard ~167–184 ms, gamepad-left no repeat); right unchanged and passing |
+| 7 | 2026-11-23 | FAIL | after left-DAS fix `4a16841`: left values identical to run 6; right unchanged and passing |
+| 8 | 2026-11-23 | FAIL | after key-edge fix `557f95b`: left still identical (keyboard ~166–183 ms, gamepad-left no repeat); right passes |
 
 ## Verification
 
-Per-frame analysis via a `fillRect` hook, current piece = last four cell fills per side, timestamps relative to the input press. Raw timelines: `tests/reports/TC-003/run6-das-timeline.txt`, `tests/reports/TC-003/run7-das-timeline.txt`. No image input used.
+Per-frame analysis via a `fillRect` hook, current piece = last four cell fills per side, timestamps relative to the input press. One synthetic keydown per press, so OS key auto-repeat is not involved. Raw timelines: `tests/reports/TC-003/run6-das-timeline.txt`, `run7-das-timeline.txt`, `run8-das-timeline.txt`. No image input used.
 
 ## Notes / follow-up
 
 - Hold timing is new coverage in this case (runs 1–4 only checked single moves), so the failures are not regressions of a previously passing check.
-- Runs 6 and 7 re-test DAS fixes (`8c932b1`, `4a16841`): right direction fixed, left direction still wrong in the same way.
+- Runs 6–8 re-test DAS fixes (`8c932b1`, `4a16841`, `557f95b`): right direction fixed and stable, left direction still wrong in the same way each time.
+- Gamepad-left (no keydown path at all) fails identically, so the left defect is not specific to keyboard edge detection.
 - Root cause is out of scope for this test asset.

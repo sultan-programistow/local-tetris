@@ -1,0 +1,29 @@
+TC-003 run 8 — DAS timeline after commit 557f95b ("Left DAS: use per-frame prevKeys snapshot instead of OS key-repeat edges")
+Date: 2026-11-23
+Build tested: 557f95b, static `vite preview` at http://127.0.0.1:4174 (no HMR), served bundle index-BqIjtjO9.js
+Method: CanvasRenderingContext2D.fillRect hook, each frame the current piece = last four 48 px cells drawn for the side.
+Fresh page load per input (unique URL). Hold = 900 ms, released by in-page setTimeout; tap = 130 ms.
+Exactly one synthetic keydown per press (no OS auto-repeat involved). Timestamps in ms relative to press.
+
+Spec expectation (specs/03-input-and-controls.md §DAS): press edge moves one column, then 350 ms delay, then repeat every 75 ms; keyboard and gamepad.
+
+RIGHT (PASS)
+P1 d               first +43   repeats +377, +460, +543        (gaps 334, 83, 83)
+pad0 D-pad right   first +63   repeats +380, +480, +580        (gaps 317, 100, 100)
+pad0 stick +1.0    first +59   repeats +392, +476, +559, +642  (gaps 333, 84, 83, 83)
+
+LEFT (FAIL, unchanged from runs 6-7)
+P1 a               first +52   repeats +235, +302              (gaps 183, 67)
+P1 a (2nd run)     first +47   repeats +213, +263              (gaps 166, 50)
+P2 ArrowLeft       first +50   repeats +217, +283              (gaps 167, 66)
+pad0 D-pad left    first +46   no further move within 900 ms
+pad1 D-pad left    first +41   no further move within 900 ms
+pad0 stick -1.0    first +33   no further move within 900 ms
+
+TAP (PASS)
+P1 a, 130 ms       one move +43, no extra move
+pad0 D-pad left    one move +38, no extra move
+
+Frames are drawn every ~33 ms, so gaps carry ±33 ms resolution.
+Gamepad-left never reaches a keydown handler at all, yet it fails the same way, so the
+failure is not tied to key-repeat edge detection.
