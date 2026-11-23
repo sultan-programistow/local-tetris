@@ -1,0 +1,47 @@
+TC-003 run 5 — horizontal steering: tap and hold (DAS) timeline
+2026-11-23, static preview http://127.0.0.1:4174, build from HEAD 7774d42
+canvas 1920x1080, cell 50 px, P1 board origin (200,40), P2 origin (1220,40)
+
+Method: CanvasRenderingContext2D.fillRect hook logs every 50 px board cell with
+performance.now(). Current piece = last 4 cell fills per side (board cells are
+drawn before the current piece). Column = (min piece x - origin)/50.
+Fresh match per run (unique URL query, 3 s countdown); in-page setTimeout ends
+the hold, so release timing is not skewed by the test harness. Gamepads mocked
+by overriding navigator.getGamepads(): pad 0 -> P1, pad 1 -> P2.
+
+A. TAP (130 ms press)
+
+| Input                | First move | Columns moved | Extra moves |
+|----------------------|-----------|---------------|-------------|
+| P1 a                 | +67 ms    | 1 (3 -> 2)    | none        |
+| P2 ArrowRight        | +44 ms    | 1 (3 -> 4)    | none        |
+| pad0 D-pad right     | +111 ms   | 1 (3 -> 4)    | none        |
+| pad1 D-pad right     | +59 ms    | 1 (3 -> 4)    | none        |
+| pad0 left stick +1   | +47 ms    | 1 (3 -> 4)    | none        |
+
+B. HOLD (900 ms), t = ms from press, col = piece left column
+
+P1 a          press 0 -> col 2 at +39/+60  [press-edge cell]
+                          col 1 at +239/+260  (+200 ms after first cell)
+                          col 0 at +273/+293  (+34 ms)
+                          wall reached, no further moves
+P1 d          press 0 -> col 4 at +56
+                          col 5 at +423  (+367 ms after first cell)
+                          col 6 at +489  (+66 ms)
+                          wall reached
+P2 ArrowRight press 0 -> col 4 at +66
+                          col 5 at +417  (+351 ms after first cell)
+                          col 6 at +483  (+66 ms)
+                          col 7 at +517  (+34 ms)
+                          wall reached
+pad0 D-pad R  press 0 -> col 4 at +38   [one cell, then nothing for 900 ms]
+pad1 D-pad R  press 0 -> col 4 at +50   [one cell, then nothing for 900 ms]
+pad0 stick +1 press 0 -> col 4 at +68   [one cell, then nothing for 900 ms]
+
+Spec (specs/03-input-and-controls.md §DAS, pinned at 10aa6a0): 350 ms initial
+delay, 50 ms repeat, keyboard and gamepad.
+
+Observed: keyboard-left repeats ~200 ms after the press-edge cell; keyboard-right
+~350-367 ms; gamepad D-pad and left stick never repeat. Repeat gaps 34-66 ms
+(one draw frame = ~33 ms). Left-direction runs repeated twice for confirmation
+(a: +200 ms both runs).

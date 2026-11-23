@@ -521,6 +521,9 @@ window.addEventListener('keydown', e => {
       const items = menuItems();
       if (e.key === 'ArrowDown' || e.key === 's') menuIndex = (menuIndex + 1) % items.length;
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') menuIndex = (menuIndex - 1 + items.length) % items.length;
+      if (e.key === 'Escape') {
+        if (pausedFromGame) { pausedFromGame = false; screen = 'play'; if (match) match.status = 'playing'; }
+      }
       if (e.key === 'Enter' || e.key === ' ') {
         const opt = items[menuIndex];
         if (opt === 'Start' || opt === 'Resume') {
