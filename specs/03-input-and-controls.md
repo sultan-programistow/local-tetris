@@ -28,7 +28,8 @@
 
 ## Gamepad (Web Gamepad API)
 
-- D-pad / left stick: move left/right, up = rotate CW, down = soft drop (like A).
+- D-pad: move left/right, up = rotate CW, down = soft drop (like A).
+- Left stick: move left/right only (up/down do nothing).
 - A button: soft drop.
 - X + left trigger/bumper: rotate CCW.
 - B + right trigger/bumper: rotate CW.

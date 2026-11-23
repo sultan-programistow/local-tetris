@@ -144,8 +144,8 @@ function update(dt: number) {
     // D-pad / left stick
     const left = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
     const right = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
-    const softDropBtn = gp.buttons[0]?.pressed || gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
-    const upBtn = gp.buttons[12]?.pressed || gp.axes[1] < -0.5;
+    const softDropBtn = gp.buttons[0]?.pressed || gp.buttons[13]?.pressed;
+    const upBtn = gp.buttons[12]?.pressed;
     // edge detection for left/right handled by keys set? We'll inject into keys via a virtual set? Instead handle movement directly.
     // For simplicity, set virtual key flags by toggling a gamepad state on player
     if (p._gp === undefined) p._gp = { left:false, right:false, down:false, a:false, x:false, b:false };
@@ -374,11 +374,11 @@ function drawBoard(p: any, ox: number, oy: number, cell: number) {
   }
 }
 
-const CELL = 54;
+const CELL = 50;
 function drawPlay(countdown: boolean) {
   const p0 = match!.players[0], p1 = match!.players[1];
-  drawBoard(p0, 200, 80, CELL);
-  drawBoard(p1, 1920 - 200 - COLS*CELL, 80, CELL);
+  drawBoard(p0, 200, 40, CELL);
+  drawBoard(p1, 1920 - 200 - COLS*CELL, 40, CELL);
   // HUD
   ctx.fillStyle = '#fff'; ctx.font = '24px monospace';
   ctx.fillText(`P1 Score: ${p0.score}  Lvl ${p0.level}`, 200, 60);
