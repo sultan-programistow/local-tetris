@@ -1,6 +1,11 @@
 # 03 — Input & Controls
 
-## Mouse
+## Input Capture Policy
+
+- The app must NOT capture or preventDefault on keys it does not use for gameplay/menus.
+- Only call preventDefault/stopPropagation for keys explicitly mapped (movement, rotation, soft drop, pause, menu nav, volume).
+- Browser shortcuts (F5 refresh, Ctrl+J downloads, Ctrl+R, Ctrl+W, DevTools, etc.) must remain functional.
+- Avoid global keydown listeners that blanket-preventDefault; scope handlers to the game canvas/container and check the key first.
 
 - Mouse is supported in menus and screens (main menu, pause menu, game over, stats, controls, volume).
 - Hover highlights the focused item; click selects it.

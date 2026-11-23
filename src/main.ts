@@ -30,7 +30,8 @@ window.addEventListener('resize', scaleCanvas); scaleCanvas();
 
 // Input
 const keys = new Set<string>();
-window.addEventListener('keydown', e => { keys.add(e.key); e.preventDefault(); });
+const USED_KEYS = new Set(['a','d','s','z','x','ArrowLeft','ArrowRight','ArrowDown','[',']','Escape','Enter','w','W']);
+window.addEventListener('keydown', e => { if (USED_KEYS.has(e.key)) { keys.add(e.key); e.preventDefault(); } });
 window.addEventListener('keyup', e => { keys.delete(e.key); });
 
 // Mouse support for menus
