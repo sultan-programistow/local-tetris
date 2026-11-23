@@ -689,16 +689,8 @@ function handleGamepadMenus(dt: number) {
       // B/Select returns to Main Menu
       if (b && !prev.b) { screen = 'menu'; gameOverIndex = 0; }
     } else if (screen === 'volume') {
-      if (gpPrev[gi]._vol === undefined) gpPrev[gi]._vol = { l:0, r:0, thL:350, thR:350, heldL:false, heldR:false };
-      const v = gpPrev[gi]._vol;
-      if (left) {
-        if (!v.heldL) { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); playSfx('menu_select'); v.l = 0; v.thL = 350; v.heldL = true; }
-        else { v.l += dt*1000; if (v.l >= v.thL) { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); playSfx('menu_select'); v.l = 0; v.thL = 75; } }
-      } else { v.l = 0; v.thL = 350; v.heldL = false; }
-      if (right) {
-        if (!v.heldR) { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); playSfx('menu_select'); v.r = 0; v.thR = 350; v.heldR = true; }
-        else { v.r += dt*1000; if (v.r >= v.thR) { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); playSfx('menu_select'); v.r = 0; v.thR = 75; } }
-      } else { v.r = 0; v.thR = 350; v.heldR = false; }
+      if (left && !prev.left) { volume = Math.max(0, volume - 0.05); saveVolume(volume); setAudioVolume(volume); playSfx('menu_select'); }
+      if (right && !prev.right) { volume = Math.min(1, volume + 0.05); saveVolume(volume); setAudioVolume(volume); playSfx('menu_select'); }
       if (b && !prev.b) screen = 'menu';
     } else if (screen === 'stats') {
       if (up && !prev.up) statsScroll = Math.max(0, statsScroll - 1);
