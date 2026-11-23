@@ -31,7 +31,23 @@ window.addEventListener('resize', scaleCanvas); scaleCanvas();
 // Input
 const keys = new Set<string>();
 const USED_KEYS = new Set(['a','d','s','z','x','ArrowLeft','ArrowRight','ArrowDown','[',']','Escape','Enter','w','W']);
-window.addEventListener('keydown', e => { if (USED_KEYS.has(e.key)) { keys.add(e.key); e.preventDefault(); } });
+window.addEventListener('keydown', e => {
+  if (USED_KEYS.has(e.key)) { keys.add(e.key); e.preventDefault(); }
+  // rotation edge handling during play
+  if (screen === 'play' && match && match.status === 'playing') {
+    const isP1rot = e.key === 'z' || e.key === 'x';
+    const isP2rot = e.key === '[' || e.key === ']';
+    if (isP1rot || isP2rot) {
+      const idx = isP1rot ? 0 : 1;
+      const p = match.players[idx] as any;
+      if (p.current && !p.gameOver) {
+        const dir = (e.key === 'z' || e.key === '[') ? -1 : 1;
+        tryRotate(p.board, p.current, dir as 1 | -1);
+        p.lockTimer = 0;
+      }
+    }
+  }
+});
 window.addEventListener('keyup', e => { keys.delete(e.key); });
 
 // Mouse support for menus
@@ -117,41 +133,71 @@ function update(dt: number) {
   if (screen !== 'play') return;
   if (match.status === 'paused') return;
 
-  // handle top-out logic
-  // per player update
   for (let i = 0; i < 2; i++) {
-    const p = match.players[i];
+    const p = match.players[i] as any;
     if (p.gameOver) continue;
-    // input handling
-    handleInput(p, i, dt);
-    // gravity
-    p.lockTimer = 0; // reset handled below
-    // drop timer
-    // We'll use a per-player drop accumulator stored on player? Add field via any
-    const pa = p as any;
-    if (pa.dropAcc === undefined) pa.dropAcc = 0;
-    pa.dropAcc += dt;
-    const speed = speedForLevel(p.level);
-    if (pa.dropAcc >= speed) {
-      pa.dropAcc = 0;
-      if (p.current) {
-        if (!collides(p.board, p.current, 0, 1)) {
-          p.current.y += 1;
-          p.lockTimer = 0;
-        } else {
-          // landed: lock delay
-          if (p.lockTimer === 0) p.lockTimer = 0.5;
+    const isP1 = i === 0;
+    const leftKey = isP1 ? 'a' : 'ArrowLeft';
+    const rightKey = isP1 ? 'd' : 'ArrowRight';
+    const downKey = isP1 ? 's' : 'ArrowDown';
+
+    // horizontal DAS
+    if (p._leftHeld === undefined) { p._leftHeld = false; p._rightHeld = false; p._dasL = 0; p._dasR = 0; p._movedL = false; p._movedR = false; }
+    const leftHeld = keys.has(leftKey);
+    const rightHeld = keys.has(rightKey);
+    if (leftHeld && !p._leftHeld) { // just pressed
+      if (p.current && !collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; }
+      p._dasL = 0; p._movedL = true;
+    }
+    if (rightHeld && !p._rightHeld) {
+      if (p.current && !collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; }
+      p._dasR = 0; p._movedR = true;
+    }
+    p._leftHeld = leftHeld; p._rightHeld = rightHeld;
+    // DAS repeat
+    if (leftHeld && p.current) {
+      p._dasL += dt * 1000;
+      if (p._dasL >= 133) {
+        // repeat every 33ms
+        const repeats = Math.floor((p._dasL - 133) / 33);
+        // move one step per threshold crossing
+        if (repeats > (p._dasLprev || 0)) {
+          if (!collides(p.board, p.current, -1, 0)) { p.current.x -= 1; p.lockTimer = 0; }
         }
+        p._dasLprev = repeats;
+      }
+    } else { p._dasL = 0; p._dasLprev = 0; }
+    if (rightHeld && p.current) {
+      p._dasR += dt * 1000;
+      if (p._dasR >= 133) {
+        const repeats = Math.floor((p._dasR - 133) / 33);
+        if (repeats > (p._dasRprev || 0)) {
+          if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; }
+        }
+        p._dasRprev = repeats;
+      }
+    } else { p._dasR = 0; p._dasRprev = 0; }
+
+    // soft drop
+    if (keys.has(downKey) && p.current) {
+      if (!collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
+    }
+
+    // gravity
+    if (p.dropAcc === undefined) p.dropAcc = 0;
+    p.dropAcc += dt;
+    const speed = speedForLevel(p.level);
+    if (p.dropAcc >= speed) {
+      p.dropAcc = 0;
+      if (p.current) {
+        if (!collides(p.board, p.current, 0, 1)) { p.current.y += 1; p.lockTimer = 0; }
       }
     }
-    // lock delay countdown
+    // lock delay
     if (p.current && collides(p.board, p.current, 0, 1)) {
       if (p.lockTimer <= 0) p.lockTimer = 0.5;
       p.lockTimer -= dt;
-      if (p.lockTimer <= 0) {
-        // lock
-        lockPiece(p, i);
-      }
+      if (p.lockTimer <= 0) lockPiece(p, i);
     } else {
       p.lockTimer = 0;
     }
