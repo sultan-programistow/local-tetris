@@ -31,20 +31,22 @@ Keyboard, both players — the delay is **not** respected:
 |---|---|---|---|---|
 | P1 | `s` | 51 (row 1) | 101 (row 2) — moved 1 cell | 301 (row 6) — ~4 cells |
 | P2 | `ArrowDown` | 51 (row 1) | 101 (row 2) — moved 1 cell | 351 (row 7) — ~5 cells |
+| P1 gamepad | A (button 0) | 1 (row 0) | 51 (row 1) — moved 1 cell | 151 (row 3) — ~2 cells |
+| P1 gamepad | D-pad down (button 13) | 51 (row 1) | 101 (row 2) — moved 1 cell | 301 (row 6) — ~4 cells |
 
-A 100 ms tap already moves the piece one cell (expected: no move before 250 ms). The longer hold descends roughly one cell per ~100 ms rather than the specified 10 ms repeat / rapid drop to the bottom.
+A 100 ms tap already moves the piece one cell (expected: no move before 250 ms). The longer hold descends roughly one cell per ~100–225 ms rather than the specified 10 ms repeat / rapid drop to the bottom.
 
 ## Status
 
 **FAIL** — soft drop moves immediately instead of waiting 250 ms, and the repeat is far slower than 10 ms.
 
-## Not verified
+## Gamepad verification (static build)
 
-- Gamepad soft drop (D-pad down / A button): the mock gamepad was wiped by repeated dev-server HMR reloads during the run; needs a re-run on a stable server.
+Gamepad soft drop was checked against the production build served statically (`vite preview` on `http://127.0.0.1:4173`, no HMR) to avoid dev-server reloads wiping the mock gamepad. Mock pads were injected via `navigator.getGamepads()` (pad 0 → P1). Results in the table above: both the A button and D-pad down move one cell on a 100 ms tap and only descend slowly on a 450 ms hold.
 
 ## Verification
 
-Canvas pixel sampling of exact piece-colored pixels (`getImageData` over the board region), sampling `minY` before/after timed key holds. No image input used.
+Canvas pixel sampling of exact piece-colored pixels (`getImageData` over the board region), sampling `minY` before/after timed key/gamepad holds. No image input used.
 
 ## Notes / follow-up
 
