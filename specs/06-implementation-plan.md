@@ -35,7 +35,7 @@ Suggested build order. Each milestone should be playable/testable.
 
 ## Milestone 8 — Polish
 - Line clear flash + particles, countdown animation, responsive polish.
-- localStorage stats persistence, last 5 sessions.
+- localStorage stats persistence, all sessions (stats screen shows all; game over shows last 5).
 
 ## Acceptance Criteria
 

@@ -48,7 +48,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
   - P1 wins (with win %).
   - P2 wins (with win %).
 - Win % is derived from wins / games for that column's scope (today or total).
-- Below the two-column table: a scrollable list of all play sessions, most recent first.
+- Below the two-column table: a scrollable list of all play sessions (all sessions so far), most recent first, with an optional scrollbar.
   - Each session row shows: date + time, P1 score, P2 score, winner.
   - Scroll via W/S arrow keys, D-pad, and left analog stick (vertical axis).
 - Back via B/Esc/Select.
