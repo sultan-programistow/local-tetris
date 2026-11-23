@@ -926,7 +926,8 @@ function drawStats() {
     y += 34;
   }
   ctx.textAlign = "center";
-  ctx.fillText("W/S or D-pad to scroll, Esc to back", 960, 1000);
+  ctx.font = "22px monospace";
+ctx.fillText("W/S or D-pad to scroll, Esc to back", 960, 1000);
   ctx.textAlign = "left";
 }
 
@@ -961,7 +962,8 @@ function drawVolume() {
   ctx.fillRect(400, 420, 1120 * volume, 20);
   ctx.fillStyle = "#fff";
   ctx.fillText(`Volume: ${Math.round(volume * 100)}%`, 960, 380);
-  ctx.fillText("Use Left/Right or drag slider, Esc to back", 960, 500);
+  ctx.font = "22px monospace";
+  ctx.fillText("Use Left/Right or drag slider, Esc to back", 960, 1000);
   ctx.textAlign = "left";
 }
 
