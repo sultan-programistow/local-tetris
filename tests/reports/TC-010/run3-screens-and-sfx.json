@@ -1,0 +1,265 @@
+{
+  "steps": [
+    {
+      "step": "A5 menu ArrowDown x1",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [
+        [
+          "menu_select",
+          0
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "A6 menu ArrowUp x1",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [
+        [
+          "menu_select",
+          0
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "B2 Stats Esc -> menu",
+      "expected": [
+        [
+          "menu_back",
+          0.0
+        ]
+      ],
+      "actual": [
+        [
+          "menu_back",
+          0
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "V1 Volume ArrowRight (test blip)",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [
+        [
+          "menu_select",
+          0
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "V2 Volume ArrowLeft",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [
+        [
+          "menu_select",
+          0
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "B1 Volume Esc -> menu",
+      "expected": [
+        [
+          "menu_back",
+          0.0
+        ]
+      ],
+      "actual": [
+        [
+          "menu_back",
+          0
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "B3 Controls Esc -> menu",
+      "expected": [
+        [
+          "menu_back",
+          0.0
+        ]
+      ],
+      "actual": [
+        [
+          "menu_back",
+          0
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "C1 P1 a move",
+      "expected": [
+        [
+          "move",
+          -0.85
+        ]
+      ],
+      "actual": [
+        [
+          "move",
+          -0.85
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "C2 P1 d move",
+      "expected": [
+        [
+          "move",
+          -0.85
+        ]
+      ],
+      "actual": [
+        [
+          "move",
+          -0.85
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "C5 P2 ArrowLeft",
+      "expected": [
+        [
+          "move",
+          0.85
+        ]
+      ],
+      "actual": [
+        [
+          "move",
+          0.85
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "C6 P2 ArrowRight",
+      "expected": [
+        [
+          "move",
+          0.85
+        ]
+      ],
+      "actual": [
+        [
+          "move",
+          0.85
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "R1 P1 x rotate CW",
+      "expected": [
+        [
+          "rotate",
+          -0.85
+        ]
+      ],
+      "actual": [
+        [
+          "rotate",
+          -0.85
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "R2 P2 ] rotate CW",
+      "expected": [
+        [
+          "rotate",
+          0.85
+        ]
+      ],
+      "actual": [
+        [
+          "rotate",
+          0.85
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "C3 P1 s soft drop",
+      "expected": [
+        [
+          "soft_drop",
+          -0.85
+        ]
+      ],
+      "actual": [
+        [
+          "soft_drop",
+          -0.85
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "step": "C4 P2 ArrowDown soft drop",
+      "expected": [
+        [
+          "soft_drop",
+          0.85
+        ]
+      ],
+      "actual": [
+        [
+          "soft_drop",
+          0.85
+        ]
+      ],
+      "pass": true
+    }
+  ],
+  "screens": {},
+  "lock_window": [
+    {
+      "name": "soft_drop",
+      "pan": -0.8500000238418579,
+      "t": 18821,
+      "ctxT": 18.699
+    },
+    {
+      "name": "piece_lock",
+      "pan": -0.8500000238418579,
+      "t": 19877,
+      "ctxT": 19.755
+    },
+    {
+      "name": "piece_lock",
+      "pan": -0.8500000238418579,
+      "t": 20767,
+      "ctxT": 20.64
+    }
+  ]
+}

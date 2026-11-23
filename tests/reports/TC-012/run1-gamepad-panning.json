@@ -1,0 +1,32 @@
+{
+  "pad_menu_down": [
+    [
+      "menu_select",
+      0
+    ]
+  ],
+  "pad0_left": [
+    [
+      "move",
+      -0.85
+    ]
+  ],
+  "pad1_left": [
+    [
+      "move",
+      0.85
+    ]
+  ],
+  "pad0_down_softdrop": [
+    [
+      "soft_drop",
+      -0.85
+    ]
+  ],
+  "pad1_a_rotate": [
+    [
+      "soft_drop",
+      0.85
+    ]
+  ]
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "step": "A1 hover Start -> Stats",
+    "expected": [
+      [
+        "menu_select",
+        0.0
+      ]
+    ],
+    "actual": [
+      [
+        "menu_select",
+        0
+      ]
+    ],
+    "pass": true
+  },
+  {
+    "step": "A2 hover same item again",
+    "expected": [],
+    "actual": [],
+    "pass": true
+  },
+  {
+    "step": "A3 hover empty row",
+    "expected": [],
+    "actual": [],
+    "pass": true
+  },
+  {
+    "step": "A4 hover empty -> Start",
+    "expected": [
+      [
+        "menu_select",
+        0.0
+      ]
+    ],
+    "actual": [
+      [
+        "menu_select",
+        0
+      ]
+    ],
+    "pass": true
+  },
+  {
+    "step": "C7 P2 ArrowDown again",
+    "expected": [
+      [
+        "soft_drop",
+        0.85
+      ]
+    ],
+    "actual": [
+      [
+        "soft_drop",
+        0.85
+      ]
+    ],
+    "pass": true
+  }
+]

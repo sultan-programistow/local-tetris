@@ -1,0 +1,32 @@
+{
+  "locks": [
+    [
+      "soft_drop",
+      -0.85
+    ],
+    [
+      "soft_drop",
+      0.85
+    ],
+    [
+      "piece_lock",
+      -0.85
+    ],
+    [
+      "piece_lock",
+      0.85
+    ]
+  ],
+  "pause": [
+    [
+      "pause",
+      0
+    ]
+  ],
+  "unpause": [
+    [
+      "unpause",
+      0
+    ]
+  ]
+}
