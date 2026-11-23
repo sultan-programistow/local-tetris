@@ -1,0 +1,64 @@
+TC-010 run 1 — 2026-11-24, build f12ecbf, headless Chromium 156
+Capture: PipeWire null sink `opencode_test` monitor, parec s16le 48 kHz stereo, 25 ms RMS windows, threshold -50 dB
+Reference level: volume-slider blip peaks at ~-22.7 dB, so a navigation blip would be plainly visible
+
+play() log (page instrumentation, every sound the app requested during the whole run):
+  t=1795475581892  menu_select.ogg  vol=0.75   <- volume +5% (positive control P1)
+  t=1795475583140  menu_select.ogg  vol=0.70   <- volume -5% (positive control P2)
+  (no other play() calls during hover, arrows or D-pad phases; two extra control2 steps not counted, see note)
+
+PHASE control   (start 1795475579605 ms)
+   362.1 ms  ArrowDown (menu -> Stats)
+  1446.1 ms  Enter (open Volume)
+  2284.1 ms  ArrowRight
+  3533.1 ms  ArrowLeft
+  4768.1 ms  Escape (back to menu)
+  AUDIO 2350.0..2375.0 ms  peak -22.9 dB
+  AUDIO 3575.0..3600.0 ms  peak -22.5 dB
+
+PHASE hover     (start 1795475585217 ms)
+   369.6 ms  hover Start
+  1281.6 ms  hover Stats
+  2199.6 ms  hover Volume
+  3115.6 ms  hover Controls
+  4030.6 ms  hover empty area
+  4948.6 ms  hover Start
+  AUDIO: none above -50 dB
+
+PHASE arrows    (start 1795475591069 ms)
+   385.7 ms  ArrowDown
+  1218.7 ms  ArrowDown
+  2051.7 ms  ArrowDown
+  2885.7 ms  ArrowDown
+  3719.7 ms  ArrowUp
+  4552.7 ms  ArrowUp
+  5389.7 ms  ArrowUp
+  6223.7 ms  ArrowUp
+  AUDIO: none above -50 dB
+
+PHASE dpad      (start 1795475598095 ms)
+   480.5 ms  D-pad down (btn 13)
+  1503.5 ms  D-pad down
+  2527.5 ms  D-pad down
+  3556.5 ms  D-pad up (btn 12)
+  4581.5 ms  D-pad up
+  AUDIO: none above -50 dB
+
+PHASE control2  (start 1795475603579 ms)
+   351.7 ms  Enter
+  2060.7 ms  ArrowRight
+  3295.7 ms  Escape
+  AUDIO: none above -50 dB
+
+Note on control2: no audio was expected there either. The menu index had drifted during the
+arrows/D-pad phases, so "2x ArrowDown + Enter" opened Controls instead of Volume and the
+ArrowRight had no slider to move. Control P1 in phase 1 is the valid positive control.
+
+Navigation path verification (separate run, same build):
+  hover Controls -> Enter  => Controls screen     (screenshot run1-hover-then-enter.png)
+  3x D-pad down -> A       => Controls screen     (screenshot run1-pad-then-A.png)
+  so the three navigation paths do reach the intended items; they are silent, not broken.
+
+App source at this commit (read-only cross-check, no root-cause claim):
+  src/main.ts has playSfx("menu_select") on volume steps (9 sites) but none on menuIndex changes;
+  playSfx("menu_back"), playSfx("move") and playSfx("soft_drop") are never called.

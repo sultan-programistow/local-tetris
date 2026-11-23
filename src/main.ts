@@ -876,25 +876,15 @@ function drawStats() {
       Math.round(stats.todayPlayTimeMs / 60000),
       Math.round(stats.totalPlayTimeMs / 60000),
     ],
-    ["P1 wins", stats.winsP1Today, stats.winsP1],
-    ["P2 wins", stats.winsP2Today, stats.winsP2],
     [
-      "P1 win %",
-      stats.sessionsToday
-        ? Math.round((stats.winsP1Today / stats.sessionsToday) * 100)
-        : 0,
-      stats.sessionsPlayed
-        ? Math.round((stats.winsP1 / stats.sessionsPlayed) * 100)
-        : 0,
+      "P1 wins",
+      `${stats.winsP1Today} (${stats.sessionsToday ? Math.round((stats.winsP1Today / stats.sessionsToday) * 100) : 0}%)`,
+      `${stats.winsP1} (${stats.sessionsPlayed ? Math.round((stats.winsP1 / stats.sessionsPlayed) * 100) : 0}%)`,
     ],
     [
-      "P2 win %",
-      stats.sessionsToday
-        ? Math.round((stats.winsP2Today / stats.sessionsToday) * 100)
-        : 0,
-      stats.sessionsPlayed
-        ? Math.round((stats.winsP2 / stats.sessionsPlayed) * 100)
-        : 0,
+      "P2 wins",
+      `${stats.winsP2Today} (${stats.sessionsToday ? Math.round((stats.winsP2Today / stats.sessionsToday) * 100) : 0}%)`,
+      `${stats.winsP2} (${stats.sessionsPlayed ? Math.round((stats.winsP2 / stats.sessionsPlayed) * 100) : 0}%)`,
     ],
   ];
   rows.forEach((r, i) => {
