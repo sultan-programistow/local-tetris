@@ -5,8 +5,8 @@ import { Board } from './game/board';
 import { COLS, ROWS } from './game/board';
 import { availablePieces } from './game/pieces';
 
-const STORAGE_STATS = 'tetris-duel:stats';
-const STORAGE_VOLUME = 'tetris-duel:volume';
+const STORAGE_STATS = 'local-tetris:stats';
+const STORAGE_VOLUME = 'local-tetris:volume';
 
 interface Session { date: string; winner: string; scores: [number, number]; pieces: [number, number]; }
 interface Stats { sessionsPlayed: number; totalPlayTimeMs: number; winsP1: number; winsP2: number; lastSessions: Session[]; }
