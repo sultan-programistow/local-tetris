@@ -4,6 +4,7 @@
 
 Options: Start/Resume (dynamic), Stats, Volume, Controls.
 - The first item's label is dynamic: "Resume" when the menu is opened from in-game (Esc/Start), "Start" otherwise.
+- Start button (gamepad) in the Main Menu resumes the game when a match is in progress (same as selecting Resume/Start).
 - Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover highlights, click selects.
 - Volume: slider 0–1 (persisted), adjustable via mouse drag or keyboard.
 - Controls: shows key/button mapping.
