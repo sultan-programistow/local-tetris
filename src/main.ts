@@ -957,11 +957,11 @@ function drawVolume() {
   ctx.font = "32px monospace";
   // slider
   ctx.fillStyle = "#444";
-  ctx.fillRect(400, 420, 1120, 20);
+  ctx.fillRect(400, 540, 1120, 20);
   ctx.fillStyle = "#0f0";
-  ctx.fillRect(400, 420, 1120 * volume, 20);
+  ctx.fillRect(400, 540, 1120 * volume, 20);
   ctx.fillStyle = "#fff";
-  ctx.fillText(`Volume: ${Math.round(volume * 100)}%`, 960, 380);
+  ctx.fillText(`Volume: ${Math.round(volume * 100)}%`, 960, 500);
   ctx.font = "22px monospace";
   ctx.fillText("Use Left/Right or drag slider, Esc to back", 960, 1000);
   ctx.textAlign = "left";
