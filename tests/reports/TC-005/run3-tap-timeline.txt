@@ -1,0 +1,32 @@
+TC-005 run 3 — raw tap/hold timeline (2026-11-23, static preview :4173, cell 50px)
+
+Method: fillRect hook logs every 50px board cell with performance.now(); per-frame
+top row per player; +50px = one cell down. P1 cells x<900, P2 x>=900.
+"both" = both players advanced in the same frame => gravity (~800 ms cadence).
+"P1"/"P2" = single player advanced => attributable to that player's input.
+
+RUN 1 — taps only, 120 ms each
+
+press s            5212.1 .. 5332.5   -> step 5221 dy+50 P1  (both)   [gravity]
+press ArrowDown    6535.8 .. 6656.0   -> step 6854 dy+50 P1+P2         [gravity]
+press w            7856.3 .. 7977.9   -> step 8487 dy+50 P1+P2         [gravity; no rotation]
+press pad0 btn13   9178.3 .. 9298.5   -> step 9305 dy+50 P1+P2         [gravity]
+press pad0 btn0   10498.7 .. 10618.8  -> step 10921 dy+50 P1+P2        [gravity]
+=> no single-player downward step within any tap window or the following ~1.1 s.
+
+RUN 2 — taps and 350 ms holds
+
+press s            4993 .. 5113      -> step 5183 dy+50 both          [gravity]
+press s (hold)     5813 .. 6163      -> step 6000 both [gravity]
+                                     -> step 6184 P1 dy+50 (+371 ms)  [single cell only]
+press ArrowDown    6864 .. 6984      -> step 7634 both                [gravity]
+press ArrowDown(h) 7684 .. 8034      -> step 8417 both                [gravity, no hold step]
+press pad0 b13     8990 .. 9110      -> step 9250 both                [gravity]
+press pad0 b13(h)  9810 .. 10161     -> step 10050 both [gravity]
+                                     -> step 10184 P1 dy+50 (+374 ms) [single cell only]
+press pad0 b0     10861 .. 10981     -> step 10917 both               [gravity]
+press pad0 b0(h)  11681 .. 12031     -> step 12517 both               [gravity, no hold step]
+press w           12989 .. 13109     -> step 13017 P1 bbox 150x50 -> 50x150 [rotated CW]
+
+Gravity cadence observed: ~800-817 ms (level 1, 0.8 s/cell); both players in lockstep.
+Pieces locked during the run eventually; game reached GAME OVER ~14 s later.
