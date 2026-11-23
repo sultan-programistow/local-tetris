@@ -867,8 +867,8 @@ function drawStats() {
   ctx.fillText("STATS", 960, 120);
   ctx.font = "28px monospace";
   ctx.textAlign = "left";
-  ctx.fillText("Today", 700, 180);
-  ctx.fillText("Total", 900, 180);
+  ctx.fillText("Today", 750, 180);
+  ctx.fillText("Total", 950, 180);
   const rows = [
     ["Games", stats.sessionsToday, stats.sessionsPlayed],
     [
@@ -898,12 +898,12 @@ function drawStats() {
     ],
   ];
   rows.forEach((r, i) => {
-    ctx.fillText(String(r[0]), 400, 220 + i * 36);
-    ctx.fillText(String(r[1]), 700, 220 + i * 36);
-    ctx.fillText(String(r[2]), 900, 220 + i * 36);
+    ctx.fillText(String(r[0]), 450, 220 + i * 36);
+    ctx.fillText(String(r[1]), 750, 220 + i * 36);
+    ctx.fillText(String(r[2]), 950, 220 + i * 36);
   });
   ctx.fillStyle = "#aaa";
-  ctx.fillText("Sessions (newest first):", 400, 440);
+  ctx.fillText("Sessions (newest first):", 450, 440);
   ctx.fillStyle = "#fff";
   const visible = 12;
   const start = statsScroll;
@@ -916,7 +916,7 @@ function drawStats() {
     const s = stats.sessions[i];
     ctx.fillText(
       `${s.date.slice(0, 16)}  ${s.winner}  P1:${s.scores[0]} P2:${s.scores[1]}`,
-      400,
+      450,
       y,
     );
     y += 34;
