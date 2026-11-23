@@ -965,17 +965,29 @@ function drawVolume() {
 let lastKey = "";
 window.addEventListener("keydown", (e) => {
   if (screen === "volume") {
-    if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
-      volume = Math.max(0, volume - 0.05);
-      saveVolume(volume);
-      setAudioVolume(volume);
-      playSfx("menu_select");
+    const isLeft = e.key === "ArrowLeft" || e.key === "a" || e.key === "A";
+    const isRight = e.key === "ArrowRight" || e.key === "d" || e.key === "D";
+    if (isLeft && !e.repeat) {
+      if (!kbVol.heldL) {
+        volume = Math.max(0, volume - 0.05);
+        saveVolume(volume);
+        setAudioVolume(volume);
+        playSfx("menu_select");
+        kbVol.heldL = true;
+        kbVol.l = 0;
+        kbVol.thL = 300;
+      }
     }
-    if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
-      volume = Math.min(1, volume + 0.05);
-      saveVolume(volume);
-      setAudioVolume(volume);
-      playSfx("menu_select");
+    if (isRight && !e.repeat) {
+      if (!kbVol.heldR) {
+        volume = Math.min(1, volume + 0.05);
+        saveVolume(volume);
+        setAudioVolume(volume);
+        playSfx("menu_select");
+        kbVol.heldR = true;
+        kbVol.r = 0;
+        kbVol.thR = 300;
+      }
     }
     if (e.key === "Escape") screen = "menu";
     return;
@@ -1060,8 +1072,12 @@ window.addEventListener("keydown", (e) => {
     }
   }
 });
-window.addEventListener("keyup", () => {
+window.addEventListener("keyup", (e) => {
   lastKey = "";
+  if (screen === "volume") {
+    if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") kbVol.heldL = false;
+    if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") kbVol.heldR = false;
+  }
 });
 
 // Simplified game loop with real input polling for movement
@@ -1086,8 +1102,41 @@ let gpPrev: any[] = [
     start: false,
   },
 ];
+let volState: any[] = [{l:0,r:0,thL:300,thR:300,heldL:false,heldR:false},{l:0,r:0,thL:300,thR:300,heldL:false,heldR:false}];
+let kbVol = {heldL:false,heldR:false,l:0,r:0,thL:300,thR:300};
 let startOpenedMenu = false;
 function handleGamepadMenus(dt: number) {
+  // keyboard volume repeat (app-side DAS)
+  if (screen === "volume") {
+    if (kbVol.heldL) {
+      kbVol.l += dt * 1000;
+      if (kbVol.l >= kbVol.thL) {
+        volume = Math.max(0, volume - 0.05);
+        saveVolume(volume);
+        setAudioVolume(volume);
+        playSfx("menu_select");
+        kbVol.l = 0;
+        kbVol.thL = 50;
+      }
+    } else {
+      kbVol.l = 0;
+      kbVol.thL = 300;
+    }
+    if (kbVol.heldR) {
+      kbVol.r += dt * 1000;
+      if (kbVol.r >= kbVol.thR) {
+        volume = Math.min(1, volume + 0.05);
+        saveVolume(volume);
+        setAudioVolume(volume);
+        playSfx("menu_select");
+        kbVol.r = 0;
+        kbVol.thR = 50;
+      }
+    } else {
+      kbVol.r = 0;
+      kbVol.thR = 300;
+    }
+  }
   const gps = (navigator as any).getGamepads
     ? (navigator as any).getGamepads()
     : [];
@@ -1170,16 +1219,7 @@ function handleGamepadMenus(dt: number) {
         gameOverIndex = 0;
       }
     } else if (screen === "volume") {
-      if (gpPrev[gi]._vol === undefined)
-        gpPrev[gi]._vol = {
-          l: 0,
-          r: 0,
-          thL: 300,
-          thR: 300,
-          heldL: false,
-          heldR: false,
-        };
-      const v = gpPrev[gi]._vol;
+      const v = volState[gi];
       if (left) {
         if (!v.heldL) {
           volume = Math.max(0, volume - 0.05);

@@ -1,0 +1,43 @@
+TC-009 run 2 — keyboard volume slider, tap/hold/repeat timing
+Build: 7527f9a (production build, vite preview 127.0.0.1:4173)
+Method: Storage.prototype.setItem hook for local-tetris:volume (timestamp + value);
+KeyboardEvent keydown/keyup dispatched on window, press/release scheduled in-page with
+setTimeout. Volume baseline 0.5 each sub-case. One recorded write = one 0.05 step.
+
+Expected (user request, 2026-11-23): one step on press; still one step during the first
+300 ms; then one step every ~50 ms until release. Same for A/D and left/right arrows.
+
+A. TAP 120 ms — plain down/up
+key        hold     steps  start -> end   first step offset
+A          120 ms   1      0.50 -> 0.45   ~0 ms
+D          120 ms   1      0.50 -> 0.55   ~0 ms
+ArrowLeft  120 ms   1      0.50 -> 0.45   ~0 ms
+ArrowRight 120 ms   1      0.50 -> 0.55   ~0 ms
+=> PASS (expected one step).
+
+B. HOLD 250 ms — plain down/up (no repeat events, below threshold)
+key        hold     steps  start -> end   offsets from press
+A          250 ms   1      0.50 -> 0.45   ~0 ms
+D          250 ms   1      0.50 -> 0.55   ~0 ms
+ArrowLeft  250 ms   1      0.50 -> 0.45   ~0 ms
+ArrowRight 250 ms   1      0.50 -> 0.55   ~0 ms
+=> PASS (expected one step).
+
+C. HOLD 700 ms — plain down/up (no OS repeat events)
+key        hold     steps  start -> end   last step
+A          700 ms   1      0.50 -> 0.45   at press, none after
+D          700 ms   1      0.50 -> 0.55   at press, none after
+ArrowLeft  700 ms   1      0.50 -> 0.45   at press, none after
+ArrowRight 700 ms   1      0.50 -> 0.55   at press, none after
+=> FAIL: no repeat after 300 ms; expected ~8 steps by 700 ms.
+
+D. HOLD 700 ms — emulated OS auto-repeat (500 ms first delay, 33 ms interval)
+key        hold     steps  start -> end   offsets from press (ms)
+A          700 ms   7      0.50 -> 0.15   0, 500, 533, 567, 600, 634, 667
+D          700 ms   7      0.50 -> 0.85   (same schedule)
+ArrowLeft  700 ms   7      0.50 -> 0.15   0, 500, 533, 567, 600, 634, 667
+ArrowRight 700 ms   7      0.50 -> 0.85   (same schedule)
+=> FAIL: repeats start at 500 ms and run every ~33 ms (OS-driven), not 300 ms / 50 ms.
+   D-pad/stick run (run 1) repeats every rendered frame (~33 ms) from the press.
+
+Summary: tap PASS, 250 ms hold PASS, 700 ms hold FAIL (plain and OS-repeat).

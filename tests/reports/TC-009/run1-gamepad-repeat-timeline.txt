@@ -1,0 +1,48 @@
+TC-009 run 1 — gamepad volume slider, hold/repeat timing
+Build: 7ab789c (production build, vite preview 127.0.0.1:4173)
+Method: navigator.getGamepads() mock (standard mapping, pad 0), Storage.prototype.setItem
+hook for local-tetris:volume (timestamp + value), CanvasRenderingContext2D.fillText hook
+to confirm the VOLUME screen. Press/release scheduled in-page with setTimeout. Volume
+baseline 0.5 each sub-case. Steps are 0.05 unless clamped at 0/1.
+
+Expected (user request, 2026-11-23):
+  tap: one step only
+  hold 300 ms: still only that one step
+  after 300 ms: repeat one step every ~50 ms
+  vertical controls: no volume change
+
+A. TAP 120 ms (press -> release)
+input           hold    steps  start -> end   step offsets from press (ms)
+d-pad left      120 ms  4      0.50 -> 0.30   3.5, 36.6, 69.9, 103.3
+d-pad right     120 ms  4      0.50 -> 0.70   9.3, 42.3, 76.3, 110.0
+stick left      120 ms  4      0.50 -> 0.30   10.7, 43.9, 77.1, 110.9
+stick right     120 ms  4      0.50 -> 0.70   23.1, 56.8, 89.7, 106.6
+=> 20% change on a tap; expected 5%.
+
+B. HOLD 250 ms (below the 300 ms threshold)
+input           hold    steps  start -> end   step offsets from press (ms)
+d-pad left      250 ms  7      0.50 -> 0.15   5.4, 38.4, 88.8, 138.4, 172.0, 204.9, 238.4
+d-pad right     250 ms  7      0.50 -> 0.85   8.0, 25.4, 74.8, 108.6, 158.6, 191.9, 225.3
+stick left      250 ms  8      0.50 -> 0.10   9.3, 42.7, 76.2, 110.2, 126.3, 159.3, 192.9, 226.5
+stick right     250 ms  8      0.50 -> 0.90   10.1, 43.3, 76.6, 110.3, 127.0, 160.5, 193.6, 227.0
+=> 35-40% change before 300 ms; expected 5%.
+
+C. HOLD 700 ms
+input           hold    steps to bound  time to bound  start -> end   first step / repeat
+d-pad left      700 ms  10              312 ms         0.50 -> 0.00   28 ms, then 33-50 ms
+d-pad right     700 ms  10              359 ms         0.50 -> 1.00   25 ms, then 33-67 ms
+stick left      700 ms  10              328 ms         0.50 -> 0.00   28 ms, then 33-50 ms
+stick right     700 ms  10              311 ms         0.50 -> 1.00   11 ms, then 33-67 ms
+(continued saveVolume calls at the clamped 0/1 value until release, every ~33 ms)
+=> steps start immediately, every ~33 ms (per rendered frame), no 300 ms quiet period;
+   expected one step then ~50 ms repeats after a 300 ms delay.
+
+D. CONTROL — vertical inputs, 250 ms each
+d-pad up: 0 volume events, value 0.50 -> 0.50
+stick down: 0 volume events, value 0.50 -> 0.50
+=> no change, as expected.
+
+Raw sequence per sub-case was read from localStorage writes; the UI text confirmed the
+same percentage ("Volume: 50%" at start, screenshot run1-volume-screen.png).
+
+Summary: A FAIL, B FAIL, C FAIL, D PASS.
