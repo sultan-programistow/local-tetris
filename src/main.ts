@@ -907,7 +907,7 @@ function drawStats() {
   ctx.fillStyle = "#fff";
   const visible = 12;
   const start = statsScroll;
-  let y = 450;
+  let y = 470;
   for (
     let i = start;
     i < Math.min(stats.sessions.length, start + visible);
