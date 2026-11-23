@@ -1,0 +1,27 @@
+TC-003 run 7 — DAS timeline after commit 4a16841 ("Fix left DAS via key-edge tracking and per-piece reset")
+Date: 2026-11-23
+Build tested: 4a16841, static `vite preview` at http://127.0.0.1:4174 (no HMR). Served bundle
+index-Clsuxd4J.js md5 matches dist/ of that build.
+Method: CanvasRenderingContext2D.fillRect hook, each frame the current piece = last four 48 px cells drawn for the side.
+Fresh page load per input (unique URL). Hold = 900 ms, released by in-page setTimeout; tap = 130 ms.
+Timestamps in ms relative to the synthetic keydown / gamepad state change.
+
+Spec expectation (specs/03-input-and-controls.md §DAS): press edge moves one column, then 350 ms delay, then repeat every 75 ms; keyboard and gamepad.
+
+RIGHT (PASS, unchanged)
+P1 d               first +57   repeats +407, +507, +607   (gaps 350, 100, 100)
+pad0 D-pad right   first +39   repeats +372, +473, +573   (gaps 333, 101, 100)
+
+LEFT (FAIL, same as run 6)
+P1 a               first +49   repeats +233, +299          (gaps 184, 66)
+P2 ArrowLeft       first +66   repeats +233, +299          (gaps 167, 66)
+pad0 D-pad left    first +40   no further move within 900 ms
+pad1 D-pad left    first +38   no further move within 900 ms
+pad0 stick -1.0    first +50   no further move within 900 ms
+
+TAP (PASS)
+P1 a, 130 ms       one move +44, no extra move
+pad0 D-pad left    one move +66, no extra move
+
+Frames are drawn every ~33 ms, so gaps carry ±33 ms resolution. Left/right difference
+(167-184 vs 333-350 ms initial delay; 66 vs 100 ms repeat) is far above that resolution.
