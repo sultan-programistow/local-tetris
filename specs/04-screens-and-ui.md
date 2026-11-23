@@ -16,6 +16,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 
 - 3-2-1 (3 seconds) before pieces start falling.
 - Both boards visible, pieces frozen.
+- Esc (keyboard) or Start (gamepad) during countdown opens the Main Menu (pauses countdown); resuming continues the countdown.
 
 ## Play Screen
 

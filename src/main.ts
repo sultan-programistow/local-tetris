@@ -85,7 +85,7 @@ function handleMouseClick() {
     menuIndex = hoveredMenu;
     const opt = menuItems()[menuIndex];
     if (opt === 'Start' || opt === 'Resume') {
-      if (opt === 'Resume') { pausedFromGame = false; screen = 'play'; if (match) match.status = 'playing'; }
+      if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
       else startMatch();
     }
     else if (opt === 'Stats') screen = 'stats';
@@ -109,6 +109,7 @@ function updateVolumeFromMouse() {
 let match: MatchState | null = null;
 let screen: 'menu' | 'countdown' | 'play' | 'gameover' | 'stats' | 'controls' | 'volume' = 'menu';
 let pausedFromGame = false;
+let pausedReturn: 'play' | 'countdown' = 'play';
 let menuIndex = 0;
 let gameOverIndex = 0;
 function menuItems(): string[] {
@@ -121,6 +122,7 @@ let stats = loadStats();
 
 function startMatch() {
   pausedFromGame = false;
+  pausedReturn = 'play';
   const seed = Math.floor(Math.random() * 1e9);
   match = new MatchState(seed);
   screen = 'countdown';
@@ -137,6 +139,7 @@ function speedForLevel(lvl: number): number {
 function update(dt: number) {
   if (!match) return;
   if (screen === 'countdown') {
+    if (match.status === 'paused') return;
     match.countdownMs -= dt * 1000;
     if (match.countdownMs <= 0) {
       screen = 'play';
@@ -522,12 +525,12 @@ window.addEventListener('keydown', e => {
       if (e.key === 'ArrowDown' || e.key === 's') menuIndex = (menuIndex + 1) % items.length;
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') menuIndex = (menuIndex - 1 + items.length) % items.length;
       if (e.key === 'Escape') {
-        if (pausedFromGame) { pausedFromGame = false; screen = 'play'; if (match) match.status = 'playing'; }
+        if (pausedFromGame) { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
       }
       if (e.key === 'Enter' || e.key === ' ') {
         const opt = items[menuIndex];
         if (opt === 'Start' || opt === 'Resume') {
-          if (opt === 'Resume') { pausedFromGame = false; screen = 'play'; if (match) match.status = 'playing'; }
+          if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
           else startMatch();
         }
         else if (opt === 'Stats') screen = 'stats';
@@ -547,7 +550,9 @@ window.addEventListener('keydown', e => {
         if (gameOverIndex === 0) startMatch(); else { screen = 'menu'; gameOverIndex = 0; }
       } else if (e.key === 'Escape') { screen = 'menu'; gameOverIndex = 0; }
     } else if (screen === 'play') {
-      if (e.key === 'Escape') { pausedFromGame = true; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
+      if (e.key === 'Escape') { pausedFromGame = true; pausedReturn = 'play'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
+    } else if (screen === 'countdown') {
+      if (e.key === 'Escape') { pausedFromGame = true; pausedReturn = 'countdown'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
     }
   }
 });
@@ -567,7 +572,10 @@ function handleGamepadMenus() {
   const a = gp.buttons[0]?.pressed;
   const b = gp.buttons[1]?.pressed || gp.buttons[8]?.pressed;
   if (screen === 'play') {
-    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
+    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; pausedReturn = 'play'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
+  }
+  if (screen === 'countdown') {
+    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; pausedReturn = 'countdown'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
   }
   if (screen === 'menu') {
     const items = menuItems();
@@ -578,7 +586,7 @@ function handleGamepadMenus() {
     if (activate) {
       const opt = items[menuIndex];
       if (opt === 'Start') startMatch();
-      else if (opt === 'Resume') { pausedFromGame = false; screen = 'play'; if (match) match.status = 'playing'; }
+      else if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
       else if (opt === 'Stats') screen = 'stats';
       else if (opt === 'Volume') screen = 'volume';
       else if (opt === 'Controls') screen = 'controls';

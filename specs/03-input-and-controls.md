@@ -70,3 +70,4 @@
 ## Pause (removed)
 
 - No separate pause state. Esc (keyboard) or Start (gamepad) opens the Main Menu, which effectively pauses the game.
+- Pausing works during countdown too: Esc/Start during the 3-2-1 countdown opens the Main Menu (countdown pauses/resumes accordingly).
