@@ -30,7 +30,7 @@ Options: Start, Stats, Volume, Controls.
 - Winner announcement (P1 / P2 / Draw).
 - Both scores, pieces placed.
 - Summary + last 5 sessions.
-- "Press any key or gamepad button to restart" → new match with new seed.
+- Two options: Restart (default) and Main Menu. Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover + click. Restart starts a new match (new random seed). Main Menu returns to the main menu.
 
 ## Stats Screen
 
