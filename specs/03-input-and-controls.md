@@ -38,13 +38,13 @@
 
 ## DAS (Delayed Auto Shift)
 
-- Initial delay: 133ms before auto-repeat starts.
+- Initial delay: 250ms before auto-repeat starts.
 - Repeat rate (ARR): 33ms.
 - Applies to left/right movement and soft drop.
 
 ## Soft Drop
 
-- Accelerated drop: first cell 133ms, then 10ms repeat → effectively drops to bottom.
+- Accelerated drop: first cell 250ms, then 10ms repeat → effectively drops to bottom.
 - Lock delay still applies at landing; allows sideways squeeze/rotation before lock (~0.5s).
 - No hard drop in v1.
 

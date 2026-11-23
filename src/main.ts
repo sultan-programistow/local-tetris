@@ -157,7 +157,7 @@ function update(dt: number) {
     // DAS repeat
     if (leftHeld && p.current) {
       p._dasL += dt * 1000;
-      if (p._dasL >= 133) {
+      if (p._dasL >= 250) {
         // repeat every 33ms
         const repeats = Math.floor((p._dasL - 133) / 33);
         // move one step per threshold crossing
@@ -169,7 +169,7 @@ function update(dt: number) {
     } else { p._dasL = 0; p._dasLprev = 0; }
     if (rightHeld && p.current) {
       p._dasR += dt * 1000;
-      if (p._dasR >= 133) {
+      if (p._dasR >= 250) {
         const repeats = Math.floor((p._dasR - 133) / 33);
         if (repeats > (p._dasRprev || 0)) {
           if (!collides(p.board, p.current, 1, 0)) { p.current.x += 1; p.lockTimer = 0; }
@@ -234,7 +234,7 @@ function handleInput(p: any, idx: number, dt: number) {
   // movement with DAS
   if (keys.has(left)) {
     p.dasLeft += dt * 1000;
-    if (p.dasLeft >= 133) {
+    if (p.dasLeft >= 250) {
       // move
       if (p.dasLeft - dt*1000 < 133) {
         // initial
@@ -466,7 +466,7 @@ function loop(now: number) {
       // left
       if (keys.has(leftKey)) {
         p._dasL = (p._dasL || 0) + dt * 1000;
-        if (p._dasL >= 133 && (p._dasL - dt*1000 < 133 || (p._dasL % 33) < ( (p._dasL - dt*1000) % 33))) {
+        if (p._dasL >= 250 && (p._dasL - dt*1000 < 250 || (p._dasL % 33) < ( (p._dasL - dt*1000) % 33))) {
           // attempt move; on first, immediate
         }
       } else p._dasL = 0;
