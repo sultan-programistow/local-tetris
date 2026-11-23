@@ -2,7 +2,7 @@
 
 - **Area:** Rendering / layout
 - **Priority:** High
-- **Date run:** 2026-11-23 (run 2: FAIL)
+- **Date run:** 2026-11-23 (run 3: PASS)
 - **Environment:** Chromium (OpenBot browser), `http://localhost:5173`, dev server, viewport 1781×1103, canvas 1920×1080 (scaled ≈0.928×)
 
 ## Preconditions
@@ -22,25 +22,26 @@ The board border of both players is fully visible inside the browser viewport �
 
 ## Actual result
 
-Both boards extend below the viewport:
+Both boards now fit inside the viewport:
 
 | Board | Displayed bbox (left, top, right, bottom) | Inside viewport |
 |---|---|---|
-| P1 | 178.0, 124.7, 678.9, 1126.5 | **no** (bottom > 1103) |
-| P2 | 1087.1, 124.7, 1588.0, 1126.5 | **no** (bottom > 1103) |
+| P1 | 178.0, 87.6, 641.8, 1015.2 | yes |
+| P2 | 1124.2, 87.6, 1588.0, 1015.2 | yes |
 
-Viewport: 1781×1103. Canvas displayed: 1781.0×1001.8 (ends at y≈1052), so the board bottom is past both the canvas and the viewport. Board height 1080 at y=80 → logical bottom y=1160 > canvas 1080.
+Viewport: 1781×1103. Canvas displayed: 1781.0×1001.8 (ends at y≈1052). Board cell 50 at y=40 → 20 rows end at logical y=1040, inside the canvas; bottom border pixel at (450,1040) = `204,204,204` (drawn).
 
 ## Status
 
-**FAIL** (run 2) — board bottom border is outside the viewport.
+**PASS** (run 3) — board border is inside the viewport for both players.
 
 ## Run history
 
 | Run | Date | Result | Notes |
 |---|---|---|---|
 | 1 | 2026-11-23 | PASS | cell = 24 (board 240×480) — fit inside the viewport |
-| 2 | 2026-11-23 | FAIL | cell changed to 54 (board 540×1080) — bottom extends past the canvas/viewport |
+| 2 | 2026-11-23 | FAIL | cell changed to 54 (board 540×1080) — bottom extended past the canvas/viewport |
+| 3 | 2026-11-23 | PASS | cell 50, origin y=40 (board 500×1000, ends y=1040) — fits; border drawn |
 
 ## Verification
 
@@ -48,5 +49,5 @@ Geometry check of the displayed bounding box against `window.innerWidth`/`window
 
 ## Notes / follow-up
 
-- **Regression** relative to run 1 (cell size increased from 24 to 54).
+- Regression from run 2 fixed by @Developer (cell 50, origin y=40); re-run 2026-11-23 PASS.
 - Root cause is out of scope for this test asset.

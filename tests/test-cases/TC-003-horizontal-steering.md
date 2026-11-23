@@ -28,18 +28,18 @@
 
 **Keyboard (PASS):** P1 centroid `118.36 → 111.50` (left) → `127.50` (right); P2 centroid `117.22 → 110.36` (left), right verified in the same session.
 
-**Gamepad (PASS):** with the mock pads (board cell = 54 px; P1 origin 200, P2 origin 1180):
+**Gamepad (PASS):** with the mock pads (board cell = 50 px; P1 origin 200, P2 origin 1220, y=40):
 
 | Input | P1 centroid | P2 centroid |
 |---|---|---|
-| before | 242.5 | 242.5 |
-| pad0 button 14 (left) | 188.5 | — |
-| pad0 button 15 (right) | 242.5 | — |
-| pad1 button 14 (left) | — | 188.5 |
-| pad1 button 15 (right) | — | 242.5 |
-| pad0 `axes[0]` = -1 / +1 | 188.5 / 242.5 | — |
+| before | 212 | 212 |
+| pad0 button 14 (left) | 162 | — |
+| pad0 button 15 (right) | 212 | — |
+| pad1 button 14 (left) | — | 162 |
+| pad1 button 15 (right) | — | 212 |
+| pad0 `axes[0]` = -1 | 149.5 (from 199.5) | — |
 
-Both D-pad buttons and the left stick move the correct player by one column.
+Both D-pad buttons and the left stick move the correct player by one column (50 px).
 
 ## Status
 
@@ -47,10 +47,10 @@ Both D-pad buttons and the left stick move the correct player by one column.
 
 ## Verification
 
-Canvas pixel sampling of piece-colored pixels (exact piece colors only, filtering background/grid/anti-alias), in logical 1920×1080 board coordinates (P1 origin 200, P2 origin 1180, cell 54, board 540×1080). Gamepad mocked in-page by replacing `navigator.getGamepads()` with two synthetic pads. No image input used.
+Canvas pixel sampling of piece-colored pixels (exact piece colors only, filtering background/grid/anti-alias), in logical 1920×1080 board coordinates (P1 origin 200,40; P2 origin 1220,40; cell 50; board 500×1000). Gamepad mocked in-page by replacing `navigator.getGamepads()` with two synthetic pads. No image input used.
 
 ## Notes / follow-up
 
 - Gamepad support is now implemented (Developer commits: menu navigation, soft drop, gameover restart).
-- Note: board cell size is now 54 px, so the board is 540×1080 and its bottom edge extends past the canvas — tracked separately in TC-004.
+- Board layout is now cell 50, origin y=40 (board 500×1000, ends at y=1040) — TC-004 re-checked PASS.
 - Root cause is out of scope for this test asset.
