@@ -39,7 +39,7 @@
 ## DAS (Delayed Auto Shift)
 
 - Initial delay: 250ms before auto-repeat starts.
-- Repeat rate (ARR): 33ms.
+- Repeat rate (ARR): 50ms.
 - Applies to left/right movement and soft drop.
 
 ## Soft Drop
