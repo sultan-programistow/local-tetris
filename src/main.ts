@@ -573,6 +573,7 @@ window.addEventListener('keyup', () => { lastKey = ''; });
 // Simplified game loop with real input polling for movement
 let last = performance.now();
 let gpPrev: any = { up:false, down:false, left:false, right:false, a:false, b:false, start:false };
+let startOpenedMenu = false;
 function handleGamepadMenus() {
   const gps = (navigator as any).getGamepads ? (navigator as any).getGamepads() : [];
   const gp = gps[0];
@@ -584,17 +585,17 @@ function handleGamepadMenus() {
   const a = gp.buttons[0]?.pressed;
   const b = gp.buttons[1]?.pressed || gp.buttons[8]?.pressed;
   if (screen === 'play') {
-    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; pausedReturn = 'play'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
+    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; pausedReturn = 'play'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; startOpenedMenu = true; }
   }
   if (screen === 'countdown') {
-    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; pausedReturn = 'countdown'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; }
+    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; pausedReturn = 'countdown'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; startOpenedMenu = true; }
   }
   if (screen === 'menu') {
     const items = menuItems();
     if (up && !gpPrev.up) menuIndex = (menuIndex - 1 + items.length) % items.length;
     if (down && !gpPrev.down) menuIndex = (menuIndex + 1) % items.length;
     const startPressed = gp.buttons[9]?.pressed;
-    const activate = (a && !gpPrev.a) || (pausedFromGame && startPressed && !gpPrev.start);
+    const activate = (a && !gpPrev.a) || (pausedFromGame && startPressed && !gpPrev.start && !startOpenedMenu);
     if (activate) {
       const opt = items[menuIndex];
       if (opt === 'Start') startMatch();
@@ -617,6 +618,7 @@ function handleGamepadMenus() {
   } else if (screen === 'stats' || screen === 'controls') {
     if (b && !gpPrev.b) screen = 'menu';
   }
+  if (!gp.buttons[9]?.pressed) startOpenedMenu = false;
   gpPrev = { up, down, left, right, a, b, start: gp.buttons[9]?.pressed };
 }
 function loop(now: number) {
