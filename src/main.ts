@@ -893,7 +893,7 @@ function drawStats() {
     ctx.fillText(String(r[2]), 1200, 220 + i * 36);
   });
   ctx.fillStyle = "#aaa";
-  ctx.fillText("Sessions (newest first):", 700, 440);
+  ctx.fillText("Sessions:", 700, 440);
   ctx.fillStyle = "#fff";
   const visible = 12;
   const start = statsScroll;
