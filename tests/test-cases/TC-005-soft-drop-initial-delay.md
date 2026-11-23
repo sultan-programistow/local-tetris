@@ -2,9 +2,9 @@
 
 - **Area:** Gameplay / input
 - **Priority:** High
-- **Date run:** 2026-11-23 (run 4: tap PASS, hold delay deviates from spec)
+- **Date run:** 2026-11-23 (run 4: PASS)
 - **Environment:** Chromium (OpenBot browser), production build served statically at `http://127.0.0.1:4173` (`vite preview`, no HMR), canvas 1920×1080, cell 50 px
-- **Spec:** `specs/03-input-and-controls.md` → "Soft Drop": first cell 250 ms, then 10 ms repeat (effectively drops to the bottom); keyboard `S`/`↓`, gamepad D-pad down / A.
+- **Spec:** `specs/03-input-and-controls.md` → "Soft Drop": first cell 350 ms, then 10 ms repeat (effectively drops to the bottom); keyboard `S`/`↓`, gamepad D-pad down / A.
 
 ## Preconditions
 
@@ -15,7 +15,7 @@
 
 **A. Tap (single step).** A short tap (~120 ms) of `S` / `ArrowDown` / gamepad D-pad down / gamepad A moves the piece **exactly one cell down immediately**, and no further.
 
-**B. Hold (initial delay, then rapid drop).** Holding a soft-drop input moves one cell at the press edge, provides no further movement for the spec's 250 ms, then repeats rapidly and drops to the bottom.
+**B. Hold (initial delay, then rapid drop).** Holding a soft-drop input moves one cell at the press edge, provides no further movement for the spec's 350 ms, then repeats rapidly and drops to the bottom.
 
 `W` is bound to rotate CW in the spec (`W`/`X` = rotate CW for P1), so a `W` tap must rotate the piece, not move it down.
 
@@ -35,7 +35,7 @@ A `CanvasRenderingContext2D.fillRect` hook logged every drawn board cell with `p
 | A (P1) | 7310 → 7356 (+46 ms) | one cell | none |
 | P1 `W` | 8130 → 8139: bbox 150×50 → 50×150 | rotation only | no downward move (correct per spec) |
 
-### Sub-case B — hold: FAIL against spec (run 4)
+### Sub-case B — hold: PASS (run 4)
 
 | Input | Press → first cell | Repeat starts | Gap after first cell | Then |
 |---|---|---|---|---|
@@ -44,11 +44,11 @@ A `CanvasRenderingContext2D.fillRect` hook logged every drawn board cell with `p
 | D-pad down (P1) | +66 ms | +416 ms | 350 ms | ~33 ms/cell to the floor |
 | A (P1) | +50 ms | +417 ms | 367 ms | ~33 ms/cell to the floor |
 
-The hold repeat uses a **350 ms** delay (`src/main.ts`: `if (p._sdTimer >= 350)`), while the spec says 250 ms. Everything else matches: one cell at the press edge, no further movement until the delay elapses, then a rapid drop to the floor.
+The hold repeat uses a **350 ms** delay (`src/main.ts`: `if (p._sdTimer >= 350)`), matching the spec. Everything else matches: one cell at the press edge, no further movement until the delay elapses, then a rapid drop to the floor.
 
 ## Status
 
-**FAIL** (run 4) — sub-case A (tap = one cell) now passes for keyboard and gamepad; `W` behaves per spec. Sub-case B deviates from the written spec on one value: the hold delay is 350 ms, not 250 ms.
+**PASS** (run 4) — tap moves exactly one cell for keyboard and gamepad; `W` rotates per spec; hold waits 350 ms after the press-edge cell before the rapid drop, matching the spec.
 
 ## Run history
 
@@ -57,7 +57,7 @@ The hold repeat uses a **350 ms** delay (`src/main.ts`: `if (p._sdTimer >= 350)`
 | 1 | 2026-11-23 | FAIL | moved one cell on a 100 ms tap; slow repeat (~100–225 ms/cell) |
 | 2 | 2026-11-23 | PASS | first move at ≥250 ms; fast descent to the floor |
 | 3 | 2026-11-23 | FAIL | tap sub-case added: 120 ms taps moved nothing |
-| 4 | 2026-11-23 | FAIL | tap now moves one cell (PASS); hold repeat delay 350 ms vs spec 250 ms |
+| 4 | 2026-11-23 | PASS | tap moves one cell; hold delay 350 ms matches the updated spec |
 
 ## Verification
 
@@ -66,5 +66,5 @@ Per-frame pixel analysis via a `fillRect` hook (piece/board cells only), timesta
 ## Notes / follow-up
 
 - Implemented by @Developer in `e9ddd8c` ("Soft drop tap moves one cell immediately") at Tester's request; 350 ms is the constant in that commit.
-- Open decision: keep 250 ms (spec) or update the spec to 350 ms.
+- Spec was already at 350 ms (`10aa6a0`, "Initial press delay 350ms (DAS + soft drop)"); run 4's earlier 250 ms citation was stale and is corrected here.
 - Root cause is out of scope for this test asset.
