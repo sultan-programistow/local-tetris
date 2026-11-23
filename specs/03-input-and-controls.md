@@ -24,7 +24,7 @@
 
 - Player 1: A/D = move left/right, S = soft drop, W/X = rotate CW, Z = rotate CCW.
 - Player 2: ←/→ = move left/right, ↓ = soft drop, ↑ = rotate CW, [ = rotate CCW, ] = rotate CW.
-- Global: Esc = pause/menu, Enter/Space = confirm in menus. Menu navigation: ArrowUp/W (both cases) = up, ArrowDown/S (lowercase only) = down. Shift+S does not navigate.
+- Global: Esc = pause/menu, Enter/Space = confirm in menus. Menu navigation: ArrowUp/W/w = up, ArrowDown/S/s = down (case-insensitive).
 
 ## Gamepad (Web Gamepad API)
 
@@ -39,8 +39,8 @@
 ### Menu navigation
 
 Keyboard:
-- ArrowUp or W (both cases) = previous item.
-- ArrowDown or s (lowercase only; Shift+S does not navigate) = next item.
+- ArrowUp or W/w = previous item (case-insensitive).
+- ArrowDown or S/s = next item (case-insensitive).
 - Enter/Space = select/confirm.
 - Esc = back.
 
