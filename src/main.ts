@@ -902,7 +902,7 @@ function drawStats() {
   ctx.fillText("Sessions", 960, 420);
   ctx.textAlign = "left";
   ctx.fillStyle = "#aaa";
-  ctx.fillText("Date".padEnd(18) + "Duration".padEnd(10) + "Winner".padEnd(10) + "Score", 700, 470);
+  ctx.fillText("Date".padEnd(18) + "Duration".padEnd(10) + "Winner".padEnd(10) + "Score", 550, 470);
   ctx.fillStyle = "#fff";
   const visible = 12;
   const start = statsScroll;
@@ -920,7 +920,7 @@ function drawStats() {
     ctx.fillStyle = "#fff";
     ctx.fillText(
       `${(s.date.slice(0, 10) + " " + s.date.slice(11, 16)).padEnd(18)}${dur.padEnd(10)}${winLabel.padEnd(10)}${winScore}:${loseScore}`,
-      700,
+      550,
       y,
     );
     y += 34;

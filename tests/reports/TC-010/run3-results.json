@@ -1,0 +1,265 @@
+{
+ "assets": [
+  {
+   "name": "move",
+   "ok": true,
+   "dur": 0.042
+  },
+  {
+   "name": "rotate",
+   "ok": true,
+   "dur": 0.617
+  },
+  {
+   "name": "soft_drop",
+   "ok": true,
+   "dur": 0.129
+  },
+  {
+   "name": "piece_lock",
+   "ok": true,
+   "dur": 0.292
+  },
+  {
+   "name": "line_clear",
+   "ok": true,
+   "dur": 0.559
+  },
+  {
+   "name": "game_over",
+   "ok": true,
+   "dur": 0.17
+  },
+  {
+   "name": "pause",
+   "ok": true,
+   "dur": 0.268
+  },
+  {
+   "name": "unpause",
+   "ok": true,
+   "dur": 0.258
+  },
+  {
+   "name": "menu_select",
+   "ok": true,
+   "dur": 0.059
+  },
+  {
+   "name": "menu_back",
+   "ok": true,
+   "dur": 0.065
+  }
+ ],
+ "results": [
+  {
+   "step": "A1 hover Start -> Stats",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "A2 hover same item again",
+   "expected": [],
+   "got": [],
+   "status": "PASS"
+  },
+  {
+   "step": "A3 hover empty row",
+   "expected": [],
+   "got": [],
+   "status": "PASS"
+  },
+  {
+   "step": "A4 hover back onto Start",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "A5 ArrowDown x4 (incl. wrap)",
+   "expected": [
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "A6 ArrowUp x4",
+   "expected": [
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "A7 D-pad down x3, up x2",
+   "expected": [
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "A8 s / Shift+S / w / Shift+W navigation",
+   "expected": [
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "B1 Volume: Escape -> menu",
+   "expected": [
+    "menu_back.ogg"
+   ],
+   "got": [
+    "menu_back.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "B2 Stats: Escape -> menu",
+   "expected": [
+    "menu_back.ogg"
+   ],
+   "got": [
+    "menu_back.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "B3 Controls: Escape -> menu",
+   "expected": [
+    "menu_back.ogg"
+   ],
+   "got": [
+    "menu_back.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "B4 Volume: gamepad B -> menu",
+   "expected": [
+    "menu_back.ogg"
+   ],
+   "got": [
+    "menu_back.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "C1 P1 'a' move left",
+   "expected": [
+    "move.ogg"
+   ],
+   "got": [
+    "move.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "C2 P1 'd' move right",
+   "expected": [
+    "move.ogg"
+   ],
+   "got": [
+    "move.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "C3 P1 's' soft drop tap",
+   "expected": [
+    "soft_drop.ogg"
+   ],
+   "got": [
+    "soft_drop.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "C4 P2 ArrowDown soft drop tap",
+   "expected": [
+    "soft_drop.ogg"
+   ],
+   "got": [
+    "soft_drop.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "C5 P2 ArrowLeft move left",
+   "expected": [
+    "move.ogg"
+   ],
+   "got": [
+    "move.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "C6 P2 ArrowRight move right",
+   "expected": [
+    "move.ogg"
+   ],
+   "got": [
+    "move.ogg"
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "C7 P2 ArrowDown soft drop again",
+   "expected": [
+    "soft_drop.ogg"
+   ],
+   "got": [
+    "soft_drop.ogg"
+   ],
+   "status": "PASS"
+  }
+ ],
+ "playErrors": null
+}
