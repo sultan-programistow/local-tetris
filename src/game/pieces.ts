@@ -23,8 +23,10 @@ const TETROMINOES: PieceDef[] = [
 // Pentominoes + irregular variants unlock from level 3, one new shape every 2 levels
 const EXTRA: PieceDef[] = [
   { id: 'P1', name: 'Pento-X', shape: [[0,1,0],[1,1,1],[0,1,0]], color: '#ff4da6', unlockLevel: 3 },
-  { id: 'P2', name: 'Pento-U', shape: [[1,0,1],[1,1,1]], color: '#00ccff', unlockLevel: 5 },
+  { id: 'I3', name: 'Tromino-I', shape: [[1,1,1]], color: '#ff1493', unlockLevel: 6 },
+  { id: 'P2', name: 'Pento-U', shape: [[1,0,1],[1,1,1]], color: '#ff6e40', unlockLevel: 5 },
   { id: 'P3', name: 'Pento-F', shape: [[0,1,1],[1,1,0],[0,1,0]], color: '#7fff00', unlockLevel: 7 },
+  { id: 'L3', name: 'Tromino-L', shape: [[1,0],[1,1]], color: '#00ff7f', unlockLevel: 10 },
   { id: 'P4', name: 'Pento-P', shape: [[1,1],[1,1],[1,0]], color: '#ff7f50', unlockLevel: 9 },
   { id: 'P5', name: 'Pento-W', shape: [[1,0,0],[1,1,0],[0,1,1]], color: '#9370db', unlockLevel: 11 },
 ];
