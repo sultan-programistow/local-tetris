@@ -1,0 +1,33 @@
+TC-006 run 3 — 2026-11-23
+Build: clean worktree of 5bd2de2 ("Gamepad B/Select back navigation in menu and game over"), `npm run build`,
+`vite preview` at http://127.0.0.1:4175 (no HMR).
+Canvas 1920x1080. Gamepads mocked via navigator.getGamepads(); the same pad object was returned for
+slots 0 and 1 so that both players soft-drop, which is needed to reach Game Over.
+Method as in run 2: P1 board border pixel (200,900) summed RGB; play is bright (612), static screens dark (53).
+Green selection pixels: Main Menu band y 340-430, Game Over band y 470-590. White pixels y 280-325 mark
+the Game Over score line.
+Start = button 9, A = 0, B = 1, Select = 8, 150 ms per press edge.
+
+Check 4 — B in paused Main Menu resumes
+  play before Start:      board 612
+  Start 150 ms -> menu:   board 53, green 977 (Main Menu, "Resume" highlighted)
+  B 150 ms:               board 612, game advancing (PASS)
+
+Check 5 — Select in paused Main Menu resumes
+  Start 150 ms -> menu:   board 53, green 977
+  Select 150 ms:          board 612, game advancing (PASS)
+
+Check 9 — B / Select on Game Over return to Main Menu
+  top-out (both pads soft-drop held): Game Over after ~6 s (P1 was already topped out) and ~10 s (fresh match)
+  Game Over screen:       board 53, green 803 in y 470-590 (Restart highlighted), white 760 (score line)
+  B 150 ms:               Main Menu (green 581 in y 340-430, Game Over green 0, score line white 0) — PASS
+  Select 150 ms:          Main Menu (green 581 in y 340-430, Game Over green 0, score line white 0) — PASS
+
+Note on probing: while only Player 1 had topped out, the board border pixel dropped to 153 and the board still
+drew "GAME OVER" for P1; the game was still in play. The Game Over screen was therefore identified by
+green pixels in the y 470-590 band (Game Over options) and the absence of board pixels.
+
+Checks 1, 2, 3, 6, 7 (keyboard Esc, gamepad Start, Resume) were not re-run in run 3; run 2 results stand.
+Check 8 (Esc on Game Over) was not re-run in run 3; run 1 result stands.
+
+Exit code: 0
