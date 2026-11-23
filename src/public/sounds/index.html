@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tetris Duel — SFX Preview</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #0f1115; color: #e8e8e8; padding: 24px; }
+  h1 { margin-bottom: 16px; }
+  table { border-collapse: collapse; width: 100%; max-width: 720px; }
+  th, td { border: 1px solid #333; padding: 10px 12px; text-align: left; }
+  th { background: #1b1e26; }
+  tr:nth-child(even) { background: #161922; }
+  button { background: #2d6cdf; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  button:hover { background: #1f57b8; }
+  .playing { background: #2ecc71; }
+  .note { color: #888; font-size: 13px; margin-top: 12px; }
+</style>
+</head>
+<body>
+<h1>Tetris Duel — Sound Effects Preview</h1>
+<table>
+  <thead>
+    <tr><th>#</th><th>SFX</th><th>File</th><th>Play</th></tr>
+  </thead>
+  <tbody id="rows"></tbody>
+</table>
+<p class="note">Source: Kenney Interface Sounds (CC0, no attribution). Click Play to preview. Sounds are OGG Vorbis.</p>
+
+<script>
+const sounds = [
+  { name: "Move (left/right)", file: "move.ogg" },
+  { name: "Rotate", file: "rotate.ogg" },
+  { name: "Soft drop", file: "soft_drop.ogg" },
+  { name: "Piece lock", file: "piece_lock.ogg" },
+  { name: "Line clear", file: "line_clear.ogg" },
+  { name: "Game over", file: "game_over.ogg" },
+  { name: "Pause", file: "pause.ogg" },
+  { name: "Unpause", file: "unpause.ogg" },
+  { name: "Menu select", file: "menu_select.ogg" },
+  { name: "Menu back", file: "menu_back.ogg" },
+];
+const tbody = document.getElementById("rows");
+let current = null;
+sounds.forEach((s, i) => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `<td>${i+1}</td><td>${s.name}</td><td>${s.file}</td><td><button data-file="${s.file}">Play</button></td>`;
+  tbody.appendChild(tr);
+});
+tbody.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  const file = btn.dataset.file;
+  if (current) { current.pause(); current = null; document.querySelectorAll("button").forEach(b => b.classList.remove("playing")); }
+  const audio = new Audio(file);
+  audio.addEventListener("ended", () => btn.classList.remove("playing"));
+  audio.play().then(() => { btn.classList.add("playing"); current = audio; }).catch(err => alert("Could not play: " + err));
+});
+</script>
+</body>
+</html>

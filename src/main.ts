@@ -572,54 +572,67 @@ window.addEventListener('keyup', () => { lastKey = ''; });
 
 // Simplified game loop with real input polling for movement
 let last = performance.now();
-let gpPrev: any = { up:false, down:false, left:false, right:false, a:false, b:false, start:false };
+let gpPrev: any[] = [
+  { up:false, down:false, left:false, right:false, a:false, b:false, start:false },
+  { up:false, down:false, left:false, right:false, a:false, b:false, start:false },
+];
 let startOpenedMenu = false;
 function handleGamepadMenus() {
   const gps = (navigator as any).getGamepads ? (navigator as any).getGamepads() : [];
-  const gp = gps[0];
-  if (!gp) return;
-  const up = gp.buttons[12]?.pressed || gp.axes[1] < -0.5;
-  const down = gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
-  const left = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
-  const right = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
-  const a = gp.buttons[0]?.pressed;
-  const b = gp.buttons[1]?.pressed || gp.buttons[8]?.pressed;
-  if (screen === 'play') {
-    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; pausedReturn = 'play'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; startOpenedMenu = true; }
-  }
-  if (screen === 'countdown') {
-    if (gp.buttons[9]?.pressed && !gpPrev.start) { pausedFromGame = true; pausedReturn = 'countdown'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; startOpenedMenu = true; }
-  }
-  if (screen === 'menu') {
-    const items = menuItems();
-    if (up && !gpPrev.up) menuIndex = (menuIndex - 1 + items.length) % items.length;
-    if (down && !gpPrev.down) menuIndex = (menuIndex + 1) % items.length;
-    const startPressed = gp.buttons[9]?.pressed;
-    const activate = (a && !gpPrev.a) || (pausedFromGame && startPressed && !gpPrev.start && !startOpenedMenu);
-    if (activate) {
-      const opt = items[menuIndex];
-      if (opt === 'Start') startMatch();
-      else if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
-      else if (opt === 'Restart') { pausedFromGame = false; startMatch(); }
-      else if (opt === 'Stats') screen = 'stats';
-      else if (opt === 'Volume') screen = 'volume';
-      else if (opt === 'Controls') screen = 'controls';
+  // Process both players' gamepads (0 and 1) for menu navigation.
+  for (let gi = 0; gi < 2; gi++) {
+    const gp = gps[gi];
+    if (!gp) continue;
+    const prev = gpPrev[gi];
+    const up = gp.buttons[12]?.pressed || gp.axes[1] < -0.5;
+    const down = gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
+    const left = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
+    const right = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
+    const a = gp.buttons[0]?.pressed;
+    const b = gp.buttons[1]?.pressed || gp.buttons[8]?.pressed;
+    if (screen === 'play') {
+      if (gp.buttons[9]?.pressed && !prev.start) { pausedFromGame = true; pausedReturn = 'play'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; startOpenedMenu = true; }
     }
-  } else if (screen === 'gameover') {
-    if (up && !gpPrev.up) gameOverIndex = 0;
-    if (down && !gpPrev.down) gameOverIndex = 1;
-    if (a && !gpPrev.a) {
-      if (gameOverIndex === 0) startMatch(); else { screen = 'menu'; gameOverIndex = 0; }
+    if (screen === 'countdown') {
+      if (gp.buttons[9]?.pressed && !prev.start) { pausedFromGame = true; pausedReturn = 'countdown'; if (match) match.status = 'paused'; screen = 'menu'; menuIndex = 0; startOpenedMenu = true; }
     }
-  } else if (screen === 'volume') {
-    if (left && !gpPrev.left) { volume = Math.max(0, volume - 0.05); saveVolume(volume); }
-    if (right && !gpPrev.right) { volume = Math.min(1, volume + 0.05); saveVolume(volume); }
-    if (b && !gpPrev.b) screen = 'menu';
-  } else if (screen === 'stats' || screen === 'controls') {
-    if (b && !gpPrev.b) screen = 'menu';
+    if (screen === 'menu') {
+      const items = menuItems();
+      if (up && !prev.up) menuIndex = (menuIndex - 1 + items.length) % items.length;
+      if (down && !prev.down) menuIndex = (menuIndex + 1) % items.length;
+      // B/Select acts as Back: resume when a game is in progress
+      if (b && !prev.b && pausedFromGame) {
+        pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing';
+      }
+      const startPressed = gp.buttons[9]?.pressed;
+      const activate = (a && !prev.a) || (pausedFromGame && startPressed && !prev.start && !startOpenedMenu);
+      if (activate) {
+        const opt = items[menuIndex];
+        if (opt === 'Start') startMatch();
+        else if (opt === 'Resume') { pausedFromGame = false; screen = pausedReturn; if (match) match.status = 'playing'; }
+        else if (opt === 'Restart') { pausedFromGame = false; startMatch(); }
+        else if (opt === 'Stats') screen = 'stats';
+        else if (opt === 'Volume') screen = 'volume';
+        else if (opt === 'Controls') screen = 'controls';
+      }
+    } else if (screen === 'gameover') {
+      if (up && !prev.up) gameOverIndex = 0;
+      if (down && !prev.down) gameOverIndex = 1;
+      if (a && !prev.a) {
+        if (gameOverIndex === 0) startMatch(); else { screen = 'menu'; gameOverIndex = 0; }
+      }
+      // B/Select returns to Main Menu
+      if (b && !prev.b) { screen = 'menu'; gameOverIndex = 0; }
+    } else if (screen === 'volume') {
+      if (left && !prev.left) { volume = Math.max(0, volume - 0.05); saveVolume(volume); }
+      if (right && !prev.right) { volume = Math.min(1, volume + 0.05); saveVolume(volume); }
+      if (b && !prev.b) screen = 'menu';
+    } else if (screen === 'stats' || screen === 'controls') {
+      if (b && !prev.b) screen = 'menu';
+    }
+    if (!gp.buttons[9]?.pressed) startOpenedMenu = false;
+    gpPrev[gi] = { up, down, left, right, a, b, start: gp.buttons[9]?.pressed };
   }
-  if (!gp.buttons[9]?.pressed) startOpenedMenu = false;
-  gpPrev = { up, down, left, right, a, b, start: gp.buttons[9]?.pressed };
 }
 function loop(now: number) {
   handleGamepadMenus();
