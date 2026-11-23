@@ -1,0 +1,29 @@
+TC-007 run 3 (dev server) — 2026-11-23 — build 4379d90 (dev server localhost:5173)
+Method: canvas pixel sampling; spawn window = cell columns 3-6, rows 0-3 of each board
+(board origins P1 x=200 y=40, P2 x=1220 y=40, cell 50); exact tetromino palette colors;
+per-board spawn detection; Next preview regions 720,40 80x80 (P1) vs 1120,40 80x80 (P2).
+
+Sequences (normalized shape cells + color):
+index  P1        P2        same
+0      J         J         yes
+1      I         I         yes
+2      T         T         yes
+3      O         O         yes
+4      L         L         yes
+5      J         J         yes
+6      L         L         yes
+7      O         O         yes
+8      T         T         yes
+
+mismatches: 0 / 9
+Next preview pixel diffs at spawns [0,0,0,0,0,0,0,0,0]
+Recorded lengths: P1=9, P2=9
+
+Raw normalized shapes:
+J 0,0;0,1;1,1;2,1
+I 0,0;1,0;2,0;3,0
+T 0,1;1,0;1,1;2,1
+O 0,0;0,1;1,0;1,1
+L 0,1;1,1;2,0;2,1
+
+Run log: no mismatch samples; no game-over during the 9 recorded spawns.

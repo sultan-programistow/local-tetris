@@ -1,0 +1,28 @@
+TC-007 run 1 — 2026-11-23
+Build: commit 4379d90 ("Fix shared tile sequence: both players now receive identical pieces"),
+`npm run build` output in dist/, `vite preview` at http://127.0.0.1:4175 (no HMR).
+Canvas 1920x1080, viewport 1766x1102.
+
+Method: `CanvasRenderingContext2D.fillRect` hook recorded 48 px board-cell fills per board region
+(P1 x 200-700, P2 x 1220-1720); the last cell fill before the per-player score text is the current
+piece. `fillText` hook parsed "P1 Score: N" / "P2 Score: N", so every piece is keyed by its index
+(score = pieces placed). A page-side keyboard driver soft-dropped 10 pieces per player and spread
+them to alternate walls so no stack reached the top. Fill colour identifies the piece type
+(I #00f0f0, O #f0f000, T #a000f0, S #00f000, Z #f00000, J #0000f0, L #f0a000).
+
+Run 1 — first 10 pieces per player (piece index 0 = first spawn)
+
+  index | P1 fill  | P1 piece | P2 fill  | P2 piece | match
+  ------+----------+----------+----------+----------+------
+    0   | #a000f0  | T        | #a000f0  | T        | yes
+    1   | #0000f0  | J        | #0000f0  | J        | yes
+    2   | #0000f0  | J        | #0000f0  | J        | yes
+    3   | #f0f000  | O        | #f0f000  | O        | yes
+    4   | #00f000  | S        | #00f000  | S        | yes
+    5   | #a000f0  | T        | #a000f0  | T        | yes
+    6   | #0000f0  | J        | #0000f0  | J        | yes
+    7   | #f00000  | Z        | #f00000  | Z        | yes
+    8   | #00f000  | S        | #00f000  | S        | yes
+    9   | #f0f000  | O        | #f0f000  | O        | yes
+
+Result: 10/10 identical, same order. PASS.

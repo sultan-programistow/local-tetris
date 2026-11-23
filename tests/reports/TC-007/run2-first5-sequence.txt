@@ -1,0 +1,20 @@
+TC-007 run 2 — 2026-11-23
+Build: commit 4379d90, `vite preview` at http://127.0.0.1:4175 (see run 1 for method).
+New match started from the paused Main Menu -> Restart, so a different random seed than run 1.
+
+Run 2 — first 5 pieces per player (piece index 0 = first spawn)
+
+  index | P1 fill  | P1 piece | P2 fill  | P2 piece | match
+  ------+----------+----------+----------+----------+------
+    0   | #f0a000  | L        | #f0a000  | L        | yes
+    1   | #f00000  | Z        | #f00000  | Z        | yes
+    2   | #0000f0  | J        | #0000f0  | J        | yes
+    3   | #f0f000  | O        | #f0f000  | O        | yes
+    4   | #f0f000  | O        | #f0f000  | O        | yes
+
+Result: 5/5 identical, same order, including two O pieces in a row (indices 3-4). Screenshot
+`run2-after-5-pieces.png` shows both boards with identical
+stacks, score 5 : 5 and the same NEXT piece (Z) on each side. PASS.
+
+The two runs produced different sequences (run 1: T J J O S T J Z S O; run 2: L Z J O O),
+so the sequence is random per match and shared within the match.
