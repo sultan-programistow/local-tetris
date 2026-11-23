@@ -337,6 +337,7 @@ function draw() {
 }
 
 function drawBoard(p: any, ox: number, oy: number, cell: number) {
+  const over = p.gameOver || p.toppedOut;
   // grid lines (brighter)
   ctx.strokeStyle = '#444';
   ctx.lineWidth = 1;
@@ -345,6 +346,13 @@ function drawBoard(p: any, ox: number, oy: number, cell: number) {
   // board border
   ctx.strokeStyle = '#ccc'; ctx.lineWidth = 2;
   ctx.strokeRect(ox, oy, COLS*cell, ROWS*cell);
+  if (over) {
+    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.fillRect(ox, oy, COLS*cell, ROWS*cell);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 36px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('GAME OVER', ox + COLS*cell/2, oy + ROWS*cell/2);
+    ctx.textAlign = 'left';
+  }
   // cells
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
     const v = p.board.grid[r][c];

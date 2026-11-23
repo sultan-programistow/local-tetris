@@ -36,6 +36,8 @@ Two players play Tetris simultaneously on the same screen. Both receive the **sa
 2. 3-2-1 countdown.
 3. Both players play simultaneously with identical piece sequence (seeded RNG).
 4. First player to top out: their score is frozen; the other keeps playing.
+   - The topped-out player's board enters a soft "Game Over" state: board is grayed out and a "GAME OVER" label is shown over that board only.
+   - The other player's board remains active and playable.
 5. Second player must exceed the first's score to win; if they also top out at ≤ score, first player wins.
 6. Tie (identical scores) = draw.
 7. Game over screen: winner, both scores, pieces placed, summary + last 5 sessions, "press to restart" (new random seed).
