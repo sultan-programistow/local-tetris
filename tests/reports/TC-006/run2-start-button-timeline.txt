@@ -1,0 +1,32 @@
+TC-006 run 2 — 2026-11-23
+Build: clean checkout of commit 82b1d18 ("Gamepad Start opens menu without auto-activating Resume") in a separate worktree, `npm run build`, `vite preview` at http://127.0.0.1:4174 (no HMR).
+Canvas 1920x1080, viewport 1781x1103. Gamepad mocked via navigator.getGamepads(), pad 0.
+Method: P1 board border pixel (200,900) summed RGB; play is bright (~612), menu/game-over dark (~53).
+Green selection pixels counted in region x 560-1360, y 340-420.
+Start = button 9, A = 0, B = 1, Select = 8, 150 ms per press edge.
+
+Check 2 — Start in play opens Main Menu
+  play before Start:        board 612, green 0
+  Start pressed 150 ms; released
+  first dark frame:         72 ms after the press
+  after release:            board 53,  green 1076
+  samples after transition: board 53, green 1076 for 720 ms until Escape was pressed (7/7 samples)
+  back-to-back hashes of the board region while the menu was open: identical across 1.4 s (game frozen)
+  Menu contents (screenshot run2-start-menu.png): title LOCAL TETRIS, items Resume / Restart / Stats / Volume / Controls; Resume highlighted.
+
+Check 3 — Esc in paused Main Menu resumes
+  Esc: board 53 -> 612; board-region hash changed again over the next 1.2 s (game advancing), PASS.
+
+Check 4 — B in paused Main Menu resumes
+  menu: board 53
+  B 150 ms: board 53 (menu stays open, FAIL)
+
+Check 5 — Select in paused Main Menu resumes
+  menu: board 53
+  Select 150 ms: board 53 (menu stays open, FAIL)
+
+Check 6 — A on "Resume" resumes
+  menu: board 53
+  A 150 ms: board 612, game advancing (PASS)
+
+Checks 8 and 9 (Game Over) not re-run in run 2; run 1 results stand.

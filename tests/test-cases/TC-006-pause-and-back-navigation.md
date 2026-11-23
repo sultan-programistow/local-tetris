@@ -2,8 +2,8 @@
 
 - **Area:** Menus / navigation / input
 - **Priority:** High
-- **Date run:** 2026-11-23 (run 1: FAIL — 4 of 9 checks fail)
-- **Environment:** Chromium (OpenBot browser), production build served statically at `http://127.0.0.1:4173` (`vite preview`, no HMR), canvas 1920×1080; gamepads mocked via `navigator.getGamepads()` (pad 0)
+- **Date run:** 2026-11-23 (run 2: FAIL — gamepad `Start` fixed; `B`/`Select` still do not go back)
+- **Environment:** Chromium (OpenBot browser), production build of `82b1d18` served statically at `http://127.0.0.1:4174` (`vite preview`, no HMR), canvas 1920×1080; gamepads mocked via `navigator.getGamepads()` (pad 0)
 - **Spec:** `specs/03-input-and-controls.md` §"Pause (removed)" and §"Gamepad"; `specs/04-screens-and-ui.md` §"Main Menu", §"Play Screen", §"Game Over Screen"
 - **Spec pin:** `03-input-and-controls.md` @ `10aa6a0`, `04-screens-and-ui.md` @ `db1a953`
 
@@ -34,25 +34,26 @@ Canvas pixel checks (no DOM content):
 
 | # | Check | Result | Observed |
 |---|---|---|---|
-| 1 | `Esc` in play opens Main Menu | **PASS** | Menu shown with first item "Resume"; pieces frozen: model cell set identical before/after a 1.4 s menu visit |
-| 2 | `Start` in play opens Main Menu | **FAIL** | Nothing visible happens; game keeps running (30/30 sampled frames still play). The menu does not stay open — consistent with it opening and immediately activating "Resume" in the same input pass |
-| 3 | `Esc` in paused Main Menu returns to game | **FAIL** | Menu stays open (checked twice, 800 ms apart) |
-| 4 | `B` in paused Main Menu returns to game | **FAIL** | Menu stays open |
-| 5 | `Select` in paused Main Menu returns to game | **FAIL** | Menu stays open |
-| 6 | "Resume" item resumes the game | **PASS** | `Enter` on "Resume" returns to play; pieces continue from the frozen position |
-| 7 | "Resume" label when opened from a game / "Start" otherwise | **PASS** | "Resume" after `Esc` during play; "Start" on a fresh Main Menu |
-| 8 | `Esc` on Game Over returns to Main Menu | **PASS** | Game Over ("Draw!", P1 11 : P2 11) → Main Menu |
-| 9 | `B` / `Select` on Game Over return to Main Menu | **FAIL** | Both leave the Game Over screen unchanged |
+| 1 | `Esc` in play opens Main Menu | **PASS** | Menu shown with first item "Resume"; pieces frozen: board-region hash identical across a 1.4 s menu visit |
+| 2 | `Start` in play opens Main Menu | **PASS** (run 2) | Board pixel 612 → 53 and green selection pixels 0 → 1076; menu stays open in all 12 samples over 1.6 s after release. Items: Resume / Restart / Stats / Volume / Controls, "Resume" highlighted. Game frozen while the menu is open and advancing again after resume |
+| 3 | `Esc` in paused Main Menu returns to game | **PASS** (run 2) | Board pixel 53 → 612; repeatable (menu → play twice) |
+| 4 | `B` in paused Main Menu returns to game | **FAIL** (run 2) | Menu stays open (board 53, green 1076 after a 150 ms `B` press) |
+| 5 | `Select` in paused Main Menu returns to game | **FAIL** (run 2) | Menu stays open (board 53, green 1076 after a 150 ms `Select` press) |
+| 6 | "Resume" item resumes the game | **PASS** | Keyboard `Enter` and gamepad `A`: returns to play, board redraws and advances from the frozen position |
+| 7 | "Resume" label when opened from a game / "Start" otherwise | **PASS** | "Resume" after `Esc` and after gamepad `Start` during play; "Start" on a fresh Main Menu |
+| 8 | `Esc` on Game Over returns to Main Menu | **PASS** (run 1) | Game Over ("Draw!", P1 11 : P2 11) → Main Menu; not re-run in run 2 |
+| 9 | `B` / `Select` on Game Over return to Main Menu | **FAIL** (run 1) | Both leave the Game Over screen unchanged; not re-run in run 2 |
 
 ## Status
 
-**FAIL** (run 1) — the keyboard path mostly works (pause via `Esc`, resume via `Resume`), but gamepad `Start` does not pause, and `Esc`/`B`/`Select` do not act as "back" in either the paused Main Menu or the Game Over screen.
+**FAIL** (run 2) — gamepad `Start` now opens the Main Menu and keeps it open (fix `82b1d18`), and `Esc` resumes from the paused menu. The gamepad back buttons still do not work: `B` and `Select` leave both the paused Main Menu and the Game Over screen unchanged.
 
 ## Run history
 
 | Run | Date | Result | Notes |
 |---|---|---|---|
 | 1 | 2026-11-23 | FAIL | checks 2, 3, 4, 5, 9 fail; checks 1, 6, 7, 8 pass |
+| 2 | 2026-11-23 | FAIL | after gamepad-Start fix `82b1d18`: checks 2 and 3 now pass; 4 and 5 still fail (`B`/`Select`); 8 and 9 not re-run |
 
 ## Evidence
 
@@ -60,8 +61,11 @@ Canvas pixel checks (no DOM content):
 - `tests/reports/TC-006/gameover-screen.png` — Game Over screen ("Draw!", Restart / Main Menu).
 - `tests/reports/TC-006/gameover-esc-main-menu.png` — after `Esc` on Game Over: Main Menu.
 - Numeric checks are listed in the table above; no image analysis was needed for them.
+- `tests/reports/TC-006/run2-start-menu.png` — Main Menu opened by gamepad `Start` in play: "Resume" highlighted, Restart / Stats / Volume / Controls below.
+- `tests/reports/TC-006/run2-start-button-timeline.txt` — run 2 pixel counts, frame samples, freeze hashes and `B`/`Select` results.
 
 ## Notes / follow-up
 
-- New test case and first failures stay with the user per the agreed workflow; no fix request has been sent to @Developer.
+- Run 1 failures were handed to @Developer at the user's request; the `Start` fix (`82b1d18`) is verified in run 2.
+- `B`/`Select` back navigation still fails (checks 4, 5, 9) and has not been sent to @Developer yet.
 - Root cause is out of scope for this test asset.
