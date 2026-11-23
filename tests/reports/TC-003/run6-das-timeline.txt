@@ -1,0 +1,32 @@
+TC-003 run 6 — DAS timeline after commit 8c932b1 ("Fix DAS: 350ms then 75ms repeat; gamepad auto-repeat via shared DAS")
+Date: 2026-11-23
+Build tested: 8c932b1, static `vite preview` at http://127.0.0.1:4174 (no HMR)
+Method: CanvasRenderingContext2D.fillRect hook, each frame the current piece = last four 48 px cells drawn for the side.
+Fresh page load per input (unique URL). Hold = 900 ms, released by in-page setTimeout.
+Timestamps in ms relative to the synthetic keydown / gamepad state change.
+
+Spec expectation (specs/03-input-and-controls.md §DAS @a27d32b): press edge moves one column, then 350 ms delay, then repeat every 75 ms; keyboard and gamepad.
+
+RIGHT (works)
+P1 d               first +65   repeats +399, +499, +599   (gaps 334, 100, 100)
+P1 d (2nd run)     first +65   repeats +398, +498, +598   (gaps 333, 100, 100)
+P2 ArrowRight      first +49   repeats +399, +499, +583   (gaps 350, 100, 84)
+pad0 D-pad right   first +49   repeats +382, +465, +565   (gaps 333, 83, 100)
+pad1 D-pad right   first +64   repeats +381, +481, +581   (gaps 317, 100, 100)
+pad0 stick +1.0    first +50   repeats +383, +467, +567   (gaps 333, 84, 100)
+
+LEFT (fails)
+P1 a               first +60   repeats +227, +294          (gaps 167, 67)
+P1 a (2nd run)     first +63   repeats +230, +297          (gaps 167, 67)
+P1 a (3rd run)     first +58   repeats +225, +292          (gaps 167, 67)
+P2 ArrowLeft       first +41   repeats +224, +291          (gaps 183, 67)
+pad0 D-pad left    first +36   no further move within 900 ms
+pad0 stick -1.0    first +51   no further move within 900 ms
+pad1 D-pad left    first +51   no further move within 900 ms
+pad1 stick -1.0    first +46   no further move within 900 ms
+
+Frames are drawn every ~33 ms, so repeat gaps carry ±33 ms resolution. The left/right
+difference (167 vs 334 ms initial delay, 67 vs 100 ms repeat) is far above that resolution
+and reproduced in every run.
+
+TAP: every input moved exactly one column (single change entry above), no extra move.
