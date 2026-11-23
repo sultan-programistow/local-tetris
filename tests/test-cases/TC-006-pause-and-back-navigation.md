@@ -26,7 +26,7 @@
 Canvas pixel checks (no DOM content):
 
 - **Play screen:** the P1 board border pixel `(200,900)` is light (> 50); menu/game-over screens draw no board, so it is dark.
-- **Which static screen:** green item text rows — Main Menu selection at y ≈ 380–400, Game Over selection at y ≈ 680–700.
+- **Which static screen:** green item text rows — Main Menu selection at y ≈ 380–400, Game Over selection at y ≈ 380–400.
 - **Pause freeze:** the set of drawn piece-cell coordinates (via a `fillRect` hook) was captured for the last frame before `Esc` and the first frame after resuming; identical sets mean the game did not advance while the menu was open.
 - Gamepad buttons: `Start` = 9, `A` = 0, `B` = 1, `Select` = 8, all pressed for 150 ms per edge.
 

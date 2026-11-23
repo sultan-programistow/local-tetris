@@ -67,7 +67,7 @@ window.addEventListener('mouseup', () => { volumeDragging = false; });
 function updateHover() {
   if (screen === 'gameover') {
     [0,1].forEach(i => {
-      const y = 700 + i * 60;
+      const y = 400 + i * 60;
       if (mouseX >= 860 && mouseX <= 1060 && mouseY >= y - 30 && mouseY <= y + 10) gameOverIndex = i;
     });
     return;
@@ -447,7 +447,7 @@ function drawPlay(countdown: boolean) {
 
 function drawMenu() {
   ctx.fillStyle = '#fff'; ctx.font = 'bold 72px sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('TETRIS DUEL', 960, 200);
+  ctx.fillText('LOCAL TETRIS', 960, 200);
   ctx.font = '36px sans-serif';
   menuItems().forEach((m, i) => {
     ctx.fillStyle = i === menuIndex ? '#0f0' : '#aaa';
@@ -465,7 +465,7 @@ function drawGameOver() {
   const opts = ['Restart', 'Main Menu'];
   opts.forEach((o, i) => {
     ctx.fillStyle = i === gameOverIndex ? '#0f0' : '#aaa';
-    ctx.fillText(o, 960, 700 + i * 60);
+    ctx.fillText(o, 960, 400 + i * 60);
   });
   ctx.textAlign = 'left';
 }

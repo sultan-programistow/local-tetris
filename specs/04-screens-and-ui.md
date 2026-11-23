@@ -2,6 +2,8 @@
 
 ## Main Menu
 
+Title: "LOCAL TETRIS" displayed at the top of the screen.
+
 Options: Start/Resume (dynamic), Stats, Volume, Controls.
 - The first item's label is dynamic: "Resume" when the menu is opened from in-game (Esc/Start), "Start" otherwise.
 - Start button (gamepad) in the Main Menu resumes the game when a match is in progress (same as selecting Resume/Start). When no game is in progress, the Start button does nothing.
