@@ -619,29 +619,6 @@ function handleGamepadMenus() {
 function loop(now: number) {
   handleGamepadMenus();
   const dt = (now - last) / 1000; last = now;
-  // handle movement input during play
-  if (screen === 'play' && match && match.status === 'playing') {
-    for (let i = 0; i < 2; i++) {
-      const p = match.players[i] as any;
-      if (p.gameOver || !p.current) continue;
-      const isP1 = i === 0;
-      const leftKey = isP1 ? 'a' : 'ArrowLeft';
-      const rightKey = isP1 ? 'd' : 'ArrowRight';
-      const downKey = isP1 ? 's' : 'ArrowDown';
-      const ccwKey = isP1 ? 'z' : '[';
-      const cwKey = isP1 ? 'x' : ']';
-      // rotation edge detection via a pressed set tracking
-      // movement DAS
-      // left
-      if (keys.has(leftKey)) {
-        p._dasL = (p._dasL || 0) + dt * 1000;
-        if (p._dasL >= 350 && (p._dasL - dt*1000 < 350 || (p._dasL % 75) < ( (p._dasL - dt*1000) % 33))) {
-          // attempt move; on first, immediate
-        }
-      } else p._dasL = 0;
-      // We'll do simpler: on keydown event move once + DAS repeat via timers (skip complexity)
-    }
-  }
   update(dt);
   keyEdges.clear();
   requestAnimationFrame(loop);
