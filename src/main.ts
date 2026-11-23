@@ -552,13 +552,15 @@ window.addEventListener('keyup', () => { lastKey = ''; });
 
 // Simplified game loop with real input polling for movement
 let last = performance.now();
-let gpPrev: any = { up:false, down:false, a:false, b:false, start:false };
+let gpPrev: any = { up:false, down:false, left:false, right:false, a:false, b:false, start:false };
 function handleGamepadMenus() {
   const gps = (navigator as any).getGamepads ? (navigator as any).getGamepads() : [];
   const gp = gps[0];
   if (!gp) return;
   const up = gp.buttons[12]?.pressed || gp.axes[1] < -0.5;
   const down = gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
+  const left = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
+  const right = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
   const a = gp.buttons[0]?.pressed;
   const b = gp.buttons[1]?.pressed || gp.buttons[8]?.pressed;
   if (screen === 'play') {
@@ -583,10 +585,14 @@ function handleGamepadMenus() {
     if (a && !gpPrev.a) {
       if (gameOverIndex === 0) startMatch(); else { screen = 'menu'; gameOverIndex = 0; }
     }
-  } else if (screen === 'stats' || screen === 'controls' || screen === 'volume') {
+  } else if (screen === 'volume') {
+    if (left && !gpPrev.left) { volume = Math.max(0, volume - 0.05); saveVolume(volume); }
+    if (right && !gpPrev.right) { volume = Math.min(1, volume + 0.05); saveVolume(volume); }
+    if (b && !gpPrev.b) screen = 'menu';
+  } else if (screen === 'stats' || screen === 'controls') {
     if (b && !gpPrev.b) screen = 'menu';
   }
-  gpPrev = { up, down, a, b, start: gp.buttons[9]?.pressed };
+  gpPrev = { up, down, left, right, a, b, start: gp.buttons[9]?.pressed };
 }
 function loop(now: number) {
   handleGamepadMenus();

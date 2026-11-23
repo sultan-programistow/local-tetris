@@ -7,7 +7,7 @@ Options: Start/Resume (dynamic), Stats, Volume, Controls.
 - Start button (gamepad) in the Main Menu resumes the game when a match is in progress (same as selecting Resume/Start).
 - Menu items are centered horizontally; Main Menu and Game Over screen share the same horizontal position/alignment for menu items (consistent layout).
 - Navigation: D-pad/arrows, A/Enter/Space select, B/Esc/Select back. Mouse: hover highlights, click selects.
-- Volume: slider 0–1 (persisted), adjustable via mouse drag or keyboard.
+- Volume: slider 0.0–1.0 (persisted), adjustable via mouse drag/click or keyboard/gamepad; live apply. Icon reflects state.
 - Controls: shows key/button mapping.
 - Stats: opens stats screen.
 
