@@ -1,0 +1,584 @@
+[
+ {
+  "step": "A0",
+  "note": "menu baseline",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "A-down-1",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Stats"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "A-down-2",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "A-down-3",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "A-down-4",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "A-up-1",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "A-up-2",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "A-up-3",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Stats"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "A-up-4",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "A-seq",
+  "note": "arrow sequence",
+  "observed": [
+   [
+    "Stats"
+   ],
+   [
+    "Volume"
+   ],
+   [
+    "Controls"
+   ],
+   [
+    "Start"
+   ],
+   [
+    "Controls"
+   ],
+   [
+    "Volume"
+   ],
+   [
+    "Stats"
+   ],
+   [
+    "Start"
+   ]
+  ]
+ },
+ {
+  "step": "B0",
+  "note": "menu baseline",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "B-s-1",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Stats"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "B-s-2",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "B-s-3",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "B-s-4",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "B-w-1",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "B-w-2",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "B-w-3",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Stats"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "B-w-4",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "B-seq",
+  "note": "w/s sequence",
+  "observed": [
+   [
+    "Stats"
+   ],
+   [
+    "Volume"
+   ],
+   [
+    "Controls"
+   ],
+   [
+    "Start"
+   ],
+   [
+    "Controls"
+   ],
+   [
+    "Volume"
+   ],
+   [
+    "Stats"
+   ],
+   [
+    "Start"
+   ]
+  ]
+ },
+ {
+  "step": "C0",
+  "note": "two s presses",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "C1-space",
+  "note": "Space on Volume",
+  "screen": "volume",
+  "selected": [],
+  "texts": "VOLUME | Volume: 70% | Use Left/Right or drag slider, Esc to back | 8da9d1f"
+ },
+ {
+  "step": "C2-esc",
+  "note": "Esc back",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "D0",
+  "note": "three ArrowDown",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "D1-enter",
+  "note": "Enter on Controls",
+  "screen": "controls",
+  "selected": [],
+  "texts": "CONTROLS | P1: A/D move, S soft drop, Z rotate CCW, X rotate CW | P2: Arrow Left/Right move, Arrow Down soft drop, [ rotate CCW, ] rotate CW | Global: Esc pause/menu, Enter confirm | Press Esc to back | 8da9d1f"
+ },
+ {
+  "step": "D2-esc",
+  "note": "Esc back",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | 8da9d1f"
+ },
+ {
+  "step": "E-control",
+  "note": "before=['Start'] left=['Start'] right=['Start'] x=['Start']",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ]
+ },
+ {
+  "step": "F0",
+  "note": "menu baseline",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F-dpad-down-1",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Stats"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F-dpad-down-2",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F-dpad-down-3",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F-dpad-down-4",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F-dpad-up-1",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F-dpad-up-2",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F-dpad-up-3",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Stats"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F-dpad-up-4",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F2-before-A",
+  "note": "three D-pad down",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F3-A",
+  "note": "A on Controls",
+  "screen": "controls",
+  "selected": [],
+  "texts": "CONTROLS | P1: A/D move, S soft drop, Z rotate CCW, X rotate CW | P2: Arrow Left/Right move, Arrow Down soft drop, [ rotate CCW, ] rotate CW | Global: Esc pause/menu, Enter confirm | Press Esc to back | cb74734"
+ },
+ {
+  "step": "F4-B",
+  "note": "B back",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "F-seq",
+  "note": "dpad sequence",
+  "observed": [
+   [
+    "Stats"
+   ],
+   [
+    "Volume"
+   ],
+   [
+    "Controls"
+   ],
+   [
+    "Start"
+   ],
+   [
+    "Controls"
+   ],
+   [
+    "Volume"
+   ],
+   [
+    "Stats"
+   ],
+   [
+    "Start"
+   ]
+  ]
+ },
+ {
+  "step": "G-stick-down-1",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Stats"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G-stick-down-2",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G-stick-down-3",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G-stick-down-4",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G-stick-up-1",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G-stick-up-2",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Volume"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G-stick-up-3",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Stats"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G-stick-up-4",
+  "note": "",
+  "screen": "menu",
+  "selected": [
+   "Start"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G2-before-A",
+  "note": "three stick down",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G3-A",
+  "note": "A on Controls",
+  "screen": "controls",
+  "selected": [],
+  "texts": "CONTROLS | P1: A/D move, S soft drop, Z rotate CCW, X rotate CW | P2: Arrow Left/Right move, Arrow Down soft drop, [ rotate CCW, ] rotate CW | Global: Esc pause/menu, Enter confirm | Press Esc to back | cb74734"
+ },
+ {
+  "step": "G4-B",
+  "note": "B back",
+  "screen": "menu",
+  "selected": [
+   "Controls"
+  ],
+  "texts": "LOCAL TETRIS | Start | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "G-seq",
+  "note": "stick sequence",
+  "observed": [
+   [
+    "Stats"
+   ],
+   [
+    "Volume"
+   ],
+   [
+    "Controls"
+   ],
+   [
+    "Start"
+   ],
+   [
+    "Controls"
+   ],
+   [
+    "Volume"
+   ],
+   [
+    "Stats"
+   ],
+   [
+    "Start"
+   ]
+  ]
+ },
+ {
+  "step": "H0-start",
+  "note": "Enter on Start",
+  "screen": "play",
+  "selected": [],
+  "texts": "P1 Score: 0 | P2 Score: 0 | NEXT | NEXT | 2 | cb74734"
+ },
+ {
+  "step": "H1-esc-menu",
+  "note": "Esc in game",
+  "screen": "menu",
+  "selected": [
+   "Resume"
+  ],
+  "texts": "LOCAL TETRIS | Resume | Restart | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "H2-esc-resume",
+  "note": "Esc in paused menu",
+  "screen": "play",
+  "selected": [],
+  "texts": "P1 Score: 0 | P2 Score: 0 | NEXT | NEXT | 2 | cb74734"
+ },
+ {
+  "step": "H3-menu-again",
+  "note": "Esc in game",
+  "screen": "menu",
+  "selected": [
+   "Resume"
+  ],
+  "texts": "LOCAL TETRIS | Resume | Restart | Stats | Volume | Controls | cb74734"
+ },
+ {
+  "step": "H4-B-resume",
+  "note": "B in paused menu",
+  "screen": "play",
+  "selected": [],
+  "texts": "P1 Score: 0 | P2 Score: 0 | NEXT | NEXT | cb74734"
+ }
+]

@@ -906,7 +906,7 @@ function drawStats() {
   });
   ctx.fillStyle = "#aaa";
   ctx.fillText("Sessions:", 700, 440);
-  ctx.fillText("Date            Winner  Score  Dur", 700, 470);
+  ctx.fillText("Date".padEnd(18) + "Winner".padEnd(8) + "Score  Dur", 700, 470);
   ctx.fillStyle = "#fff";
   const visible = 12;
   const start = statsScroll;
