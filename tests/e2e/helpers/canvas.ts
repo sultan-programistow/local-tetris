@@ -67,3 +67,20 @@ export async function probe(page: Page): Promise<Probe> {
     };
   });
 }
+
+/** Green (#0f0) pixel count per menu row band, top to bottom (rows drawn at y = 400 + 60·i). */
+export async function menuRowGreen(page: Page): Promise<number[]> {
+  return page.evaluate(() => {
+    const canvas = document.querySelector('canvas') as HTMLCanvasElement | null;
+    if (!canvas) throw new Error('canvas not found');
+    const ctx = canvas.getContext('2d')!;
+    return [0, 1, 2, 3, 4].map((i) => {
+      const { data } = ctx.getImageData(700, 370 + i * 60, 520, 40);
+      let n = 0;
+      for (let p = 0; p < data.length; p += 4) {
+        if (data[p + 1] > 180 && data[p] < 90 && data[p + 2] < 90) n++;
+      }
+      return n;
+    });
+  });
+}

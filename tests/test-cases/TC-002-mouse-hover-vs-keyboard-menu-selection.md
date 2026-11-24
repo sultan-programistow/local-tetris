@@ -2,15 +2,16 @@
 
 - **Area:** Main menu / input
 - **Priority:** Medium
-- **Date run:** 2026-11-23 (run 4: PASS)
+- **Date run:** 2026-11-24 (run 5: PASS, automated; manual run 4: PASS)
 - **Environment:** Chromium (OpenBot browser), `http://localhost:5173`, dev server, viewport 1766×1102, canvas 1920×1080 (scaled)
+- **Automated:** `tests/e2e/tc-002-hover-selection.spec.ts` — `npm run test TC-002`
 - **Verification:** canvas pixel sampling (green pixels per menu band + total non-background pixels); no image input used
 - **Spec:** `specs/03-input-and-controls.md` → "Menu selection model (Option B)"
 
 ## Preconditions
 
 1. The app is running (`npm run dev`) at `http://localhost:5173`.
-2. The main menu is shown (`TETRIS DUEL`; items Start, Stats, Volume, Controls).
+2. The main menu is shown (`LOCAL TETRIS`; items Start, Stats, Volume, Controls).
 
 ## Expected behavior (Option B)
 
@@ -42,7 +43,7 @@ All steps pass.
 
 ## Status
 
-**PASS** (run 4) — single selected item; hover moves the selection; selection persists; Enter/click activates.
+**PASS** (run 5, automated; manual run 4) — single selected item; hover moves the selection; selection persists; Enter/click activates.
 
 ## Run history
 
@@ -52,6 +53,7 @@ All steps pass.
 | 2 | 2026-11-23 | FAIL | dual highlight; Enter still activated keyboard selection |
 | 3 | 2026-11-23 | FAIL | dual highlight (hover did not move selection) |
 | 4 | 2026-11-23 | PASS | single highlight; hover moves selection; Enter/click activates |
+| 5 | 2026-11-24 | PASS (automated) | `npm run test TC-002`: every step one green row only (567/626 px); hover Start/Volume moves selection; pointer away keeps it; Enter opens Stats; click on Controls opens Controls |
 
 ## Evidence (run 4)
 
@@ -60,8 +62,18 @@ All steps pass.
 - `tests/reports/TC-002/run4-hover-away.png` (pointer away → selection stays)
 - Pre-implementation baseline: `tests/reports/TC-002/keyboard-stats.png`, `hover-start-dual.png`
 
+## Evidence (run 5, automated)
+
+- `tests/reports/TC-002/run5-*.png` (one screenshot per step) and `run5-results.json` (state + per-row green counts after every step)
+
 ## Notes / follow-up
 
 - Decision: Option B (relayed via Orchestrator, 2026-11-23).
 - Gamepad path (`A` activates) not tested; no gamepad connected.
 - Root cause is out of scope for this test asset.
+
+## Automation
+
+`tests/e2e/tc-002-hover-selection.spec.ts`, run with `npm run test TC-002`, production build at 1600×900. State from the read-only `?e2e=1` hook (`screen`, `menuIndex`, `frame`); the highlight is checked per menu row band, so "exactly one green" is a real assertion, not a sum.
+
+Mutation check: with `menuIndex = i` removed from `updateHover` (hover no longer selects), the spec fails at step 3; restored afterwards.
