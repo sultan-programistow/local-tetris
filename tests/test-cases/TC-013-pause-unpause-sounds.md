@@ -2,14 +2,14 @@
 
 - **Area:** Audio / pause / input paths
 - **Priority:** Medium
-- **Date run:** 2026-11-24 (run 1: FAIL — 8/12; keyboard `Esc` resume, both gamepad `Start` pause paths and mouse Resume are silent)
+- **Date run:** 2026-11-24 (run 1: FAIL — 8/12; run 2: PASS — 12/12 on `4616b7e`, all four silent paths fixed)
 - **Spec:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" — "Pause/unpause" is a listed SFX event with no input-path exception. Input paths from `specs/03-input-and-controls.md` (`Esc = pause/menu`, gamepad `Start`, `B`/`Select = back`, mouse supported in menus) and `specs/04-screens-and-ui.md` §"Main Menu" (Resume is the first item when paused). The spec does not name the sound files; `src/audio.ts` maps the events to `pause.ogg` / `unpause.ogg`.
 - **Spec pin:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" @ `962dc56`; input paths @ `8b4c2ef` / `ceabcd2` as pinned in TC-011.
 - **Behaviour under test:** opening the menu over a live match (or the countdown) plays `pause` exactly once, and returning to play plays `unpause` exactly once — on every resume path the app offers. No other sound is required for these actions.
 
 ## Preconditions
 
-1. Production build of `962dc56` served at `http://127.0.0.1:4183` (clean `git archive` copy, `vite preview`), headless Chrome 158, 1920×1080.
+1. Production build of `4616b7e` served at `http://127.0.0.1:4183` (clean `git archive` copy served statically: `vite preview` in run 1, `python3 -m http.server` in run 2), headless Chrome 158, 1920×1080.
 2. Volume `0.7` (default; non-zero, so `play()` is not short-circuited).
 3. A trusted click on the page for AudioContext activation.
 4. Gamepad path uses a standard-mapping mock exposed through `navigator.getGamepads()` (pads 0 and 1), same method as TC-005 / TC-009 / TC-012.
@@ -23,24 +23,26 @@
 - Pause entry and resume are paired on the same page where possible: a resume step always starts from a verified pause menu with Resume highlighted.
 - In B4 the same `A` press that resumes also reaches gameplay, so a `soft_drop` follows the `unpause`; that is a property of the test input, not a second pause-path sound.
 
-## Sub-cases and results (run 1, `962dc56`)
+## Sub-cases and results (run 2, `4616b7e`; run 1 actuals in the run history)
 
 | # | Input path | Action | Expected | Actual | Screen after | Status |
 |---|---|---|---|---|---|---|
 | A1 | Keyboard | `Esc` in play | `pause` ×1 | `pause` ×1 | pause menu, Resume highlighted | PASS |
-| B1 | Keyboard | `Esc` in the pause menu (Resume selected) | `unpause` ×1 | no sound | play | **FAIL** |
+| B1 | Keyboard | `Esc` in the pause menu (Resume selected) | `unpause` ×1 | `unpause` ×1 | play | PASS |
 | B2 | Keyboard | `Enter` on Resume | `unpause` ×1 | `unpause` ×1 | play | PASS |
 | B3 | Keyboard | `Space` on Resume | `unpause` ×1 | `unpause` ×1 | play | PASS |
 | A2 | Keyboard | `Esc` during the countdown | `pause` ×1 | `pause` ×1 | pause menu, Resume highlighted | PASS |
-| A3 | Gamepad 0 | `Start` in play | `pause` ×1 | no sound | pause menu, Resume highlighted | **FAIL** |
+| A3 | Gamepad 0 | `Start` in play | `pause` ×1 | `pause` ×1 | pause menu, Resume highlighted | PASS |
 | B4 | Gamepad 0 | `A` on Resume | `unpause` (a `soft_drop` from the same press follows in play) | `unpause`, then `soft_drop` | play | PASS |
 | B5 | Gamepad 0 | `B` in the pause menu | `unpause` ×1 | `unpause` ×1 | play | PASS |
 | B6 | Gamepad 0 | `Select` (button 8) in the pause menu | `unpause` ×1 | `unpause` ×1 | play | PASS |
-| A4 | Gamepad 1 | `Start` in play | `pause` ×1 | no sound | pause menu, Resume highlighted | **FAIL** |
+| A4 | Gamepad 1 | `Start` in play | `pause` ×1 | `pause` ×1 | pause menu, Resume highlighted | PASS |
 | B7 | Gamepad 0 | `Start` again on Resume (after Start opened the menu and was released) | `unpause` ×1 | `unpause` ×1 | play | PASS |
-| B8 | Mouse | Click Resume (first item, y ≈ 390) | `unpause` ×1 | no sound | play | **FAIL** |
+| B8 | Mouse | Click Resume (first item, y ≈ 390) | `unpause` ×1 | `unpause` ×1 | play | PASS |
 
-**Run 1 result: FAIL — 8 of 12.** Every pause entry and resume path that works is confirmed by the screen after the step: A1/A2 play `pause`, B2–B7 play `unpause`. Four paths perform the action silently: keyboard `Esc` to resume (B1), gamepad `Start` to pause on pad 0 (A3) and pad 1 (A4), and clicking Resume (B8). Screenshots `run1-pad-start-pause.png` (pause menu open with Resume highlighted after a silent pad-`Start` pause) and `run1-mouse-resume.png` (play screen after a silent Resume click) show the action happened without a sound; `run1-pause-menu.png` and `run1-countdown-pause.png` show the keyboard pause entries.
+**Run 2 result: PASS — 12 of 12** on `4616b7e` ("Add missing pause/unpause SFX paths"). All four paths that were silent in run 1 now play the expected sound: keyboard `Esc` resume (B1), gamepad `Start` pause on pad 0 (A3) and pad 1 (A4), and mouse Resume (B8). The eight paths that already passed still pass. Screenshots `run2-pad-start-pause.png` (pause menu after gamepad `Start`) and `run2-mouse-resume.png` (play screen after clicking Resume) confirm the actions, and `run2-pause-menu.png` / `run2-countdown-pause.png` the keyboard entries.
+
+Run 1 (superseded, `962dc56`): **FAIL — 8 of 12.** The same four paths performed the action silently, proven by the screen after each step (screenshots `run1-*`).
 
 ## Not covered
 
@@ -51,13 +53,13 @@
 
 ## Evidence
 
-- `tests/reports/TC-013/run1-results.json` — every sub-case with expected/actual sound names, screen after the step, and the highlighted item.
-- `tests/reports/TC-013/run1-pause-menu.png`, `run1-countdown-pause.png` — pause menu after keyboard `Esc` from play and from the countdown.
-- `tests/reports/TC-013/run1-pad-start-pause.png` — pause menu open with Resume highlighted after gamepad `Start`; no `pause` sound recorded.
-- `tests/reports/TC-013/run1-mouse-resume.png` — play screen after clicking Resume; no `unpause` sound recorded.
+- `tests/reports/TC-013/run2-results.json` — run 2 (`4616b7e`): every sub-case with expected/actual sound names, screen after the step, and the highlighted item.
+- `tests/reports/TC-013/run2-*.png` — run 2: pause menu and countdown pause via keyboard, pause menu after gamepad `Start`, play screen after mouse Resume.
+- `tests/reports/TC-013/run1-results.json`, `run1-*.png` — run 1 (`962dc56`) with the four silent paths.
 
 ## Run history
 
 | Run | Date | Build | Result | Notes |
 |---|---|---|---|---|
 | 1 | 2026-11-24 | `962dc56` | **FAIL** | 8/12; silent `Esc` resume, silent gamepad `Start` pause (pads 0 and 1), silent mouse Resume |
+| 2 | 2026-11-24 | `4616b7e` | **PASS** | 12/12; all four silent paths fixed, no regressions |
