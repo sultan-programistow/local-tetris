@@ -40,10 +40,10 @@ Piece table (id, name, unlock level, color). Each piece is a separate entry; adj
 | P1 | Pento-X | 9 | #ff4da6 |
 | P2 | Pento-U | 5 | #ff6e40 |
 | P3 | Pento-F | 7 | #00bfa5 |
-| P4 | Pento-P | 3 | #29b6f6 |
+| P4 | Pento-P | 3 | #3b95c0 |
 | P5 | Pento-W | 11 | #9370db |
 | I3 | Tromino-I | 4 | #ff1493 |
-| L3 | Tromino-L | 7 | #00ff7f |
+| L3 | Tromino-L | 6 | #00ff7f |
 
 - Levels 1–2: standard 7 tetrominoes.
 - Level 3+: introduce pentominoes/irregular variants gradually (one new shape every 2 levels).

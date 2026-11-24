@@ -276,6 +276,7 @@ function startMatch() {
   const seed = Math.floor(Math.random() * 1e9);
   match = new MatchState(seed);
   screen = "countdown";
+  playSfx("countdown");
   sessionStart = Date.now();
   // spawn first pieces after countdown; we'll handle in update
 }
@@ -291,7 +292,15 @@ function update(dt: number) {
   if (!match) return;
   if (screen === "countdown") {
     if (match.status === "paused") return;
+    const beforeMs = match.countdownMs;
     match.countdownMs -= dt * 1000;
+    const beforeN = Math.max(0, Math.ceil(beforeMs / 1000));
+    const afterN = Math.max(0, Math.ceil(match.countdownMs / 1000));
+    // play a beep for each number we cross into
+    for (let n = beforeN - 1; n >= afterN; n--) {
+      if (n === 2 || n === 1) playSfx("countdown", 0);
+      if (n === 0) playSfx("countdown_go", 0);
+    }
     if (match.countdownMs <= 0) {
       screen = "play";
       // spawn initial pieces for both

@@ -11,6 +11,8 @@ const SOUND_FILES: Record<string, string> = {
   menu_select: 'sounds/menu_select.ogg',
   menu_enter: 'sounds/menu_enter.ogg',
   menu_back: 'sounds/menu_back.ogg',
+  countdown: 'sounds/countdown.ogg',
+  countdown_go: 'sounds/countdown_go.ogg',
 };
 
 let volume = 0.7;

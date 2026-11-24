@@ -2,8 +2,9 @@
 
 - **Area:** Gameplay / piece sequence (seeded RNG)
 - **Priority:** High
-- **Date run:** 2026-11-23 (run 1: PASS — first 10 pieces; run 2: PASS — first 5 pieces, new seed; run 3: PASS — 9 pieces via spawn-window pixel sampling)
+- **Date run:** 2026-11-24 (run 4: PASS, automated; runs 1–3 manual)
 - **Environment:** Chromium (OpenBot browser), production build of `4379d90` served statically at `http://127.0.0.1:4175` (`vite preview`, no HMR), canvas 1920×1080, viewport 1766×1102
+- **Automated:** `tests/e2e/tc-007-shared-piece-sequence.spec.ts` — `npm run test TC-007`
 - **Spec:** `specs/01-game-design.md` §Overview / §Match Flow / §Seeded RNG — "Both players play simultaneously with identical piece sequence (seeded RNG)"
 - **Spec pin:** `specs/01-game-design.md` §Overview / §Match Flow / §Seeded RNG @ `e50f503`
 
@@ -77,4 +78,23 @@ Independent method: spawn detection in each board's center spawn window (cell co
 
 ## Status
 
-**PASS** (2026-11-23, `4379d90`) — both players got identical piece types in identical order for the first 10 pieces (run 1) and the first 5 pieces of a second match with a new seed (run 2).
+**PASS** (run 4 automated, 2026-11-24) — both players got identical piece types in identical order for the first 10 pieces (run 1) and the first 5 pieces of a second match with a new seed (run 2).
+
+## Run history
+
+| Run | Date | Result | Notes |
+|---|---|---|---|
+| 1 | 2026-11-23 | PASS | first 10 pieces identical (fillRect/fillText hook) |
+| 2 | 2026-11-23 | PASS | first 5 pieces of a second match, new seed |
+| 3 | 2026-11-23 | PASS | 9 pieces, spawn-window pixel sampling, dev server |
+| 4 | 2026-11-24 | PASS (automated) | `npm run test TC-007`: 10/10 identical in match 1, 5/5 in match 2 with a new seed; the two sequences differ |
+
+## Automation (run 4)
+
+`tests/e2e/tc-007-shared-piece-sequence.spec.ts`, run with `npm run test TC-007`. Ten pieces are played on both boards: each piece is moved to a spread-out column (keyboard `a`/`d` and `←`/`→`), then each player's piece is soft-dropped and locked one after the other. Dropping both at once lets the two piece counters drift by one (the app picks the next piece from each player's own `piecesPlaced`), which looks like a sequence mismatch but is caused by the harness. At each spawn the piece type is read from the `?e2e=1` hook, so the comparison is type identity, not a colour match. A second match is played to show that a new seed still produces one shared sequence.
+
+Keys are held for ~55 ms: a bare `keyboard.press()` can fall between two animation frames, leaving one piece in a different column, which piles a stack up to a top-out. The run also fails with a clear message if either player tops out during the sequence.
+
+Mutation check: giving P2 the next piece in the sequence (`piecesPlaced + 1`) makes P1 and P2 diverge and fails the first assertion; restored afterwards.
+
+Evidence: `tests/reports/TC-007/run4-sequence.json`, `run4-match2-boards.png`.

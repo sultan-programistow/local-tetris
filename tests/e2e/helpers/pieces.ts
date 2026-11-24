@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { game, type PlayerView } from './hook';
+import { tapKey } from './app';
 
 /**
  * Piece helpers for TC-007 / TC-008.
@@ -22,38 +23,51 @@ export type Spawn = {
   next1: string | null;
   next2: string | null;
   extra?: Record<string, unknown>;
+  /** Piece counters at the moment of the read; they must stay equal for a shared sequence. */
+  counts?: [number, number];
 };
 
-/** Move both current pieces to `target` (clamped to the piece width), one cell per tap. */
+/**
+ * Move both current pieces to `target` (clamped to the piece width), one cell per tap.
+ * Taps are held for ~55 ms: a bare keyboard.press() can fall between two animation
+ * frames and be missed by the game's polling, which would leave the two boards in
+ * different columns and let one stack grow to a top-out.
+ */
 async function moveTo(page: Page, target: number) {
-  for (let guard = 0; guard < 10; guard++) {
+  for (let guard = 0; guard < 14; guard++) {
     const s = await game(page);
     const p1 = s.players![0];
     const p2 = s.players![1];
     const width = WIDTH[p1.type ?? ''] ?? 3;
     const goal = Math.max(0, Math.min(target, 10 - width));
     if (p1.x === goal && p2.x === goal) return;
-    const left = (p1.x ?? 3) > goal;
-    await page.keyboard.press(left ? 'a' : 'd');
-    await page.keyboard.press(left ? 'ArrowLeft' : 'ArrowRight');
-    await page.waitForTimeout(25);
+    if (p1.x !== goal) await tapKey(page, (p1.x ?? 3) > goal ? 'a' : 'd', 55);
+    if (p2.x !== goal) await tapKey(page, (p2.x ?? 3) > goal ? 'ArrowLeft' : 'ArrowRight', 55);
+    await page.waitForTimeout(20);
   }
+  throw new Error('could not align both pieces to the target column');
 }
 
-/** Hold soft drop for both players until both pieces lock and new ones spawn. */
-async function dropOne(page: Page, before: number) {
-  await page.keyboard.down('s');
-  await page.keyboard.down('ArrowDown');
+/**
+ * Hold one player's soft drop until that piece locks, then release.
+ *
+ * The two players are dropped one at a time on purpose: the app picks the next piece
+ * from each player's own piece counter (`getPiece(p.piecesPlaced)`), so two pieces
+ * locking in the same frame — and then one player's replacement locking a frame before
+ * the other — can let the counters drift apart. That drift, not the app, is what makes
+ * the sequences look different.
+ */
+async function dropPlayer(page: Page, player: 0 | 1, before: number) {
+  const key = player === 0 ? 's' : 'ArrowDown';
+  await page.keyboard.down(key);
   const deadline = Date.now() + 8_000;
   while (Date.now() < deadline) {
-    const s = await game(page);
-    if (s.players![0].pieces > before && s.players![1].pieces > before) break;
-    await page.waitForTimeout(30);
+    if ((await game(page)).players![player].pieces > before) break;
+    await page.waitForTimeout(25);
   }
-  await page.keyboard.up('s');
-  await page.keyboard.up('ArrowDown');
+  await page.keyboard.up(key);
   const s = await game(page);
-  if (s.players![0].pieces <= before) throw new Error('piece did not lock in time');
+  if (s.players![player].pieces <= before) throw new Error(`player ${player + 1} piece did not lock in time`);
 }
 
 /** Record the spawn `count` pieces, moving each to a spread-out column before dropping it. */
@@ -72,11 +86,17 @@ export async function spawnTable(
       p2: p2.type,
       next1: p1.next,
       next2: p2.next,
+      counts: [p1.pieces, p2.pieces],
       extra: capture ? await capture(i) : undefined,
     });
     if (i === count - 1) break;
     await moveTo(page, COLUMNS[i % COLUMNS.length]);
-    await dropOne(page, p1.pieces);
+    await dropPlayer(page, 0, p1.pieces);
+    await dropPlayer(page, 1, p2.pieces);
+    const after = await game(page);
+    if (after.players![0].over || after.players![1].over) {
+      throw new Error(`a player topped out after piece ${i}; the sequence cannot be compared`);
+    }
   }
   return rows;
 }

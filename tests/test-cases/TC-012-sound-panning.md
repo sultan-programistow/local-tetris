@@ -2,8 +2,9 @@
 
 - **Area:** Audio / stereo panning
 - **Priority:** Medium
-- **Date run:** 2026-11-24 (run 1: PASS at 85%; run 2: PASS at the new 95% spec)
+- **Date run:** 2026-11-24 (run 3: PASS, automated; manual run 2: PASS)
 - **Environment:** Chromium (headless, CDP-driven), production build served at `http://127.0.0.1:4174` (`vite preview`), build commit `4d88126` ("Update sound panning to 95%").
+- **Automated:** `tests/e2e/tc-012-sound-panning.spec.ts` — `npm run test TC-012`
 - **Spec:** `specs/05-audio-and-visuals.md` §"Sound Design (Panning)" — player-related sounds (piece lock, soft drop, rotate, move, line clear, game over for that player) at 95% left for P1 and 95% right for P2; non-player sounds (menu navigation, select/back, volume test blip, countdown, global game over fanfare) centred (pan 0); implemented with the Web Audio API.
 - **Spec pin:** `specs/05-audio-and-visuals.md` §"Sound Design (Panning)" @ `4d88126` (P1 = −0.95, P2 = +0.95, UI = 0). Run 1 used the previous 85% value.
 - **Behaviour under test:** every sound played for P1 gets a `StereoPannerNode` with `pan = −0.95`, every P2 sound `pan = +0.95`, every menu/UI sound `pan = 0`, on both the keyboard and the gamepad input paths.
@@ -62,7 +63,7 @@ Pan values read back as `0.949999988079071`-type float32 values / `0`, shown rou
 
 ## Result
 
-**PASS** — all player sounds checked on keyboard and gamepad carry the correct per-player pan (95% left/right per the updated spec), and every menu/UI sound is centred.
+**PASS** (run 3 automated; manual run 2) — all player sounds checked on keyboard and gamepad carry the correct per-player pan (95% left/right), and every menu/UI sound is centred.
 
 ## Evidence
 
@@ -74,3 +75,23 @@ Pan values read back as `0.949999988079071`-type float32 values / `0`, shown rou
 ## Notes
 
 - The asset-fetch/decode check (E1) only proves the buffers loaded; the pan assertion proves the routing the app configures. That the sound is physically audible in the left/right speaker is not checked.
+
+## Run history
+
+| Run | Date | Result | Notes |
+|---|---|---|---|
+| 1 | 2026-11-24 | PASS | 85% panning (previous spec value) |
+| 2 | 2026-11-24 | PASS | 95% panning on keyboard and gamepad; all UI sounds 0 |
+| 3 | 2026-11-24 | PASS (automated) | `npm run test TC-012`: A1–A5 and B1–B5 (move, soft drop, rotate, piece lock for both players), C1–C4 (gamepad pads 0/1) and D1–D8 (menu, back keys, pause/unpause, volume blip) all carry the expected pan |
+
+## Automation (run 3)
+
+`tests/e2e/tc-012-sound-panning.spec.ts`, run with `npm run test TC-012`. The Web Audio hook records the pan value the app sets on each `StereoPannerNode`; P1 sounds must be −0.95, P2 +0.95, UI 0 (asserted to two decimals, since the values arrive as float32).
+
+Piece-lock sounds are produced by holding soft drop until the hook reports the piece count advanced, so the lock is a real lock rather than a timed guess. The gamepad paths use the same mock as TC-011.
+
+Asset load (sub-case E1) is not repeated here: the automated TC-010 D1 check verifies every sound file the built bundle declares is reachable and preloaded.
+
+Mutation check: reverting the per-player pan to 0.85 fails A1; restored afterwards.
+
+Evidence: `tests/reports/TC-012/run3-panning.json`, `run3-play.png`.

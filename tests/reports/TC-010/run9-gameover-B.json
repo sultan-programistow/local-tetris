@@ -1,0 +1,12 @@
+{
+  "case": "TC-010",
+  "group": "E13",
+  "runId": "run9",
+  "actual": [
+    "menu_back"
+  ],
+  "pans": [
+    0
+  ],
+  "at": "2026-11-24T17:39:22.997Z"
+}

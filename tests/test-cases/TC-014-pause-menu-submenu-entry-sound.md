@@ -2,7 +2,8 @@
 
 - **Area:** Menus / audio / submenu entry
 - **Priority:** Medium
-- **Date run:** 2026-11-24 (run 1: PASS — 10/10 on `962dc56`; run 2: PASS — 10/10 on `4616b7e`, now playing `menu_enter`)
+- **Date run:** 2026-11-24 (run 3: PASS, automated; manual run 2: PASS)
+- **Automated:** `tests/e2e/tc-014-pause-menu-submenu-entry-sound.spec.ts` — `npm run test TC-014`
 - **Spec:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" — "Menu enter submenu (opening Stats, Volume, or Controls)" is a listed SFX event. When a match is paused the menu shows Resume, Restart, Stats, Volume, Controls (`specs/04-screens-and-ui.md` §"Main Menu"; `menuItems()` in `src/main.ts`), so all three submenus are reachable from the pause menu. TC-010 A10/A11 covers the same event from the main menu only.
 - **Spec pin:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" @ `962dc56` (the event is listed; no sound file is named).
 - **Behaviour under test:** opening Stats, Volume or Controls from the **pause menu** plays exactly one sound per entry, on keyboard, gamepad and mouse. Going back plays `menu_back` and no second entry sound.
@@ -36,7 +37,7 @@
 | M2 | Mouse | Click Volume | 1 sound | `menu_enter` ×1 | VOLUME | PASS |
 | M3 | Mouse | Click Controls | 1 sound | `menu_enter` ×1 | CONTROLS | PASS |
 
-**Run 2 result: PASS — 10 of 10** on `4616b7e`. Every entry from the pause menu plays exactly one sound on keyboard, gamepad and mouse, and every back key plays `menu_back` only. All entries now play the dedicated `menu_enter.ogg` (`4c74459` wires it for Stats/Volume/Controls); run 1 on `962dc56` played `menu_select.ogg` instead. The spec names no file, so the file name is recorded, not scored.
+**Run 3 (automated) result: PASS — 10 of 10.** Run 2 result: PASS — 10 of 10 on `4616b7e`. Every entry from the pause menu plays exactly one sound on keyboard, gamepad and mouse, and every back key plays `menu_back` only. All entries now play the dedicated `menu_enter.ogg` (`4c74459` wires it for Stats/Volume/Controls); run 1 on `962dc56` played `menu_select.ogg` instead. The spec names no file, so the file name is recorded, not scored.
 
 ## Not covered
 
@@ -58,3 +59,12 @@
 |---|---|---|---|---|
 | 1 | 2026-11-24 | `962dc56` | PASS | 10/10; all entries play `menu_select` once, back plays `menu_back` |
 | 2 | 2026-11-24 | `4616b7e` | PASS | 10/10; all entries now play `menu_enter` once, back plays `menu_back` |
+| 3 | 2026-11-24 | current | PASS (automated) | `npm run test TC-014`: K1–K4, G1–G3 and M1–M3 pass; every entry plays exactly one sound and Esc back plays only `menu_back` |
+
+## Automation (run 3)
+
+`tests/e2e/tc-014-pause-menu-submenu-entry-sound.spec.ts`, run with `npm run test TC-014`. The match is paused once with Esc; each submenu is then opened by keyboard Enter, gamepad A and a mouse click on the row (the pointer is moved onto the row and allowed to settle first, because that hover is navigation and plays `menu_select`; the log is cleared before the click is scored). The sound file name is recorded, not scored, because the spec does not name it.
+
+Mutation check: removing the entry sound from the submenu branch fails K1; restored afterwards.
+
+Evidence: `tests/reports/TC-014/run3-results.json`, `run3-mouse-stats.png`, `run3-mouse-volume.png`, `run3-mouse-controls.png`.

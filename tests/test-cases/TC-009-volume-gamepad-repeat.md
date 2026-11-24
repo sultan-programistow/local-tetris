@@ -2,8 +2,9 @@
 
 - **Area:** Menus / volume / gamepad + keyboard input
 - **Priority:** High
-- **Date run:** 2026-11-23 (run 3: PASS)
+- **Date run:** 2026-11-24 (run 4: PASS, automated; manual run 3: PASS)
 - **Environment:** Chromium (OpenBot private browser), production build served statically at `http://127.0.0.1:4173` (`vite preview`, no HMR), build commit `3d58e25`. Page rendered at ~60 fps (rAF interval ~16.7 ms), kept awake with tab recording; an earlier attempt at ~1 fps was discarded because the game loop could not run often enough to show DAS.
+- **Automated:** `tests/e2e/tc-009-volume-gamepad-repeat.spec.ts` — `npm run test TC-009`
 - **Spec:** `specs/05-audio-and-visuals.md` → "Volume": slider 0.0–1.0, ±0.05 per keyboard / gamepad D-pad / left-stick input, live apply, persisted to `local-tetris:volume`.
 - **Spec pin:** `specs/05-audio-and-visuals.md` §"Volume" @ `3d58e25` (±0.05 per input; no repeat timing specified).
 - **Behaviour under test:** the repeat timing is **not in the spec**. It comes from the user's request of 2026-11-23: one step on press, no further step during the first 300 ms, then one step every ~50 ms while held; release stops the repeat. Applies to gamepad D-pad / left stick and keyboard `A`/`D` / left/right arrows. Still needs a spec entry via the user's re-spec process.
@@ -78,7 +79,7 @@ Check that the volume slider behaves like game movement DAS: a single press chan
 
 ## Status
 
-**PASS** (run 3, build `3d58e25`) — gamepad and keyboard both produce exactly one 5% step on a tap and on a 250 ms hold; after a ~300 ms delay (measured 290–311 ms, within one frame) they repeat 5% every ~50 ms (50–67 ms, frame-quantised) until release. Keyboard auto-repeat events do not add extra steps. Vertical gamepad inputs leave the volume unchanged. A prior run on the same build at ~1 fps was discarded as invalid.
+**PASS** (run 4 automated, manual run 3) — gamepad and keyboard both produce exactly one 5% step on a tap and on a 250 ms hold; after a ~300 ms delay (measured 290–311 ms, within one frame) they repeat 5% every ~50 ms (50–67 ms, frame-quantised) until release. Keyboard auto-repeat events do not add extra steps. Vertical gamepad inputs leave the volume unchanged. A prior run on the same build at ~1 fps was discarded as invalid.
 
 ## Evidence
 
@@ -92,10 +93,21 @@ Check that the volume slider behaves like game movement DAS: a single press chan
 |---|---|---|---|---|
 | 1 | 2026-11-23 | `7ab789c` | FAIL | Gamepad: tap and 250 ms hold repeated per frame; no 300 ms delay; vertical controls pass |
 | 2 | 2026-11-23 | `7527f9a` | FAIL | Keyboard added: tap/250 ms pass; hold had no app-side repeat and followed OS 500/33 ms |
-| 3 | 2026-11-23 | `3d58e25` | PASS | Gamepad tap/250 ms/650 ms and keyboard plain/OS-repeat all match 1 step, 300 ms, ~50 ms |
+| 3 | 2026-11-23 | `3d58e25` | PASS |
+| 4 | 2026-11-24 | current | PASS (automated) | `npm run test TC-009`: 12 gamepad and 12 keyboard sub-cases; taps and 250 ms holds = one 5% step; 650 ms holds repeat after 269–308 ms then every 35–75 ms; OS-style auto-repeat adds no extra steps; vertical inputs silent | Gamepad tap/250 ms/650 ms and keyboard plain/OS-repeat all match 1 step, 300 ms, ~50 ms |
 
 ## Notes / follow-up
 
 - Fixed by @Developer in `3d58e25`; re-tested on the production build of that commit.
 - `specs/05-audio-and-visuals.md` still has no repeat-timing requirement; the 300 ms / 50 ms values need a spec pin before this case can be cited as spec-derived.
 - Not tested: a physical gamepad, a physical keyboard (synthetic key events only), mouse drag, and OS repeat settings other than the emulated 500/33 ms.
+
+## Automation (run 4)
+
+`tests/e2e/tc-009-volume-gamepad-repeat.spec.ts`, run with `npm run test TC-009`. The page starts at 50% volume (seeded through `localStorage`); each sub-case steps the volume back to exactly 50% with short arrow taps, then holds the input for 120, 250 or 650 ms. Volume is sampled per frame from the hook, so each 5% write is counted with its timestamp. Gaps are frame-quantised, hence the 250–450 ms delay band and the ≤ 150 ms repeat band.
+
+Inputs: gamepad D-pad and left stick, both directions, taps/250/650 ms; keyboard `A`, `D`, `←`, `→`, taps/250/650 ms; D-pad up and stick down as negative controls; `A` with OS-style auto-repeat events (500/33 ms) injected every 33 ms to prove they add no steps.
+
+Mutation check: gamepad hold delay 300 → 0 ms fails the first tap sub-case; restored afterwards.
+
+Evidence: `tests/reports/TC-009/run4-repeat-timeline.json` (per sub-case step count and gaps), `run4-volume-screen.png`, `run4-after-volume.png`.

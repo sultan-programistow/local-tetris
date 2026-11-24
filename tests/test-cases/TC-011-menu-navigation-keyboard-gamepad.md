@@ -2,8 +2,9 @@
 
 - **Area:** Menus / input / navigation
 - **Priority:** High
-- **Date run:** 2026-11-24 (run 4: PASS — spec re-pinned after W/S case-insensitive update)
+- **Date run:** 2026-11-24 (run 5: PASS, automated; manual run 4: PASS)
 - **Environment:** Chromium (headless `--headless=new`, Chrome 158) at 1920×1080, production build served with `vite preview` at `http://127.0.0.1:4176`, commit `8b4c2ef`, canvas 1920×1080 with no CSS scaling
+- **Automated:** `tests/e2e/tc-011-menu-navigation-keyboard-gamepad.spec.ts` — `npm run test TC-011`
 - **Spec pins:** `specs/03-input-and-controls.md` §"Keyboard" (`Enter/Space = confirm in menus`, `Esc = pause/menu`; `ArrowUp/W/w = up, ArrowDown/S/s = down (case-insensitive)`) and §"Menu navigation" (`ArrowUp or W/w = previous item`, `ArrowDown or S/s = next item`, both case-insensitive) @ `8b4c2ef`; §"Menu navigation (gamepad)" (`D-pad / left stick: navigate up/down/left/right`, `A: select/confirm`, `B: back`) @ `ceabcd2`; `specs/04-screens-and-ui.md` §"Main Menu" and §"Game Over" (`Navigation: D-pad/arrows or W/S, A/Enter/Space select, B/Esc/Select back`, W/w up, S/s down, case-insensitive) @ `8b4c2ef`.
 
 ## Purpose
@@ -49,7 +50,7 @@ Expected sequences are from the menu order Start → Stats → Volume → Contro
 
 ## Result
 
-**PASS** (run 4, commit `8b4c2ef`) — all 14 checks pass. Every direction path moves exactly one item per discrete press and wraps at both ends; Enter, Space and A activate the selected item; Esc and B go back both from sub-screens and from a game-paused menu; `W`/`w` and `S`/`s` all navigate, including with Shift held.
+**PASS** (run 5 automated, manual run 4) — all 14 checks pass. Every direction path moves exactly one item per discrete press and wraps at both ends; Enter, Space and A activate the selected item; Esc and B go back both from sub-screens and from a game-paused menu; `W`/`w` and `S`/`s` all navigate, including with Shift held.
 
 Run 2 (`0c25ff9`) failed K13b (Shift+S ignored); Developer fixed it in `a45c99b` and Architekt aligned the spec wording in `8b4c2ef`. Code is unchanged between those two commits, and both runs pass. The pre-W/S sub-cases passed unchanged on `8da9d1f`, `41b3faa` and `0c25ff9`.
 
@@ -75,8 +76,17 @@ Run 2 (`0c25ff9`) failed K13b (Shift+S ignored); Developer fixed it in `a45c99b`
 | 2 | 2026-11-24 | `0c25ff9` | FAIL — Shift+S does not navigate |
 | 3 | 2026-11-24 | `a45c99b` | PASS — Shift+S fixed, all paths |
 | 4 | 2026-11-24 | `8b4c2ef` | PASS — spec re-pinned; code unchanged |
+| 5 | 2026-11-24 | current | PASS (automated) | `npm run test TC-011`: K1–K13 pass, including wrap in both directions, Space/Enter/A activation, Esc/B back from sub-screens and the paused menu, and Shift+W/Shift+S |
 
 ## Notes
 
 - Root cause observation (not a diagnosis): before `a45c99b`, the menu and Game Over handlers compared `e.key` against `"s"` only for down but against `"w"` and `"W"` for up; the Stats handler already accepted both cases. Fixed by Developer in `a45c99b`; Shift+S now moves down in the main menu and Game Over.
 - Root cause and code changes are out of scope for this test asset.
+
+## Automation (run 5)
+
+`tests/e2e/tc-011-menu-navigation-keyboard-gamepad.spec.ts`, run with `npm run test TC-011`. Every step asserts the `screen` and `menuIndex` from the `?e2e=1` hook, so a highlight that moves without the app agreeing fails. Arrow, W/S (including Shift) and Space/Enter run on the keyboard; D-pad and left stick run through a standard-mapping gamepad mock installed before the page loads.
+
+Mutation check: making the menu down-handler case-sensitive again (dropping `S`) fails K13; restored afterwards.
+
+Evidence: `tests/reports/TC-011/run5-timeline.json`, `run5-space-volume.png`, `run5-resumed.png`.

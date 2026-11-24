@@ -125,18 +125,3 @@ export function names(events: Sfx[]): string[] {
 export function pans(events: Sfx[]): (number | null)[] {
   return events.map((e) => (e.pan === null ? null : Math.round(e.pan * 100) / 100));
 }
-
-/** The eleven files in src/audio.ts; preload must fetch and decode all of them. */
-export const SOUND_FILES = [
-  'move',
-  'rotate',
-  'soft_drop',
-  'piece_lock',
-  'line_clear',
-  'game_over',
-  'pause',
-  'unpause',
-  'menu_select',
-  'menu_enter',
-  'menu_back',
-];

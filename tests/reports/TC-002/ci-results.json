@@ -26,7 +26,7 @@
       "state": {
         "screen": "menu",
         "menuIndex": 1,
-        "frame": 9
+        "frame": 10
       },
       "rows": [
         0,
@@ -41,7 +41,7 @@
       "state": {
         "screen": "menu",
         "menuIndex": 0,
-        "frame": 19
+        "frame": 20
       },
       "rows": [
         567,
@@ -56,7 +56,7 @@
       "state": {
         "screen": "menu",
         "menuIndex": 2,
-        "frame": 25
+        "frame": 26
       },
       "rows": [
         0,
@@ -86,7 +86,7 @@
       "state": {
         "screen": "stats",
         "menuIndex": 1,
-        "frame": 59
+        "frame": 61
       },
       "rows": [
         0,
@@ -101,7 +101,7 @@
       "state": {
         "screen": "controls",
         "menuIndex": 3,
-        "frame": 66
+        "frame": 69
       },
       "rows": [
         0,
@@ -121,5 +121,5 @@
     "tests/reports/TC-002/ci-enter-stats.png",
     "tests/reports/TC-002/ci-click-controls.png"
   ],
-  "at": "2026-11-24T17:33:34.794Z"
+  "at": "2026-11-24T17:57:02.629Z"
 }

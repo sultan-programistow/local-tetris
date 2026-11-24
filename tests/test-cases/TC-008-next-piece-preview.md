@@ -2,8 +2,9 @@
 
 - **Area:** Rendering / HUD
 - **Priority:** Medium
-- **Date run:** 2026-11-23 (run 1: PASS)
+- **Date run:** 2026-11-24 (run 2: PASS, automated; manual run 1: PASS)
 - **Environment:** Chromium (OpenBot browser), production build of `4379d90` served statically at `http://127.0.0.1:4173` (`vite preview`, no HMR), canvas 1920×1080, viewport 1766×1102
+- **Automated:** `tests/e2e/tc-008-next-piece-preview.spec.ts` — `npm run test TC-008`
 - **Spec:** `specs/04-screens-and-ui.md` §Play Screen — "Per player HUD: score, next piece (1) preview"; "Next piece preview: rendered in a small preview box (e.g., 4×4 cell area) in the player's HUD, centered, using the same piece colors and cell size scaled to fit; shows the next piece in its spawn orientation."
 - **Spec pin:** `specs/04-screens-and-ui.md` §Play Screen @ `4379d90`
 
@@ -63,13 +64,15 @@ Odd dimensions sit one cell off centre on one axis (floor rounding). The spec's 
 
 ## Status
 
-**PASS** (2026-11-23, `4379d90`) — each preview showed the piece that spawned next for 6/6 measured spawns and both players' previews agreed. Cosmetic note: odd-sized pieces are one cell off exact centre in the 4×4 box.
+**PASS** (run 2 automated, 2026-11-24) — each preview showed the piece that spawned next for 6/6 measured spawns and both players' previews agreed. Cosmetic note: odd-sized pieces are one cell off exact centre in the 4×4 box.
 
 ## Run history
 
 | Run | Date | Result | Notes |
 |---|---|---|---|
 | 1 | 2026-11-23 | PASS | 7 spawns, one match; first-frame presence and box geometry checked |
+| 2 | 2026-11-24 | PASS (automated) | `npm run test TC-008`: 8 spawns in match 1 and 6 in match 2; every preview equalled the piece that spawned next on both boards, shapes in spawn orientation, 6 of 7 tetrominoes seen |
+| 2 | 2026-11-24 | PASS (automated) | `npm run test TC-008`: 8 spawns in match 1 and 6 in match 2; every preview equalled the piece that spawned next on both boards, shapes in spawn orientation, 6 of 7 tetrominoes seen |
 
 ## Evidence
 
@@ -84,3 +87,13 @@ Canvas pixel sampling (`getImageData`) with exact palette classification; spawn 
 
 - Pentomino previews at level 3+ (unlock needs 20 pieces); only the seven standard tetrominoes were seen.
 - Preview during countdown/menu (spec requires it only on the Play screen; it is empty there).
+
+## Automation (run 2)
+
+`tests/e2e/tc-008-next-piece-preview.spec.ts`, run with `npm run test TC-008`. Both 4×4 boxes are read from canvas pixels at cell centres and classified by the exact palette colour, then compared with the hook's `next` piece, checked against the spawn-orientation shape from `src/game/pieces.ts`, and finally against the piece that actually spawns next. The box border is measured (322 near-grey perimeter pixels) and the box is empty during the countdown.
+
+Frame note: the game state advances in one animation frame and the canvas paints on a later one, so the capture waits for a drawn frame and requires the state to be unchanged across the pixel read; otherwise it retries. Without that, one run in three paired a fresh preview with a stale state.
+
+Mutation check: setting `nextDef = def` (preview shows the current piece) fails the preview-vs-next-spawn assertion; restored afterwards.
+
+Evidence: `tests/reports/TC-008/run2-preview.json`, `run2-previews.png`.

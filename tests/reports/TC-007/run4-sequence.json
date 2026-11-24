@@ -4,73 +4,113 @@
   "match1": [
     {
       "index": 0,
-      "p1": "J",
-      "p2": "J",
-      "next1": "I",
-      "next2": "I"
+      "p1": "T",
+      "p2": "T",
+      "next1": "L",
+      "next2": "L",
+      "counts": [
+        0,
+        0
+      ]
     },
     {
       "index": 1,
-      "p1": "I",
-      "p2": "I",
-      "next1": "S",
-      "next2": "S"
+      "p1": "L",
+      "p2": "L",
+      "next1": "J",
+      "next2": "J",
+      "counts": [
+        1,
+        1
+      ]
     },
     {
       "index": 2,
-      "p1": "S",
-      "p2": "S",
-      "next1": "J",
-      "next2": "J"
-    },
-    {
-      "index": 3,
       "p1": "J",
       "p2": "J",
       "next1": "T",
-      "next2": "T"
+      "next2": "T",
+      "counts": [
+        2,
+        2
+      ]
+    },
+    {
+      "index": 3,
+      "p1": "T",
+      "p2": "T",
+      "next1": "L",
+      "next2": "L",
+      "counts": [
+        3,
+        3
+      ]
     },
     {
       "index": 4,
-      "p1": "T",
-      "p2": "T",
-      "next1": "S",
-      "next2": "S"
+      "p1": "L",
+      "p2": "L",
+      "next1": "L",
+      "next2": "L",
+      "counts": [
+        4,
+        4
+      ]
     },
     {
       "index": 5,
-      "p1": "S",
-      "p2": "S",
-      "next1": "T",
-      "next2": "T"
+      "p1": "L",
+      "p2": "L",
+      "next1": "L",
+      "next2": "L",
+      "counts": [
+        5,
+        5
+      ]
     },
     {
       "index": 6,
-      "p1": "T",
-      "p2": "T",
-      "next1": "T",
-      "next2": "T"
+      "p1": "L",
+      "p2": "L",
+      "next1": "S",
+      "next2": "S",
+      "counts": [
+        6,
+        6
+      ]
     },
     {
       "index": 7,
-      "p1": "T",
-      "p2": "T",
+      "p1": "S",
+      "p2": "S",
       "next1": "J",
-      "next2": "J"
+      "next2": "J",
+      "counts": [
+        7,
+        7
+      ]
     },
     {
       "index": 8,
       "p1": "J",
       "p2": "J",
-      "next1": "J",
-      "next2": "J"
+      "next1": "I",
+      "next2": "I",
+      "counts": [
+        8,
+        8
+      ]
     },
     {
       "index": 9,
-      "p1": "J",
-      "p2": "J",
-      "next1": "Z",
-      "next2": "Z"
+      "p1": "I",
+      "p2": "I",
+      "next1": "T",
+      "next2": "T",
+      "counts": [
+        9,
+        9
+      ]
     }
   ],
   "match2": [
@@ -78,39 +118,59 @@
       "index": 0,
       "p1": "I",
       "p2": "I",
-      "next1": "O",
-      "next2": "O"
+      "next1": "I",
+      "next2": "I",
+      "counts": [
+        0,
+        0
+      ]
     },
     {
       "index": 1,
-      "p1": "O",
-      "p2": "O",
-      "next1": "O",
-      "next2": "O"
+      "p1": "I",
+      "p2": "I",
+      "next1": "S",
+      "next2": "S",
+      "counts": [
+        1,
+        1
+      ]
     },
     {
       "index": 2,
-      "p1": "O",
-      "p2": "O",
-      "next1": "T",
-      "next2": "T"
+      "p1": "S",
+      "p2": "S",
+      "next1": "L",
+      "next2": "L",
+      "counts": [
+        2,
+        2
+      ]
     },
     {
       "index": 3,
-      "p1": "T",
-      "p2": "T",
-      "next1": "S",
-      "next2": "S"
+      "p1": "L",
+      "p2": "L",
+      "next1": "L",
+      "next2": "L",
+      "counts": [
+        3,
+        3
+      ]
     },
     {
       "index": 4,
-      "p1": "S",
-      "p2": "S",
-      "next1": "T",
-      "next2": "T"
+      "p1": "L",
+      "p2": "L",
+      "next1": "O",
+      "next2": "O",
+      "counts": [
+        4,
+        4
+      ]
     }
   ],
   "identical": true,
   "differentSeedsProduceDifferentSequences": true,
-  "at": "2026-11-24T16:55:10.763Z"
+  "at": "2026-11-24T17:54:18.696Z"
 }

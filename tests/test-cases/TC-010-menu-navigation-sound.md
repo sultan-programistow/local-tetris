@@ -2,7 +2,8 @@
 
 - **Area:** Menus / audio / gameplay SFX
 - **Priority:** Medium
-- **Date run:** 2026-11-24 (run 1: FAIL — no navigation sounds at all; run 2: FAIL — 16/18; run 3: PASS on the Web Audio engine; run 4: PASS — 19/19; run 5: FAIL — groups A–D 22/22 PASS incl. submenu entry, Game Over group E 6 genuine failures (arrows, W/S, D-pad silent; hover step invalid); run 6: FAIL — group E keyboard/W-S/D-pad selection sounds fixed, hover not yet in that build; run 7: PASS — group E 14/14 on `962dc56`, hover included)
+- **Date run:** 2026-11-24 (run 8: PASS, automated; manual run 7: PASS)
+- **Automated:** `tests/e2e/tc-010-menu-navigation-sound.spec.ts` — `npm run test TC-010`
 - **Spec:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" — "Move (left/right)", "Soft drop", "Menu navigation (select/back)" are listed SFX events. The spec does not name the files; `src/audio.ts` maps the events to `move.ogg`, `soft_drop.ogg`, `menu_select.ogg`, `menu_back.ogg`.
 - **Spec pin:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" incl. "Menu enter submenu (opening Stats, Volume, or Controls)" and §"Sound Design (Panning)" @ `4d88126` (sound-file mapping and panning are implementation details read from `src/audio.ts`).
 - **Spec (Game Over group):** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" lists "Menu navigation (select/back)" as a global SFX with no per-screen exception; `specs/04-screens-and-ui.md` §"Game Over Screen" @ `8b4c2ef` defines the options Restart (default), Stats, Main Menu and the navigation paths covered below.
@@ -157,4 +158,18 @@ Method is the run 3 Web Audio hook; each step waits 250 ms and the E-group reads
 | 4 | 2026-11-24 | `cb935ae` | PASS | 19/19; adds A8 case-insensitive `w`/`s` navigation |
 | 5 | 2026-11-24 | `4d88126` | **FAIL** | Groups A–D 22/22 PASS incl. new submenu-entry A10/A11 (panning now 95%); Game Over group E: arrows, `w`/`s` and D-pad silent (6 genuine failures), `Esc`/`B` back play `menu_back`; E9 hover step invalid (see harness note) |
 | 6 | 2026-11-24 | `37a97fd` | **FAIL** | Group E: arrows, `w`/`s`, D-pad and back keys now pass; hover fix not in this build; E9 step invalid, so hover not validly exercised |
-| 7 | 2026-11-24 | `962dc56` | **PASS** | Group E 14/14 with the corrected hover step; hover plays `menu_select` only on a real selection change, clamped/no-change steps stay silent |
+| 7 | 2026-11-24 | `962dc56` | **PASS** |
+| 8 | 2026-11-24 | current | PASS (automated) | `npm run test TC-010`: groups A (12 steps), B (4), C (7), D1 and E (13) all pass; the asset check takes the file list from the built bundle |
+| 8 | 2026-11-24 | current | PASS (automated) | `npm run test TC-010`: groups A (12 steps), B (4), C (7), D1 and E (13) all pass; the asset check takes the file list from the built bundle | Group E 14/14 with the corrected hover step; hover plays `menu_select` only on a real selection change, clamped/no-change steps stay silent |
+
+## Automation (run 8)
+
+`tests/e2e/tc-010-menu-navigation-sound.spec.ts`, run with `npm run test TC-010`, three tests: groups A–D, the Game Over group E1–E12, and E13 (Game Over back via gamepad B, which needs its own match).
+
+Sounds are recorded by a Web Audio hook installed before the app bundle (see `tests/e2e/helpers/audio.ts`): `fetch` records the requested `sounds/<name>.ogg`, `decodeAudioData` tags the returned buffer, and every `createBufferSource().start()` records `{name, pan, gain, time}`. Each step clears the log, performs one input, waits 250 ms and asserts the exact file sequence, so an extra sound fails as loudly as a missing one. Asset check D1 derives the expected file list from the production bundle (`sounds/<name>.ogg` strings in `dist/assets/*.js`), so a newly added sound is checked instead of ignored, and the list cannot go stale. Every declared file must be reachable and preloaded, no undeclared sound may be fetched, and an `audio preload failed` warning fails the step.
+
+Keys are held for ~70 ms because a `keyboard.press()` can fall entirely between two animation frames and be missed by the game's per-frame polling; gamepad presses are held 120–150 ms with a 40 ms release gap so each press is a fresh edge.
+
+Mutation check: muting the Game Over arrow selection sound fails E1; restored afterwards.
+
+Evidence: `tests/reports/TC-010/run8-audio-results.json`, `run8-gameover-audio-results.json`, `run8-gameover-B.json`, `run8-after-moves.png`.

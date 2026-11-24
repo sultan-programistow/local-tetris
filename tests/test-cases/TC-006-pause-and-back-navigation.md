@@ -2,8 +2,9 @@
 
 - **Area:** Menus / navigation / input
 - **Priority:** High
-- **Date run:** 2026-11-23 (run 3: PASS — gamepad `B`/`Select` back navigation fixed)
+- **Date run:** 2026-11-24 (run 4: PASS, automated; manual run 3: PASS)
 - **Environment:** Chromium (OpenBot browser), production build of `5bd2de2` served statically at `http://127.0.0.1:4175` (`vite preview`, no HMR), canvas 1920×1080; gamepads mocked via `navigator.getGamepads()` (same pad object in slots 0 and 1 so both players soft-drop)
+- **Automated:** `tests/e2e/tc-006-pause-and-back-navigation.spec.ts` — `npm run test TC-006`
 - **Spec:** `specs/03-input-and-controls.md` §"Pause (removed)" and §"Gamepad"; `specs/04-screens-and-ui.md` §"Main Menu", §"Play Screen", §"Game Over Screen"
 - **Spec pin:** `03-input-and-controls.md` @ `10aa6a0`, `04-screens-and-ui.md` @ `db1a953`
 
@@ -46,7 +47,7 @@ Canvas pixel checks (no DOM content):
 
 ## Status
 
-**PASS** (run 3) — gamepad back navigation works everywhere the case covers: `B` and `Select` resume from the paused Main Menu and return from Game Over to the Main Menu; `Start` opens the menu and `Esc` still resumes. Verified on `5bd2de2`.
+**PASS** (run 4 automated, manual run 3) — gamepad back navigation works everywhere the case covers: `B` and `Select` resume from the paused Main Menu and return from Game Over to the Main Menu; `Start` opens the menu and `Esc` still resumes. Verified on `5bd2de2`.
 
 ## Run history
 
@@ -54,7 +55,8 @@ Canvas pixel checks (no DOM content):
 |---|---|---|---|
 | 1 | 2026-11-23 | FAIL | checks 2, 3, 4, 5, 9 fail; checks 1, 6, 7, 8 pass |
 | 2 | 2026-11-23 | FAIL | after gamepad-Start fix `82b1d18`: checks 2 and 3 now pass; 4 and 5 still fail (`B`/`Select`); 8 and 9 not re-run |
-| 3 | 2026-11-23 | PASS | after `B`/`Select` fix `5bd2de2`: checks 4, 5 and 9 pass; other checks not re-run |
+| 3 | 2026-11-23 | PASS | after `B`/`Select` fix `5bd2de2`
+| 4 | 2026-11-24 | PASS (automated) | `npm run test TC-006`: menu opens paused with "Resume" first, board frozen across 900 ms, Esc/Enter/A/B/Select/Start and mouse Resume all resume; Esc, B and Select return from Game Over to the Main Menu (three matches, 7.1–8.5 s each) |: checks 4, 5 and 9 pass; other checks not re-run |
 
 ## Evidence
 
@@ -72,3 +74,13 @@ Canvas pixel checks (no DOM content):
 - `B`/`Select` back navigation was handed to @Developer and the fix (`5bd2de2`) is verified in run 3 for checks 4, 5 and 9.
 - Run 3 probed Game Over with green pixels in the y 470–590 band: while only P1 had topped out the board still drew and the game was still in play, so the board border pixel alone was not a reliable marker.
 - Root cause is out of scope for this test asset.
+
+## Automation (run 4)
+
+`tests/e2e/tc-006-pause-and-back-navigation.spec.ts`, run with `npm run test TC-006`, three tests. Pause state, the menu item list ("Resume" first) and the frozen board are read from the `?e2e=1` hook: the players' piece coordinates and piece counts must be identical across a 900 ms menu visit while the frame counter keeps rising (so a frozen page cannot pass).
+
+Game Over is reached by holding A (soft drop) on both mocked pads, which tops out both stacks in roughly 7–9 s per match; the case's three back keys are checked on three separate matches.
+
+Mutation check: dropping the Select button from the back-button test (only B) fails both the Select resume and the Game Over Select path; restored afterwards.
+
+Evidence: `tests/reports/TC-006/run4-results.json` (every step with screen/status/selection and the three Game Over durations), `run4-pause-menu.png`, `run4-resumed.png`, `run4-gameover.png`, `run4-back-at-menu.png`.

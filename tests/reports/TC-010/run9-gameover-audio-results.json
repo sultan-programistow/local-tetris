@@ -1,0 +1,145 @@
+{
+  "case": "TC-010",
+  "group": "E1-E12",
+  "runId": "run9",
+  "rows": [
+    {
+      "id": "E1",
+      "expected": [
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select"
+      ],
+      "pans": [
+        0
+      ],
+      "index": 1
+    },
+    {
+      "id": "E2",
+      "expected": [
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select"
+      ],
+      "pans": [
+        0
+      ],
+      "index": 2
+    },
+    {
+      "id": "E3",
+      "expected": [],
+      "actual": [],
+      "pans": [],
+      "index": 2
+    },
+    {
+      "id": "E4",
+      "expected": [
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select"
+      ],
+      "pans": [
+        0
+      ],
+      "index": 1
+    },
+    {
+      "id": "E5",
+      "expected": [
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select"
+      ],
+      "pans": [
+        0
+      ],
+      "index": 0
+    },
+    {
+      "id": "E6",
+      "expected": [],
+      "actual": [],
+      "pans": []
+    },
+    {
+      "id": "E7",
+      "expected": [
+        "menu_select",
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select",
+        "menu_select"
+      ],
+      "pans": [
+        0,
+        0
+      ],
+      "index": 0
+    },
+    {
+      "id": "E8",
+      "expected": [
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "pans": [
+        0,
+        0,
+        0
+      ],
+      "index": 1
+    },
+    {
+      "id": "E9",
+      "expected": [
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select"
+      ],
+      "pans": [
+        0
+      ],
+      "index": 1
+    },
+    {
+      "id": "E10",
+      "expected": [],
+      "actual": [],
+      "pans": []
+    },
+    {
+      "id": "E11",
+      "expected": [],
+      "actual": [],
+      "pans": []
+    },
+    {
+      "id": "E12",
+      "expected": [
+        "menu_back"
+      ],
+      "actual": [
+        "menu_back"
+      ],
+      "pans": [
+        0
+      ]
+    }
+  ],
+  "at": "2026-11-24T17:39:10.705Z"
+}

@@ -11,20 +11,10 @@
  *         E the Game Over menu (arrows, W/S, D-pad, hover, back keys).
  */
 import { test, expect, type Page } from '@playwright/test';
-import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { BTN, installGamepads, reachGameOver, startMatch, tapKey, tapPad } from './helpers/app';
 import { game } from './helpers/hook';
-import {
-  clearSfx,
-  fetchedSounds,
-  installAudioHook,
-  names,
-  pans,
-  sfx,
-  SOUND_FILES,
-  step,
-  type Sfx,
-} from './helpers/audio';
+import { clearSfx, fetchedSounds, installAudioHook, names, pans, step, type Sfx } from './helpers/audio';
 import { toCss } from './helpers/canvas';
 
 const REPORTS = 'tests/reports/TC-010';
@@ -40,6 +30,16 @@ function nextRunId(): string {
 }
 
 const RUN = nextRunId();
+
+/** Every `sounds/<name>.ogg` referenced by the production bundle. */
+function declaredSounds(): string[] {
+  const names = new Set<string>();
+  for (const file of readdirSync('dist/assets').filter((f) => f.endsWith('.js'))) {
+    const src = readFileSync(`dist/assets/${file}`, 'utf8');
+    for (const m of src.matchAll(/sounds\/([\w-]+)\.ogg/g)) names.add(m[1]);
+  }
+  return [...names].sort();
+}
 
 const MENU = { Start: 388, Stats: 448, Volume: 508, Controls: 568, empty: 820 };
 const GAMEOVER = { Restart: 490, Stats: 550, 'Main Menu': 610 };
@@ -203,6 +203,11 @@ test('TC-010 — menu navigation, back keys and movement sounds (A–D)', async 
   await page.screenshot({ path: `${REPORTS}/${RUN}-after-moves.png` });
 
   // ---- Group D: assets ---------------------------------------------------
+  // The expected files come from the built bundle, so a newly added sound is checked
+  // rather than silently ignored, and the list cannot go stale.
+  const declared = declaredSounds();
+  expect(declared.length, 'sound files referenced by the built bundle').toBeGreaterThanOrEqual(10);
+
   const fetched = await fetchedSounds(page);
   const statuses = await page.evaluate(async (files: string[]) => {
     const out: Record<string, number> = {};
@@ -211,11 +216,19 @@ test('TC-010 — menu navigation, back keys and movement sounds (A–D)', async 
       out[f] = r.status;
     }
     return out;
-  }, SOUND_FILES);
-  expect(Object.values(statuses).every((s) => s === 200), 'all sound files reachable').toBe(true);
-  expect(new Set(fetched)).toEqual(new Set(SOUND_FILES));
-  expect(warnings).toEqual([]);
-  record('D1', ['11 assets fetched and decoded'], [], { fetched: [...new Set(fetched)].sort(), warnings });
+  }, declared);
+
+  for (const name of declared) {
+    expect(statuses[name], `${name}.ogg is reachable`).toBe(200);
+    expect(fetched, `${name} was preloaded`).toContain(name);
+  }
+  expect(fetched.filter((f) => !declared.includes(f)), 'no undeclared sound fetched').toEqual([]);
+  expect(warnings, 'no audio preload failure').toEqual([]);
+  record('D1', ['all declared assets fetched and decoded'], [], {
+    declared,
+    fetched: [...new Set(fetched)].sort(),
+    warnings,
+  });
 
   writeFileSync(
     `${REPORTS}/${RUN}-audio-results.json`,
