@@ -901,8 +901,10 @@ function drawStats() {
     ctx.fillText(String(r[2]), 1050, 220 + i * 36);
   });
   ctx.fillStyle = "#fff";
+  ctx.font = "bold 48px sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("Sessions", 960, 420);
+  ctx.fillText("SESSIONS", 960, 420);
+  ctx.font = "28px monospace";
   ctx.textAlign = "left";
   ctx.fillStyle = "#aaa";
   ctx.fillText("Date".padEnd(18) + "Duration".padEnd(10) + "Winner".padEnd(10) + "Score", 610, 470);
