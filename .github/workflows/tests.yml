@@ -49,6 +49,6 @@ jobs:
           name: test-evidence-${{ github.run_number }}-${{ github.run_attempt }}
           path: |
             test-results/
-            tests/reports/
+            tests/reports/**/ci-${{ github.run_number }}-${{ github.run_attempt }}-*
           if-no-files-found: ignore
           retention-days: 14
