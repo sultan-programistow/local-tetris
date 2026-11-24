@@ -24,7 +24,7 @@
 
 ## Sound Design (Panning)
 
-- Player-related sounds (piece lock, soft drop, rotate, move, line clear, game over for that player) are panned: P1 = 85% left, P2 = 85% right.
+- Player-related sounds (piece lock, soft drop, rotate, move, line clear, game over for that player) are panned: P1 = 95% left, P2 = 95% right.
 - Non-player sounds (menu navigation, menu select/back, volume test blip, countdown, global game over fanfare) are centered (pan 0).
 - Implementation should use Web Audio API (stereo panner) rather than simple HTMLAudio to support panning; HTMLAudio fallback can be centered.
 

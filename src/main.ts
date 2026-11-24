@@ -134,7 +134,7 @@ window.addEventListener("keydown", (e) => {
       const p = match.players[idx] as any;
       if (p.current && !p.gameOver) {
         tryRotate(p.board, p.current, dir as 1 | -1);
-        playSfx("rotate", idx === 0 ? -0.85 : 0.85);
+        playSfx("rotate", idx === 0 ?  -0.95 : 0.95);
         p.lockTimer = 0;
       }
     }
@@ -349,7 +349,7 @@ function update(dt: number) {
         if (p.current && !collides(p.board, p.current, -1, 0)) {
           p.current.x -= 1;
           p.lockTimer = 0;
-          playSfx("move", gi === 0 ? -0.85 : 0.85);
+          playSfx("move", gi === 0 ?  -0.95 : 0.95);
         }
         g._tL = 0;
         g._thL = 350;
@@ -376,7 +376,7 @@ function update(dt: number) {
         if (p.current && !collides(p.board, p.current, 1, 0)) {
           p.current.x += 1;
           p.lockTimer = 0;
-          playSfx("move", gi === 0 ? -0.85 : 0.85);
+          playSfx("move", gi === 0 ?  -0.95 : 0.95);
         }
         g._tR = 0;
         g._thR = 350;
@@ -456,7 +456,7 @@ function update(dt: number) {
       if (p.current && !collides(p.board, p.current, -1, 0)) {
         p.current.x -= 1;
         p.lockTimer = 0;
-        playSfx("move", i === 0 ? -0.85 : 0.85);
+        playSfx("move", i === 0 ?  -0.95 : 0.95);
       }
       p._dasL = 0;
       p._dasThresholdL = 350;
@@ -468,7 +468,7 @@ function update(dt: number) {
       if (p.current && !collides(p.board, p.current, 1, 0)) {
         p.current.x += 1;
         p.lockTimer = 0;
-        playSfx("move", i === 0 ? -0.85 : 0.85);
+        playSfx("move", i === 0 ?  -0.95 : 0.95);
       }
       p._dasR = 0;
       p._dasThresholdR = 350;
@@ -482,7 +482,7 @@ function update(dt: number) {
         if (!collides(p.board, p.current, -1, 0)) {
           p.current.x -= 1;
           p.lockTimer = 0;
-          playSfx("move", i === 0 ? -0.85 : 0.85);
+          playSfx("move", i === 0 ?  -0.95 : 0.95);
         }
         p._dasL = 0;
         p._dasThresholdL = 75;
@@ -497,7 +497,7 @@ function update(dt: number) {
         if (!collides(p.board, p.current, 1, 0)) {
           p.current.x += 1;
           p.lockTimer = 0;
-          playSfx("move", i === 0 ? -0.85 : 0.85);
+          playSfx("move", i === 0 ?  -0.95 : 0.95);
         }
         p._dasR = 0;
         p._dasThresholdR = 75;
@@ -518,7 +518,7 @@ function update(dt: number) {
         if (!collides(p.board, p.current, 0, 1)) {
           p.current.y += 1;
           p.lockTimer = 0;
-          playSfx("soft_drop", i === 0 ? -0.85 : 0.85);
+          playSfx("soft_drop", i === 0 ?  -0.95 : 0.95);
         }
         p._sdTimer = 0;
       } else {
@@ -597,7 +597,7 @@ function handleInput(p: any, idx: number, dt: number) {
         if (!collides(p.board, p.current, -1, 0)) {
           p.current.x -= 1;
           p.lockTimer = 0;
-          playSfx("move", idx === 0 ? -0.85 : 0.85);
+          playSfx("move", idx === 0 ?  -0.95 : 0.95);
         }
       } else {
         // repeat every 33ms handled by accumulator threshold
@@ -624,7 +624,7 @@ function lockPiece(p: any, idx: number) {
         p.board.set(x, y, piece.def.color);
       }
     }
-  playSfx("piece_lock", idx === 0 ? -0.85 : 0.85);
+  playSfx("piece_lock", idx === 0 ?  -0.95 : 0.95);
   p.score += 1;
   p.piecesPlaced += 1;
   // level
@@ -633,7 +633,7 @@ function lockPiece(p: any, idx: number) {
   const full = p.board.fullRows();
   if (full.length > 0) {
     p.board.removeRows(full);
-    playSfx("line_clear", idx === 0 ? -0.85 : 0.85);
+    playSfx("line_clear", idx === 0 ?  -0.95 : 0.95);
   }
   // spawn next
   match!.spawnFor(p);
