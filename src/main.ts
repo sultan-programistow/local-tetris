@@ -972,11 +972,295 @@ function drawControls() {
   ctx.font = "22px monospace";
   ctx.textAlign = "center";
   const lines = [
-    "P1: A/D move, S soft drop, Z rotate CCW, X rotate CW",
-    "P2: Arrow Left/Right move, Arrow Down soft drop, [ rotate CCW, ] rotate CW",
-    "Global: Esc pause/menu, Enter confirm",
+    "P1: WSAD, ZX",
+    "P2: Arrows, []",
+    "Global: Esc pause/menu, Enter or Space confirm",
   ];
-  lines.forEach((l, i) => ctx.fillText(l, 960, 500 + i * 40));
+  lines.forEach((l, i) => ctx.fillText(l, 960, 220 + i * 40));
+
+  // Gamepad silhouette (viewBox 1050 x 660)
+  const gx = 960 - 260;
+  const gy = 540;
+  const gw = 520;
+  const gh = 330;
+  if (xboxImg.complete) {
+    ctx.drawImage(xboxImg, gx, gy, gw, gh);
+  }
+  const pt = (sx: number, sy: number) => ({
+    x: gx + (sx / 1050) * gw,
+    y: gy + (sy / 660) * gh,
+  });
+
+  ctx.save();
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+  ctx.fillStyle = "#fff";
+  ctx.lineWidth = 2;
+  ctx.font = "20px monospace";
+
+  const drawBtnIcon = (kind: string, cx: number, cy: number) => {
+    ctx.save();
+    if (kind === "A" || kind === "B" || kind === "X" || kind === "Y") {
+      const colors: Record<string, string> = {
+        A: "#34c759",
+        B: "#ff3b30",
+        X: "#007aff",
+        Y: "#f5c400",
+      };
+      ctx.beginPath();
+      ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+      ctx.fillStyle = "#222";
+      ctx.fill();
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = colors[kind];
+      ctx.stroke();
+      ctx.fillStyle = colors[kind];
+      ctx.font = "bold 18px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(kind, cx, cy + 1);
+    } else if (kind === "LB" || kind === "RB") {
+      ctx.beginPath();
+      ctx.roundRect(cx - 22, cy - 13, 44, 26, 7);
+      ctx.fillStyle = "#222";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#fff";
+      ctx.stroke();
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 15px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(kind, cx, cy + 1);
+    } else if (kind === "L") {
+      ctx.beginPath();
+      ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+      ctx.fillStyle = "#222";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#fff";
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(255,255,255,0.45)";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 14px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("L", cx, cy + 1);
+      // left and right directional triangles
+      ctx.beginPath();
+      ctx.moveTo(cx - 24, cy);
+      ctx.lineTo(cx - 18, cy - 5);
+      ctx.lineTo(cx - 18, cy + 5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(cx + 24, cy);
+      ctx.lineTo(cx + 18, cy - 5);
+      ctx.lineTo(cx + 18, cy + 5);
+      ctx.closePath();
+      ctx.fill();
+    } else if (kind === "VIEW") {
+      ctx.beginPath();
+      ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+      ctx.fillStyle = "#222";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#fff";
+      ctx.stroke();
+      ctx.strokeStyle = "#fff";
+      ctx.lineWidth = 1.8;
+      // back window (top-left)
+      ctx.beginPath();
+      ctx.moveTo(cx - 8, cy + 1);
+      ctx.lineTo(cx - 8, cy - 7);
+      ctx.lineTo(cx + 2, cy - 7);
+      ctx.lineTo(cx + 2, cy - 3);
+      ctx.stroke();
+      // front window (bottom-right)
+      ctx.strokeRect(cx - 3, cy - 2, 11, 9);
+    } else if (kind === "MENU") {
+      ctx.beginPath();
+      ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+      ctx.fillStyle = "#222";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#fff";
+      ctx.stroke();
+      ctx.strokeStyle = "#fff";
+      ctx.lineWidth = 2;
+      for (const dy of [-5, 0, 5]) {
+        ctx.beginPath();
+        ctx.moveTo(cx - 7, cy + dy);
+        ctx.lineTo(cx + 7, cy + dy);
+        ctx.stroke();
+      }
+    } else if (kind.startsWith("DPAD")) {
+      const arm = 6;
+      const len = 17;
+      ctx.fillStyle = "#222";
+      ctx.strokeStyle = "#fff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx - arm, cy - len);
+      ctx.lineTo(cx + arm, cy - len);
+      ctx.lineTo(cx + arm, cy - arm);
+      ctx.lineTo(cx + len, cy - arm);
+      ctx.lineTo(cx + len, cy + arm);
+      ctx.lineTo(cx + arm, cy + arm);
+      ctx.lineTo(cx + arm, cy + len);
+      ctx.lineTo(cx - arm, cy + len);
+      ctx.lineTo(cx - arm, cy + arm);
+      ctx.lineTo(cx - len, cy + arm);
+      ctx.lineTo(cx - len, cy - arm);
+      ctx.lineTo(cx - arm, cy - arm);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // highlight active directional arms as distinct inner white squares
+      ctx.fillStyle = "#fff";
+      if (kind === "DPAD_LR" || kind === "DPAD_L") {
+        ctx.fillRect(cx - len + 3, cy - arm + 3, len - arm - 3, arm * 2 - 6);
+      }
+      if (kind === "DPAD_LR" || kind === "DPAD_R") {
+        ctx.fillRect(cx + arm, cy - arm + 3, len - arm - 3, arm * 2 - 6);
+      }
+      if (kind === "DPAD_U") {
+        ctx.fillRect(cx - arm + 3, cy - len + 3, arm * 2 - 6, len - arm - 3);
+      }
+      if (kind === "DPAD_D") {
+        ctx.fillRect(cx - arm + 3, cy + arm, arm * 2 - 6, len - arm - 3);
+      }
+    }
+    ctx.restore();
+  };
+
+  const drawCallout = (
+    points: Array<{ x: number; y: number }>,
+    icon: string,
+    label: string,
+    side: "left" | "right",
+  ) => {
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+      ctx.lineTo(points[i].x, points[i].y);
+    }
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(points[0].x, points[0].y, 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    const end = points[points.length - 1];
+    const iconOffset = icon === "LB" || icon === "RB" || icon === "L" ? 32 : 26;
+    const iconX = side === "left" ? end.x - iconOffset : end.x + iconOffset;
+    drawBtnIcon(icon, iconX, end.y);
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "20px monospace";
+    ctx.textBaseline = "middle";
+    if (side === "left") {
+      ctx.textAlign = "right";
+      ctx.fillText(label, iconX - iconOffset - 6, end.y + 1);
+    } else {
+      ctx.textAlign = "left";
+      ctx.fillText(label, iconX + iconOffset + 6, end.y + 1);
+    }
+  };
+
+  // LB (Left bumper)
+  const pLB = pt(260, 62);
+  drawCallout(
+    [pLB, { x: pLB.x, y: 470 }, { x: 620, y: 470 }],
+    "LB",
+    "Rotate CCW",
+    "left",
+  );
+
+  // Left Stick
+  const pLS = pt(245, 302);
+  drawCallout(
+    [pLS, { x: 620, y: pLS.y }],
+    "L",
+    "Move",
+    "left",
+  );
+
+  // D-pad (split by direction like reference)
+  const pDpad = pt(385, 451);
+  ctx.beginPath();
+  ctx.moveTo(pDpad.x, pDpad.y);
+  ctx.lineTo(pDpad.x, 810);
+  ctx.lineTo(620, 810);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(pDpad.x, pDpad.y, 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  const dpadItems = [
+    { icon: "DPAD_LR", label: "Move", y: 760 },
+    { icon: "DPAD_D", label: "Soft drop", y: 810 },
+    { icon: "DPAD_U", label: "Rotate CW", y: 860 },
+  ];
+  for (const item of dpadItems) {
+    const iconX = 620 - 26;
+    drawBtnIcon(item.icon, iconX, item.y);
+    ctx.fillStyle = "#fff";
+    ctx.font = "20px monospace";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "right";
+    ctx.fillText(item.label, iconX - 26 - 6, item.y + 1);
+  }
+
+  // Menu / Start
+  const pMenu = pt(602, 288);
+  drawCallout(
+    [{ x: pMenu.x, y: pMenu.y - 12 }, { x: pMenu.x, y: 415 }, { x: 1300, y: 415 }],
+    "MENU",
+    "Pause / Resume",
+    "right",
+  );
+
+  // RB (Right bumper)
+  const pRB = pt(790, 62);
+  drawCallout(
+    [pRB, { x: pRB.x, y: 470 }, { x: 1300, y: 470 }],
+    "RB",
+    "Rotate CW",
+    "right",
+  );
+
+  // X button
+  const pX = pt(728, 287);
+  const pB = pt(874, 279);
+  const pA = pt(800, 352);
+  const faceGap = 54;
+  drawCallout(
+    [{ x: pX.x, y: pX.y - 18 }, { x: pX.x, y: pB.y - faceGap }, { x: 1300, y: pB.y - faceGap }],
+    "X",
+    "Rotate CCW",
+    "right",
+  );
+
+  // B button
+  drawCallout(
+    [{ x: pB.x + 18, y: pB.y }, { x: 1300, y: pB.y }],
+    "B",
+    "Rotate CW / Back",
+    "right",
+  );
+
+  // A button
+  drawCallout(
+    [{ x: pA.x, y: pA.y + 18 }, { x: pA.x, y: pB.y + faceGap }, { x: 1300, y: pB.y + faceGap }],
+    "A",
+    "Soft drop / Confirm",
+    "right",
+  );
+
+  ctx.restore();
   ctx.textAlign = "center";
   ctx.fillText("Press Esc to back", 960, 1000);
   ctx.textAlign = "left";
@@ -1001,6 +1285,8 @@ function drawVolume() {
 }
 
 // Menu input handling
+const xboxImg = new Image();
+xboxImg.src = "xbox-gamepad.svg";
 let lastKey = "";
 window.addEventListener("keydown", (e) => {
   if (screen === "volume") {
@@ -1201,7 +1487,7 @@ function handleGamepadMenus(dt: number) {
     const left = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
     const right = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
     const a = gp.buttons[0]?.pressed;
-    const b = gp.buttons[1]?.pressed || gp.buttons[8]?.pressed;
+    const b = gp.buttons[1]?.pressed;
     if (screen === "play") {
       if (gp.buttons[9]?.pressed && !prev.start) {
         pausedFromGame = true;
@@ -1234,18 +1520,17 @@ function handleGamepadMenus(dt: number) {
         menuIndex = (menuIndex + 1) % items.length;
         playSfx("menu_select");
       }
-      // B/Select acts as Back: resume when a game is in progress
-      if (b && !prev.b && pausedFromGame) {
+      // B or Start/Menu resumes when a game is in progress, regardless of highlighted item
+      const startPressed = gp.buttons[9]?.pressed;
+      const resumePressed =
+        (b && !prev.b) || (startPressed && !prev.start && !startOpenedMenu);
+      if (resumePressed && pausedFromGame) {
         pausedFromGame = false;
         screen = pausedReturn;
         if (match) match.status = "playing";
         playSfx("unpause");
       }
-      const startPressed = gp.buttons[9]?.pressed;
-      const activate =
-        (a && !prev.a) ||
-        (pausedFromGame && startPressed && !prev.start && !startOpenedMenu);
-      if (activate) {
+      if (a && !prev.a) {
         const opt = items[menuIndex];
         if (opt === "Start") startMatch();
         else if (opt === "Resume") {
