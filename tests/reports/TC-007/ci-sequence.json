@@ -4,10 +4,10 @@
   "match1": [
     {
       "index": 0,
-      "p1": "O",
-      "p2": "O",
-      "next1": "S",
-      "next2": "S",
+      "p1": "J",
+      "p2": "J",
+      "next1": "T",
+      "next2": "T",
       "counts": [
         0,
         0
@@ -15,10 +15,10 @@
     },
     {
       "index": 1,
-      "p1": "S",
-      "p2": "S",
-      "next1": "L",
-      "next2": "L",
+      "p1": "T",
+      "p2": "T",
+      "next1": "J",
+      "next2": "J",
       "counts": [
         1,
         1
@@ -26,8 +26,8 @@
     },
     {
       "index": 2,
-      "p1": "L",
-      "p2": "L",
+      "p1": "J",
+      "p2": "J",
       "next1": "L",
       "next2": "L",
       "counts": [
@@ -39,8 +39,8 @@
       "index": 3,
       "p1": "L",
       "p2": "L",
-      "next1": "Z",
-      "next2": "Z",
+      "next1": "L",
+      "next2": "L",
       "counts": [
         3,
         3
@@ -48,10 +48,10 @@
     },
     {
       "index": 4,
-      "p1": "Z",
-      "p2": "Z",
-      "next1": "I",
-      "next2": "I",
+      "p1": "L",
+      "p2": "L",
+      "next1": "L",
+      "next2": "L",
       "counts": [
         4,
         4
@@ -59,10 +59,10 @@
     },
     {
       "index": 5,
-      "p1": "I",
-      "p2": "I",
-      "next1": "I",
-      "next2": "I",
+      "p1": "L",
+      "p2": "L",
+      "next1": "Z",
+      "next2": "Z",
       "counts": [
         5,
         5
@@ -70,10 +70,10 @@
     },
     {
       "index": 6,
-      "p1": "I",
-      "p2": "I",
-      "next1": "O",
-      "next2": "O",
+      "p1": "Z",
+      "p2": "Z",
+      "next1": "L",
+      "next2": "L",
       "counts": [
         6,
         6
@@ -81,8 +81,8 @@
     },
     {
       "index": 7,
-      "p1": "O",
-      "p2": "O",
+      "p1": "L",
+      "p2": "L",
       "next1": "L",
       "next2": "L",
       "counts": [
@@ -94,8 +94,8 @@
       "index": 8,
       "p1": "L",
       "p2": "L",
-      "next1": "J",
-      "next2": "J",
+      "next1": "Z",
+      "next2": "Z",
       "counts": [
         8,
         8
@@ -103,10 +103,10 @@
     },
     {
       "index": 9,
-      "p1": "J",
-      "p2": "J",
-      "next1": "I",
-      "next2": "I",
+      "p1": "Z",
+      "p2": "Z",
+      "next1": "Z",
+      "next2": "Z",
       "counts": [
         9,
         9
@@ -116,10 +116,10 @@
   "match2": [
     {
       "index": 0,
-      "p1": "O",
-      "p2": "O",
-      "next1": "Z",
-      "next2": "Z",
+      "p1": "J",
+      "p2": "J",
+      "next1": "I",
+      "next2": "I",
       "counts": [
         0,
         0
@@ -127,10 +127,10 @@
     },
     {
       "index": 1,
-      "p1": "Z",
-      "p2": "Z",
-      "next1": "I",
-      "next2": "I",
+      "p1": "I",
+      "p2": "I",
+      "next1": "O",
+      "next2": "O",
       "counts": [
         1,
         1
@@ -138,10 +138,10 @@
     },
     {
       "index": 2,
-      "p1": "I",
-      "p2": "I",
-      "next1": "L",
-      "next2": "L",
+      "p1": "O",
+      "p2": "O",
+      "next1": "S",
+      "next2": "S",
       "counts": [
         2,
         2
@@ -149,10 +149,10 @@
     },
     {
       "index": 3,
-      "p1": "L",
-      "p2": "L",
-      "next1": "J",
-      "next2": "J",
+      "p1": "S",
+      "p2": "S",
+      "next1": "Z",
+      "next2": "Z",
       "counts": [
         3,
         3
@@ -160,10 +160,10 @@
     },
     {
       "index": 4,
-      "p1": "J",
-      "p2": "J",
-      "next1": "J",
-      "next2": "J",
+      "p1": "Z",
+      "p2": "Z",
+      "next1": "L",
+      "next2": "L",
       "counts": [
         4,
         4
@@ -172,5 +172,5 @@
   ],
   "identical": true,
   "differentSeedsProduceDifferentSequences": true,
-  "at": "2026-11-24T18:22:14.037Z"
+  "at": "2026-11-24T18:39:08.226Z"
 }

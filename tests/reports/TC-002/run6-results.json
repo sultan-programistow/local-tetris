@@ -11,7 +11,7 @@
       "state": {
         "screen": "menu",
         "menuIndex": 0,
-        "frame": 1
+        "frame": 5
       },
       "rows": [
         567,
@@ -26,7 +26,7 @@
       "state": {
         "screen": "menu",
         "menuIndex": 1,
-        "frame": 6
+        "frame": 13
       },
       "rows": [
         0,
@@ -41,7 +41,7 @@
       "state": {
         "screen": "menu",
         "menuIndex": 0,
-        "frame": 13
+        "frame": 25
       },
       "rows": [
         567,
@@ -56,7 +56,7 @@
       "state": {
         "screen": "menu",
         "menuIndex": 2,
-        "frame": 19
+        "frame": 33
       },
       "rows": [
         0,
@@ -71,7 +71,7 @@
       "state": {
         "screen": "menu",
         "menuIndex": 2,
-        "frame": 49
+        "frame": 65
       },
       "rows": [
         0,
@@ -86,7 +86,7 @@
       "state": {
         "screen": "stats",
         "menuIndex": 1,
-        "frame": 55
+        "frame": 74
       },
       "rows": [
         0,
@@ -101,13 +101,28 @@
       "state": {
         "screen": "controls",
         "menuIndex": 3,
-        "frame": 61
+        "frame": 81
       },
       "rows": [
         0,
         0,
         0,
-        884,
+        0,
+        0
+      ]
+    },
+    {
+      "step": "8 gamepad A on Stats",
+      "state": {
+        "screen": "stats",
+        "menuIndex": 1,
+        "frame": 101
+      },
+      "rows": [
+        0,
+        0,
+        0,
+        0,
         0
       ]
     }
@@ -119,7 +134,8 @@
     "tests/reports/TC-002/run6-hover-volume.png",
     "tests/reports/TC-002/run6-hover-away.png",
     "tests/reports/TC-002/run6-enter-stats.png",
-    "tests/reports/TC-002/run6-click-controls.png"
+    "tests/reports/TC-002/run6-click-controls.png",
+    "tests/reports/TC-002/run6-gamepad-stats.png"
   ],
-  "at": "2026-11-24T16:47:19.158Z"
+  "at": "2026-11-24T18:36:45.305Z"
 }

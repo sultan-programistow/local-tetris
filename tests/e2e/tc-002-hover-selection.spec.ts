@@ -8,6 +8,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import { menuRowGreen, state, toCss } from './helpers/canvas';
+import { BTN, installGamepads, tapPad } from './helpers/app';
 
 const REPORTS = 'tests/reports/TC-002';
 
@@ -57,6 +58,7 @@ test('TC-002 — hover moves the single menu highlight', async ({ page }) => {
     log.push({ step, state: await state(page), rows: await menuRowGreen(page) });
   };
 
+  await installGamepads(page);
   await page.goto('/?e2e=1');
   await expect.poll(() => selectionIs(page, ROW.Start), { timeout: 10_000 }).toBe(true);
   await snap('1 initial');
@@ -108,6 +110,16 @@ test('TC-002 — hover moves the single menu highlight', async ({ page }) => {
   await snap('7 click Controls');
   await page.screenshot({ path: `${REPORTS}/${RUN}-click-controls.png` });
 
+  // 8. Back to the menu, hover Stats, gamepad A -> Stats screen
+  await page.keyboard.press('Escape');
+  await expect.poll(async () => (await state(page))?.screen, { timeout: 2_000 }).toBe('menu');
+  await hover(page, MENU.Stats);
+  await expect.poll(() => selectionIs(page, ROW.Stats)).toBe(true);
+  await tapPad(page, 0, { buttons: [BTN.A] }, 150);
+  await expect.poll(async () => (await state(page))?.screen, { timeout: 2_000 }).toBe('stats');
+  await snap('8 gamepad A on Stats');
+  await page.screenshot({ path: `${REPORTS}/${RUN}-gamepad-stats.png` });
+
   const result = {
     case: 'TC-002',
     runId: RUN,
@@ -121,6 +133,7 @@ test('TC-002 — hover moves the single menu highlight', async ({ page }) => {
       'hover-away',
       'enter-stats',
       'click-controls',
+      'gamepad-stats',
     ].map((n) => `${REPORTS}/${RUN}-${n}.png`),
     at: new Date().toISOString(),
   };
