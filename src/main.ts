@@ -1051,10 +1051,15 @@ window.addEventListener("keydown", (e) => {
     } else if (screen === "controls") {
       if (e.key === "Escape") { screen = "menu"; playSfx("menu_back"); }
     } else if (screen === "gameover") {
-      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W")
+      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") {
+        const prev = gameOverIndex;
         gameOverIndex = Math.max(0, gameOverIndex - 1);
-      else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S")
+        if (gameOverIndex !== prev) playSfx("menu_select");
+      } else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") {
+        const prev = gameOverIndex;
         gameOverIndex = Math.min(2, gameOverIndex + 1);
+        if (gameOverIndex !== prev) playSfx("menu_select");
+      }
       else if (e.key === "Enter" || e.key === " ") {
         if (gameOverIndex === 0) startMatch();
         else if (gameOverIndex === 1) screen = "stats";
@@ -1224,8 +1229,16 @@ function handleGamepadMenus(dt: number) {
         else if (opt === "Controls") { screen = "controls"; playSfx("menu_select"); }
       }
     } else if (screen === "gameover") {
-      if (up && !prev.up) gameOverIndex = Math.max(0, gameOverIndex - 1);
-      if (down && !prev.down) gameOverIndex = Math.min(2, gameOverIndex + 1);
+      if (up && !prev.up) {
+        const prevGi = gameOverIndex;
+        gameOverIndex = Math.max(0, gameOverIndex - 1);
+        if (gameOverIndex !== prevGi) playSfx("menu_select");
+      }
+      if (down && !prev.down) {
+        const prevGi = gameOverIndex;
+        gameOverIndex = Math.min(2, gameOverIndex + 1);
+        if (gameOverIndex !== prevGi) playSfx("menu_select");
+      }
       if (a && !prev.a) {
         if (gameOverIndex === 0) startMatch();
         else if (gameOverIndex === 1) screen = "stats";
