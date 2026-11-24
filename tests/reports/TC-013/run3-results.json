@@ -1,0 +1,129 @@
+{
+  "case": "TC-013",
+  "runId": "run3",
+  "rows": [
+    {
+      "id": "A1",
+      "expected": [
+        "pause"
+      ],
+      "actual": [
+        "pause"
+      ],
+      "screen": "menu"
+    },
+    {
+      "id": "B1",
+      "expected": [
+        "unpause"
+      ],
+      "actual": [
+        "unpause"
+      ],
+      "screen": "play"
+    },
+    {
+      "id": "B2",
+      "expected": [
+        "unpause"
+      ],
+      "actual": [
+        "unpause"
+      ],
+      "screen": "play"
+    },
+    {
+      "id": "B3",
+      "expected": [
+        "unpause"
+      ],
+      "actual": [
+        "unpause"
+      ],
+      "screen": "play"
+    },
+    {
+      "id": "A2",
+      "expected": [
+        "pause"
+      ],
+      "actual": [
+        "pause"
+      ],
+      "screen": "menu"
+    },
+    {
+      "id": "A3",
+      "expected": [
+        "pause"
+      ],
+      "actual": [
+        "pause"
+      ],
+      "screen": "menu"
+    },
+    {
+      "id": "B4",
+      "expected": [
+        "unpause",
+        "(soft_drop)"
+      ],
+      "actual": [
+        "unpause",
+        "soft_drop"
+      ],
+      "screen": "play"
+    },
+    {
+      "id": "B5",
+      "expected": [
+        "unpause"
+      ],
+      "actual": [
+        "unpause"
+      ],
+      "screen": "play"
+    },
+    {
+      "id": "B6",
+      "expected": [
+        "unpause"
+      ],
+      "actual": [
+        "unpause"
+      ],
+      "screen": "play"
+    },
+    {
+      "id": "A4",
+      "expected": [
+        "pause"
+      ],
+      "actual": [
+        "pause"
+      ],
+      "screen": "menu"
+    },
+    {
+      "id": "B7",
+      "expected": [
+        "unpause"
+      ],
+      "actual": [
+        "unpause"
+      ],
+      "screen": "play"
+    },
+    {
+      "id": "B8",
+      "expected": [
+        "unpause"
+      ],
+      "actual": [
+        "unpause"
+      ],
+      "screen": "play"
+    }
+  ],
+  "at": "2026-11-24T17:07:40.324Z"
+}

@@ -4,7 +4,8 @@
 
 - Move (left/right) — subtle.
 - Rotate (CW/CCW).
-- Soft drop.
+- Soft drop (initial tap).
+- Soft drop (accelerated) — plays once when held soft drop switches to fast repeat after the 350ms delay; "ziuuuu" style.
 - Piece lock.
 - Line clear.
 - Level up — none (silent progression).

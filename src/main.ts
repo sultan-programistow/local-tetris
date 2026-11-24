@@ -518,6 +518,7 @@ function update(dt: number) {
     const softHeld = keys.has(downKey) || gpSoft;
     if (p._sdTimer === undefined) p._sdTimer = 0;
     if (p._sdHeldPrev === undefined) p._sdHeldPrev = false;
+    if (p._sdFastPlayed === undefined) p._sdFastPlayed = false;
     if (softHeld && p.current) {
       if (!p._sdHeldPrev) {
         // tap: immediate single cell
@@ -527,9 +528,14 @@ function update(dt: number) {
           playSfx("soft_drop", i === 0 ?  -0.95 : 0.95);
         }
         p._sdTimer = 0;
+        p._sdFastPlayed = false;
       } else {
         p._sdTimer += dt * 1000;
         if (p._sdTimer >= 350) {
+          if (!p._sdFastPlayed) {
+            playSfx("soft_drop_fast", i === 0 ?  -0.95 : 0.95);
+            p._sdFastPlayed = true;
+          }
           if (!collides(p.board, p.current, 0, 1)) {
             p.current.y += 1;
             p.lockTimer = 0;
@@ -539,6 +545,7 @@ function update(dt: number) {
       }
     } else {
       p._sdTimer = 0;
+      p._sdFastPlayed = false;
     }
     p._sdHeldPrev = softHeld;
 
@@ -1343,7 +1350,18 @@ requestAnimationFrame(draw);
 requestAnimationFrame(loop);
 
 // Test-only, read-only state hook for CI (see tests/e2e/). Absent unless ?e2e=1.
+// Getters return primitives or plain copies, so a test cannot reach into live game objects.
 if (new URLSearchParams(location.search).has("e2e")) {
+  const playerView = (p: any) => ({
+    x: p.current ? p.current.x : null,
+    y: p.current ? p.current.y : null,
+    type: p.current ? p.current.def.id : null,
+    rotation: p.current ? p.current.rotation : null,
+    next: p.nextDef ? p.nextDef.id : null,
+    score: p.score,
+    pieces: p.piecesPlaced,
+    over: p.gameOver || p.toppedOut,
+  });
   (window as any).__tetris = Object.freeze({
     get screen() {
       return screen;
@@ -1353,6 +1371,26 @@ if (new URLSearchParams(location.search).has("e2e")) {
     },
     get frame() {
       return frameCounter;
+    },
+    get menuItems() {
+      return menuItems().slice();
+    },
+    get gameOverIndex() {
+      return gameOverIndex;
+    },
+    get volume() {
+      return volume;
+    },
+    get status() {
+      return match ? match.status : null;
+    },
+    get countdownMs() {
+      return match ? match.countdownMs : null;
+    },
+    get players() {
+      return match
+        ? [playerView(match.players[0]), playerView(match.players[1])]
+        : null;
     },
   });
 }

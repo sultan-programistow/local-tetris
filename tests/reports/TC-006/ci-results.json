@@ -1,0 +1,184 @@
+{
+  "case": "TC-006",
+  "runId": "ci",
+  "steps": [
+    {
+      "id": "1",
+      "observed": "Esc in play opens the pause menu",
+      "screen": "play",
+      "status": "playing",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "1",
+      "observed": "Esc in play opens the pause menu",
+      "screen": "menu",
+      "status": "paused",
+      "menuIndex": 0,
+      "items": [
+        "Resume",
+        "Restart",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "3",
+      "observed": "Esc on the paused menu resumes play",
+      "screen": "play",
+      "status": "playing",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "6a",
+      "observed": "Enter on Resume resumes play",
+      "screen": "play",
+      "status": "playing",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "6b",
+      "observed": "gamepad A on Resume resumes play",
+      "screen": "play",
+      "status": "playing",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "2",
+      "observed": "gamepad Start in play opens the pause menu",
+      "screen": "menu",
+      "status": "paused",
+      "menuIndex": 0,
+      "items": [
+        "Resume",
+        "Restart",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "4",
+      "observed": "gamepad B on the paused menu resumes play",
+      "screen": "play",
+      "status": "playing",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "5",
+      "observed": "gamepad Select on the paused menu resumes play",
+      "screen": "play",
+      "status": "playing",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "7",
+      "observed": "gamepad Start on Resume resumes play",
+      "screen": "play",
+      "status": "playing",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "8a",
+      "observed": "match ended, Game Over shown",
+      "screen": "gameover",
+      "status": "gameover",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "8",
+      "observed": "Esc on Game Over opens the Main Menu",
+      "screen": "menu",
+      "status": "gameover",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "9",
+      "observed": "gamepad B on Game Over opens the Main Menu",
+      "screen": "menu",
+      "status": "gameover",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "9b",
+      "observed": "gamepad Select on Game Over opens the Main Menu",
+      "screen": "menu",
+      "status": "gameover",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    }
+  ],
+  "gameOverMs": [
+    7274,
+    8630,
+    8689
+  ],
+  "gameOverSelectionAtEntry": 0,
+  "at": "2026-11-24T17:22:26.835Z"
+}

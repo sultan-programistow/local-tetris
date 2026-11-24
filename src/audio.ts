@@ -2,6 +2,7 @@ const SOUND_FILES: Record<string, string> = {
   move: 'sounds/move.ogg',
   rotate: 'sounds/rotate.ogg',
   soft_drop: 'sounds/soft_drop.ogg',
+  soft_drop_fast: 'sounds/soft_drop_fast.ogg',
   piece_lock: 'sounds/piece_lock.ogg',
   line_clear: 'sounds/line_clear.ogg',
   game_over: 'sounds/game_over.ogg',

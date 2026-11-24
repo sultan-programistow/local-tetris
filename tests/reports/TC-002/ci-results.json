@@ -1,0 +1,125 @@
+{
+  "case": "TC-002",
+  "runId": "ci",
+  "viewport": {
+    "width": 1600,
+    "height": 900
+  },
+  "steps": [
+    {
+      "step": "1 initial",
+      "state": {
+        "screen": "menu",
+        "menuIndex": 0,
+        "frame": 2
+      },
+      "rows": [
+        567,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "step": "2 ArrowDown",
+      "state": {
+        "screen": "menu",
+        "menuIndex": 1,
+        "frame": 10
+      },
+      "rows": [
+        0,
+        626,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "step": "3 hover Start",
+      "state": {
+        "screen": "menu",
+        "menuIndex": 0,
+        "frame": 17
+      },
+      "rows": [
+        567,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "step": "4 hover Volume",
+      "state": {
+        "screen": "menu",
+        "menuIndex": 2,
+        "frame": 24
+      },
+      "rows": [
+        0,
+        0,
+        752,
+        0,
+        0
+      ]
+    },
+    {
+      "step": "5 pointer away",
+      "state": {
+        "screen": "menu",
+        "menuIndex": 2,
+        "frame": 52
+      },
+      "rows": [
+        0,
+        0,
+        752,
+        0,
+        0
+      ]
+    },
+    {
+      "step": "6 Enter on Stats",
+      "state": {
+        "screen": "stats",
+        "menuIndex": 1,
+        "frame": 60
+      },
+      "rows": [
+        0,
+        626,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "step": "7 click Controls",
+      "state": {
+        "screen": "controls",
+        "menuIndex": 3,
+        "frame": 69
+      },
+      "rows": [
+        0,
+        0,
+        0,
+        884,
+        0
+      ]
+    }
+  ],
+  "screenshots": [
+    "tests/reports/TC-002/ci-start-selected.png",
+    "tests/reports/TC-002/ci-keyboard-stats.png",
+    "tests/reports/TC-002/ci-hover-start.png",
+    "tests/reports/TC-002/ci-hover-volume.png",
+    "tests/reports/TC-002/ci-hover-away.png",
+    "tests/reports/TC-002/ci-enter-stats.png",
+    "tests/reports/TC-002/ci-click-controls.png"
+  ],
+  "at": "2026-11-24T17:20:58.330Z"
+}

@@ -1,0 +1,163 @@
+{
+  "case": "TC-003",
+  "runId": "run11",
+  "rows": [
+    {
+      "input": "P1 a",
+      "tapMoves": 1,
+      "moves": 3,
+      "gaps": [
+        31,
+        339,
+        114
+      ],
+      "columns": [
+        "3->2",
+        "2->1",
+        "1->0"
+      ]
+    },
+    {
+      "input": "P1 d",
+      "tapMoves": 1,
+      "moves": 4,
+      "gaps": [
+        30,
+        342,
+        91,
+        75
+      ],
+      "columns": [
+        "3->4",
+        "4->5",
+        "5->6",
+        "6->7"
+      ]
+    },
+    {
+      "input": "P2 ArrowLeft",
+      "tapMoves": 1,
+      "moves": 3,
+      "gaps": [
+        14,
+        312,
+        105
+      ],
+      "columns": [
+        "3->2",
+        "2->1",
+        "1->0"
+      ]
+    },
+    {
+      "input": "P2 ArrowRight",
+      "tapMoves": 1,
+      "moves": 4,
+      "gaps": [
+        27,
+        346,
+        81,
+        91
+      ],
+      "columns": [
+        "3->4",
+        "4->5",
+        "5->6",
+        "6->7"
+      ]
+    },
+    {
+      "input": "pad0 D-pad left",
+      "tapMoves": 1,
+      "moves": 3,
+      "gaps": [
+        33,
+        357,
+        83
+      ],
+      "columns": [
+        "3->2",
+        "2->1",
+        "1->0"
+      ]
+    },
+    {
+      "input": "pad1 D-pad left",
+      "tapMoves": 1,
+      "moves": 3,
+      "gaps": [
+        29,
+        366,
+        79
+      ],
+      "columns": [
+        "3->2",
+        "2->1",
+        "1->0"
+      ]
+    },
+    {
+      "input": "pad0 D-pad right",
+      "tapMoves": 1,
+      "moves": 4,
+      "gaps": [
+        9,
+        355,
+        73,
+        86
+      ],
+      "columns": [
+        "3->4",
+        "4->5",
+        "5->6",
+        "6->7"
+      ]
+    },
+    {
+      "input": "pad1 D-pad right",
+      "tapMoves": 1,
+      "moves": 3,
+      "gaps": [
+        4,
+        380,
+        93
+      ],
+      "columns": [
+        "3->4",
+        "4->5",
+        "5->6"
+      ]
+    },
+    {
+      "input": "pad0 stick left",
+      "tapMoves": 1,
+      "moves": 3,
+      "gaps": [
+        38,
+        366,
+        82
+      ],
+      "columns": [
+        "3->2",
+        "2->1",
+        "1->0"
+      ]
+    },
+    {
+      "input": "pad0 stick right",
+      "tapMoves": 1,
+      "moves": 3,
+      "gaps": [
+        12,
+        385,
+        100
+      ],
+      "columns": [
+        "3->4",
+        "4->5",
+        "5->6"
+      ]
+    }
+  ],
+  "at": "2026-11-24T17:15:48.919Z"
+}

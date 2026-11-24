@@ -59,7 +59,9 @@ Gamepad:
 
 ## Soft Drop
 
-- Accelerated drop: first cell 350ms, then 10ms repeat → effectively drops to bottom.
+- Initial press: drop one cell and play the soft drop SFX.
+- If held for 350ms (DAS initial delay), soft drop switches to accelerated repeat (10ms) and plays the soft drop (accelerated) SFX once.
+- If released before 350ms, no accelerated sound plays.
 - Lock delay still applies at landing; allows sideways squeeze/rotation before lock (~0.5s).
 - No hard drop in v1.
 

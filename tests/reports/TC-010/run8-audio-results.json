@@ -1,0 +1,337 @@
+{
+  "case": "TC-010",
+  "runId": "run8",
+  "rows": [
+    {
+      "id": "A1",
+      "expected": [
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select"
+      ],
+      "pans": [
+        0
+      ]
+    },
+    {
+      "id": "A2",
+      "expected": [],
+      "actual": [],
+      "pans": []
+    },
+    {
+      "id": "A3",
+      "expected": [],
+      "actual": [],
+      "pans": []
+    },
+    {
+      "id": "A4",
+      "expected": [
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select"
+      ],
+      "pans": [
+        0
+      ]
+    },
+    {
+      "id": "A5",
+      "expected": [
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "pans": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "menuIndex": 0
+    },
+    {
+      "id": "A6",
+      "expected": [
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "pans": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "A7",
+      "expected": [
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "pans": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "A8",
+      "expected": [
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "actual": [
+        "menu_select",
+        "menu_select",
+        "menu_select",
+        "menu_select"
+      ],
+      "pans": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "A10-Stats",
+      "expected": [
+        "one entry sound"
+      ],
+      "actual": [
+        "menu_enter"
+      ],
+      "pans": [
+        0
+      ],
+      "sound": "menu_enter"
+    },
+    {
+      "id": "A10-Volume",
+      "expected": [
+        "one entry sound"
+      ],
+      "actual": [
+        "menu_enter"
+      ],
+      "pans": [
+        0
+      ],
+      "sound": "menu_enter"
+    },
+    {
+      "id": "A10-Controls",
+      "expected": [
+        "one entry sound"
+      ],
+      "actual": [
+        "menu_enter"
+      ],
+      "pans": [
+        0
+      ],
+      "sound": "menu_enter"
+    },
+    {
+      "id": "A11",
+      "expected": [
+        "one entry sound"
+      ],
+      "actual": [
+        "menu_enter"
+      ],
+      "pans": [
+        0
+      ],
+      "sound": "menu_enter"
+    },
+    {
+      "id": "B2",
+      "expected": [
+        "menu_back"
+      ],
+      "actual": [
+        "menu_back"
+      ],
+      "pans": [
+        0
+      ]
+    },
+    {
+      "id": "B1",
+      "expected": [
+        "menu_back"
+      ],
+      "actual": [
+        "menu_back"
+      ],
+      "pans": [
+        0
+      ]
+    },
+    {
+      "id": "B3",
+      "expected": [
+        "menu_back"
+      ],
+      "actual": [
+        "menu_back"
+      ],
+      "pans": [
+        0
+      ]
+    },
+    {
+      "id": "B4",
+      "expected": [
+        "menu_back"
+      ],
+      "actual": [
+        "menu_back"
+      ],
+      "pans": [
+        0
+      ]
+    },
+    {
+      "id": "C1",
+      "expected": [
+        "move"
+      ],
+      "actual": [
+        "move"
+      ],
+      "pans": [
+        -0.95
+      ]
+    },
+    {
+      "id": "C2",
+      "expected": [
+        "move"
+      ],
+      "actual": [
+        "move"
+      ],
+      "pans": [
+        -0.95
+      ]
+    },
+    {
+      "id": "C3",
+      "expected": [
+        "soft_drop"
+      ],
+      "actual": [
+        "soft_drop"
+      ],
+      "pans": [
+        -0.95
+      ]
+    },
+    {
+      "id": "C4",
+      "expected": [
+        "soft_drop"
+      ],
+      "actual": [
+        "soft_drop"
+      ],
+      "pans": [
+        0.95
+      ]
+    },
+    {
+      "id": "C5",
+      "expected": [
+        "move"
+      ],
+      "actual": [
+        "move"
+      ],
+      "pans": [
+        0.95
+      ]
+    },
+    {
+      "id": "C6",
+      "expected": [
+        "move"
+      ],
+      "actual": [
+        "move"
+      ],
+      "pans": [
+        0.95
+      ]
+    },
+    {
+      "id": "C7",
+      "expected": [
+        "soft_drop"
+      ],
+      "actual": [
+        "soft_drop"
+      ],
+      "pans": [
+        0.95
+      ]
+    },
+    {
+      "id": "D1",
+      "expected": [
+        "11 assets fetched and decoded"
+      ],
+      "actual": [],
+      "pans": [],
+      "fetched": [
+        "game_over",
+        "line_clear",
+        "menu_back",
+        "menu_enter",
+        "menu_select",
+        "move",
+        "pause",
+        "piece_lock",
+        "rotate",
+        "soft_drop",
+        "unpause"
+      ],
+      "warnings": []
+    }
+  ],
+  "at": "2026-11-24T17:03:41.528Z"
+}

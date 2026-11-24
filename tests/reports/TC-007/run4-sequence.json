@@ -1,0 +1,116 @@
+{
+  "case": "TC-007",
+  "runId": "run4",
+  "match1": [
+    {
+      "index": 0,
+      "p1": "J",
+      "p2": "J",
+      "next1": "I",
+      "next2": "I"
+    },
+    {
+      "index": 1,
+      "p1": "I",
+      "p2": "I",
+      "next1": "S",
+      "next2": "S"
+    },
+    {
+      "index": 2,
+      "p1": "S",
+      "p2": "S",
+      "next1": "J",
+      "next2": "J"
+    },
+    {
+      "index": 3,
+      "p1": "J",
+      "p2": "J",
+      "next1": "T",
+      "next2": "T"
+    },
+    {
+      "index": 4,
+      "p1": "T",
+      "p2": "T",
+      "next1": "S",
+      "next2": "S"
+    },
+    {
+      "index": 5,
+      "p1": "S",
+      "p2": "S",
+      "next1": "T",
+      "next2": "T"
+    },
+    {
+      "index": 6,
+      "p1": "T",
+      "p2": "T",
+      "next1": "T",
+      "next2": "T"
+    },
+    {
+      "index": 7,
+      "p1": "T",
+      "p2": "T",
+      "next1": "J",
+      "next2": "J"
+    },
+    {
+      "index": 8,
+      "p1": "J",
+      "p2": "J",
+      "next1": "J",
+      "next2": "J"
+    },
+    {
+      "index": 9,
+      "p1": "J",
+      "p2": "J",
+      "next1": "Z",
+      "next2": "Z"
+    }
+  ],
+  "match2": [
+    {
+      "index": 0,
+      "p1": "I",
+      "p2": "I",
+      "next1": "O",
+      "next2": "O"
+    },
+    {
+      "index": 1,
+      "p1": "O",
+      "p2": "O",
+      "next1": "O",
+      "next2": "O"
+    },
+    {
+      "index": 2,
+      "p1": "O",
+      "p2": "O",
+      "next1": "T",
+      "next2": "T"
+    },
+    {
+      "index": 3,
+      "p1": "T",
+      "p2": "T",
+      "next1": "S",
+      "next2": "S"
+    },
+    {
+      "index": 4,
+      "p1": "S",
+      "p2": "S",
+      "next1": "T",
+      "next2": "T"
+    }
+  ],
+  "identical": true,
+  "differentSeedsProduceDifferentSequences": true,
+  "at": "2026-11-24T16:55:10.763Z"
+}

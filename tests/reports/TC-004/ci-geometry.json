@@ -1,0 +1,125 @@
+{
+  "case": "TC-004",
+  "runId": "ci",
+  "results": {
+    "1600x900": {
+      "viewport": {
+        "w": 1600,
+        "h": 900
+      },
+      "canvas": {
+        "left": 0,
+        "top": 0,
+        "right": 1600,
+        "bottom": 900,
+        "w": 1600,
+        "h": 900
+      },
+      "boards": [
+        {
+          "id": "P1",
+          "logical": {
+            "left": 199,
+            "right": 700,
+            "top": 39,
+            "bottom": 1040
+          },
+          "css": {
+            "left": 165.83333333333334,
+            "top": 32.5,
+            "right": 583.3333333333334,
+            "bottom": 866.6666666666667
+          },
+          "insideCanvas": true,
+          "insideViewport": true
+        },
+        {
+          "id": "P2",
+          "logical": {
+            "left": 1219,
+            "right": 1720,
+            "top": 39,
+            "bottom": 1040
+          },
+          "css": {
+            "left": 1015.8333333333334,
+            "top": 32.5,
+            "right": 1433.3333333333335,
+            "bottom": 866.6666666666667
+          },
+          "insideCanvas": true,
+          "insideViewport": true
+        }
+      ],
+      "borderPixel": {
+        "x": 450,
+        "y": 1040,
+        "rgb": [
+          204,
+          204,
+          204
+        ]
+      }
+    },
+    "1366x768": {
+      "viewport": {
+        "w": 1366,
+        "h": 768
+      },
+      "canvas": {
+        "left": 0.328125,
+        "top": 0,
+        "right": 1365.65625,
+        "bottom": 768,
+        "w": 1365.328125,
+        "h": 768
+      },
+      "boards": [
+        {
+          "id": "P1",
+          "logical": {
+            "left": 199,
+            "right": 700,
+            "top": 39,
+            "bottom": 1040
+          },
+          "css": {
+            "left": 141.83869628906248,
+            "top": 27.733227539062497,
+            "right": 498.10400390624994,
+            "bottom": 739.552734375
+          },
+          "insideCanvas": true,
+          "insideViewport": true
+        },
+        {
+          "id": "P2",
+          "logical": {
+            "left": 1219,
+            "right": 1720,
+            "top": 39,
+            "bottom": 1040
+          },
+          "css": {
+            "left": 867.1692626953125,
+            "top": 27.733227539062497,
+            "right": 1223.4345703125,
+            "bottom": 739.552734375
+          },
+          "insideCanvas": true,
+          "insideViewport": true
+        }
+      ],
+      "borderPixel": {
+        "x": 450,
+        "y": 1040,
+        "rgb": [
+          204,
+          204,
+          204
+        ]
+      }
+    }
+  },
+  "at": "2026-11-24T17:21:30.803Z"
+}

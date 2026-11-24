@@ -1,0 +1,39 @@
+{
+  "case": "TC-001",
+  "mode": "keyboard",
+  "runId": "ci",
+  "viewport": {
+    "width": 1600,
+    "height": 900
+  },
+  "probes": {
+    "afterEnter": {
+      "screen": "countdown",
+      "menuIndex": 0,
+      "frame": 12
+    },
+    "afterPixels": {
+      "nonBg": 89828,
+      "menuGreen": 0,
+      "p1Board": 37440,
+      "centerDigit": 1830
+    }
+  },
+  "screenshots": [
+    "tests/reports/TC-001/ci-enter-play.png"
+  ],
+  "final": {
+    "state": {
+      "screen": "play",
+      "menuIndex": 0,
+      "frame": 182
+    },
+    "pixels": {
+      "nonBg": 109022,
+      "menuGreen": 0,
+      "p1Board": 46656,
+      "centerDigit": 0
+    }
+  },
+  "at": "2026-11-24T17:20:56.739Z"
+}
