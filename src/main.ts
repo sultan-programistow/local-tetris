@@ -182,7 +182,10 @@ function updateHover() {
         mouseY >= y - 30 &&
         mouseY <= y + 10
       )
+      {
+        if (gameOverIndex !== i) playSfx("menu_select");
         gameOverIndex = i;
+      }
     });
     return;
   }
