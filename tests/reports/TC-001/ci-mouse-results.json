@@ -10,10 +10,10 @@
     "before": {
       "screen": "menu",
       "menuIndex": 0,
-      "frame": 4
+      "frame": 3
     },
     "beforePixels": {
-      "nonBg": 15980,
+      "nonBg": 15976,
       "menuGreen": 567,
       "p1Board": 0,
       "centerDigit": 2166
@@ -21,10 +21,10 @@
     "afterClick": {
       "screen": "countdown",
       "menuIndex": 0,
-      "frame": 16
+      "frame": 19
     },
     "afterPixels": {
-      "nonBg": 89828,
+      "nonBg": 89824,
       "menuGreen": 0,
       "p1Board": 37440,
       "centerDigit": 1830
@@ -39,14 +39,14 @@
     "state": {
       "screen": "play",
       "menuIndex": 0,
-      "frame": 117
+      "frame": 173
     },
     "pixels": {
-      "nonBg": 109022,
+      "nonBg": 109018,
       "menuGreen": 0,
       "p1Board": 46656,
       "centerDigit": 0
     }
   },
-  "at": "2026-11-24T17:20:53.196Z"
+  "at": "2026-11-24T17:33:29.804Z"
 }

@@ -1,0 +1,97 @@
+{
+  "case": "TC-014",
+  "runId": "ci",
+  "rows": [
+    {
+      "id": "K1",
+      "method": "keyboard",
+      "item": "Stats",
+      "actual": [
+        "menu_enter"
+      ],
+      "screen": "stats"
+    },
+    {
+      "id": "K2",
+      "method": "keyboard",
+      "item": "Volume",
+      "actual": [
+        "menu_enter"
+      ],
+      "screen": "volume"
+    },
+    {
+      "id": "K3",
+      "method": "keyboard",
+      "item": "Controls",
+      "actual": [
+        "menu_enter"
+      ],
+      "screen": "controls"
+    },
+    {
+      "id": "K4",
+      "method": "keyboard",
+      "item": "Controls",
+      "actual": [
+        "menu_back"
+      ],
+      "screen": "menu"
+    },
+    {
+      "id": "G1",
+      "method": "gamepad",
+      "item": "Stats",
+      "actual": [
+        "menu_enter"
+      ],
+      "screen": "stats"
+    },
+    {
+      "id": "G2",
+      "method": "gamepad",
+      "item": "Volume",
+      "actual": [
+        "menu_enter"
+      ],
+      "screen": "volume"
+    },
+    {
+      "id": "G3",
+      "method": "gamepad",
+      "item": "Controls",
+      "actual": [
+        "menu_enter"
+      ],
+      "screen": "controls"
+    },
+    {
+      "id": "M1",
+      "method": "mouse",
+      "item": "Stats",
+      "actual": [
+        "menu_enter"
+      ],
+      "screen": "stats"
+    },
+    {
+      "id": "M2",
+      "method": "mouse",
+      "item": "Volume",
+      "actual": [
+        "menu_enter"
+      ],
+      "screen": "volume"
+    },
+    {
+      "id": "M3",
+      "method": "mouse",
+      "item": "Controls",
+      "actual": [
+        "menu_enter"
+      ],
+      "screen": "controls"
+    }
+  ],
+  "at": "2026-11-24T17:25:04.309Z"
+}

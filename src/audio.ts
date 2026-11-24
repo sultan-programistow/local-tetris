@@ -15,6 +15,7 @@ const SOUND_FILES: Record<string, string> = {
 
 let volume = 0.7;
 const buffers: Record<string, AudioBuffer> = {};
+const active: Record<string, AudioBufferSourceNode[]> = {};
 let ctx: AudioContext | null = null;
 
 function getCtx(): AudioContext {
@@ -35,6 +36,12 @@ export async function preload() {
   }
 }
 
+export function stop(name: string) {
+  const list = active[name];
+  if (!list) return;
+  for (const s of list) { try { s.stop(); } catch (e) {} }
+  active[name] = [];
+}
 export function play(name: string, pan: number = 0) {
   if (volume <= 0) return;
   const buf = buffers[name];
@@ -47,5 +54,8 @@ export function play(name: string, pan: number = 0) {
   const gain = c.createGain();
   gain.gain.value = volume;
   src.connect(panner).connect(gain).connect(c.destination);
+  if (!active[name]) active[name] = [];
+  active[name].push(src);
+  src.onended = () => { active[name] = active[name].filter((n) => n !== src); };
   src.start(0);
 }

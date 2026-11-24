@@ -9,6 +9,7 @@ import {
   preload as preloadAudio,
   setVolume as setAudioVolume,
   play as playSfx,
+  stop as stopSfx,
 } from "./audio";
 
 const STORAGE_STATS = "local-tetris:stats";
@@ -545,6 +546,7 @@ function update(dt: number) {
       }
     } else {
       p._sdTimer = 0;
+      if (p._sdFastPlayed) stopSfx("soft_drop_fast");
       p._sdFastPlayed = false;
     }
     p._sdHeldPrev = softHeld;
@@ -1095,6 +1097,7 @@ window.addEventListener("keydown", (e) => {
         screen = "menu";
         menuIndex = 0;
         playSfx("pause");
+        stopSfx("soft_drop_fast");
       }
     } else if (screen === "countdown") {
       if (e.key === "Escape") {

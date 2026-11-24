@@ -37,19 +37,47 @@ type PreviewRead = {
   shape2: number[][];
   border1: number;
   border2: number;
+  /** The hook's next piece at the same moment the boxes were drawn. */
+  hookNext1: string | null;
+  hookNext2: string | null;
 };
 
+/**
+ * Read both preview boxes together with the hook value they should show.
+ *
+ * update() advances the game and draw() paints on a later frame, so the hook can
+ * report a new `nextDef` while the canvas still shows the previous frame. Wait for a
+ * drawn frame after the state read, then require the state to be unchanged across the
+ * pixel read; otherwise retry.
+ */
 async function capture(page: Page): Promise<PreviewRead> {
-  const a = await readPreview(page, P1_BOX.x, P1_BOX.y);
-  const b = await readPreview(page, P2_BOX.x, P2_BOX.y);
-  return {
-    type1: previewType(a),
-    type2: previewType(b),
-    shape1: a.shape,
-    shape2: b.shape,
-    border1: a.borderPixels,
-    border2: b.borderPixels,
-  };
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const h0 = await game(page);
+    const f0 = h0.frame;
+    await page
+      .waitForFunction((f) => (window as any).__tetris.frame > f, f0, { timeout: 2_000 })
+      .catch(() => undefined);
+    const a = await readPreview(page, P1_BOX.x, P1_BOX.y);
+    const b = await readPreview(page, P2_BOX.x, P2_BOX.y);
+    const h1 = await game(page);
+    const stable =
+      h0.players![0].pieces === h1.players![0].pieces &&
+      h0.players![1].pieces === h1.players![1].pieces &&
+      h0.players![0].next === h1.players![0].next &&
+      h0.players![1].next === h1.players![1].next;
+    if (!stable) continue;
+    return {
+      type1: previewType(a),
+      type2: previewType(b),
+      shape1: a.shape,
+      shape2: b.shape,
+      border1: a.borderPixels,
+      border2: b.borderPixels,
+      hookNext1: h0.players![0].next,
+      hookNext2: h0.players![1].next,
+    };
+  }
+  throw new Error('preview boxes changed while being read');
 }
 
 /** Check one match: every preview equals the hook's next piece and the piece that follows. */
@@ -58,15 +86,16 @@ async function checkMatch(page: Page, count: number, label: string) {
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i] as Spawn & { extra: PreviewRead };
     const p = row.extra;
-    expect(p.type1, `${label} spawn ${i}: P1 preview colour -> type`).toBe(row.next1);
-    expect(p.type2, `${label} spawn ${i}: P2 preview colour -> type`).toBe(row.next2);
+    expect(p.type1, `${label} spawn ${i}: P1 preview colour -> type`).toBe(p.hookNext1);
+    expect(p.type2, `${label} spawn ${i}: P2 preview colour -> type`).toBe(p.hookNext2);
+    expect(p.hookNext1, `${label} spawn ${i}: hook next agrees with the row`).toBe(row.next1);
     expect(p.type1, `${label} spawn ${i}: both previews`).toBe(p.type2);
     expect(p.border1, `${label} spawn ${i}: P1 box border`).toBeGreaterThan(20);
     expect(p.border2, `${label} spawn ${i}: P2 box border`).toBeGreaterThan(20);
 
-    if (row.next1) {
-      expect(p.shape1, `${label} spawn ${i}: P1 preview shape`).toEqual(SPAWN_SHAPES[row.next1]);
-      expect(p.shape2, `${label} spawn ${i}: P2 preview shape`).toEqual(SPAWN_SHAPES[row.next1]);
+    if (p.hookNext1) {
+      expect(p.shape1, `${label} spawn ${i}: P1 preview shape`).toEqual(SPAWN_SHAPES[p.hookNext1]);
+      expect(p.shape2, `${label} spawn ${i}: P2 preview shape`).toEqual(SPAWN_SHAPES[p.hookNext1]);
     }
 
     if (i + 1 < rows.length) {
