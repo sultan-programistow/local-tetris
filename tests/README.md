@@ -7,6 +7,7 @@ Test assets for the Tetris Duel app (Vite dev server at `http://localhost:5173`)
 | Path | Purpose |
 |---|---|
 | `test-cases/` | Manual/exploratory test cases, one file per case (`TC-###-slug.md`). |
+| `e2e/` | Playwright specs for cases that run in CI (`tc-###-slug.spec.ts`). |
 | `reports/` | Run reports and evidence (screenshots, notes) from test sessions. |
 
 ## Conventions
@@ -27,3 +28,20 @@ Test assets for the Tetris Duel app (Vite dev server at `http://localhost:5173`)
 ```bash
 npm run dev   # serves http://localhost:5173
 ```
+
+## Automated cases
+
+Selected cases also run headless in CI, without an agent:
+
+```bash
+npm run test TC-001    # one case
+npm run test           # every automated case
+```
+
+- Specs live in `tests/e2e/`, one per case, named `tc-###-slug.spec.ts`.
+- The runner starts the production build itself (`npm run build && vite preview`, port 4317), so no dev server is needed.
+- Screenshots and probe values land in `reports/TC-###/runN-*`. Set `TC_RUN_ID` to name the run explicitly (CI builds).
+- The markdown case stays the source of truth; each spec points to its case file.
+- Cases without a spec exit with code 3 rather than passing silently.
+- `?e2e=1` enables a read-only state hook (`window.__tetris`: `screen`, `menuIndex`, `frame`); `harness.spec.ts` checks it stays absent without the flag.
+

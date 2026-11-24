@@ -1,0 +1,39 @@
+{
+  "case": "TC-001",
+  "mode": "keyboard",
+  "runId": "run6",
+  "viewport": {
+    "width": 1600,
+    "height": 900
+  },
+  "probes": {
+    "afterEnter": {
+      "screen": "countdown",
+      "menuIndex": 0,
+      "frame": 5
+    },
+    "afterPixels": {
+      "nonBg": 89780,
+      "menuGreen": 0,
+      "p1Board": 37440,
+      "centerDigit": 1830
+    }
+  },
+  "screenshots": [
+    "tests/reports/TC-001/run6-enter-play.png"
+  ],
+  "final": {
+    "state": {
+      "screen": "play",
+      "menuIndex": 0,
+      "frame": 242
+    },
+    "pixels": {
+      "nonBg": 108974,
+      "menuGreen": 0,
+      "p1Board": 46656,
+      "centerDigit": 0
+    }
+  },
+  "at": "2026-11-24T11:19:30.820Z"
+}

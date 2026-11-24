@@ -255,6 +255,8 @@ let pausedReturn: "play" | "countdown" = "play";
 let menuIndex = 0;
 let gameOverIndex = 0;
 let statsScroll = 0;
+/** Monotonic count of completed draw() calls; exposed only through the ?e2e=1 hook. */
+let frameCounter = 0;
 function menuItems(): string[] {
   const items = pausedFromGame
     ? ["Resume", "Restart", "Stats", "Volume", "Controls"]
@@ -697,6 +699,7 @@ function decideWinner() {
 // Rendering
 declare const __GIT_HASH__: string;
 function draw() {
+  frameCounter++;
   ctx.fillStyle = "#0f1115";
   ctx.fillRect(0, 0, 1920, 1080);
   if (screen === "menu") drawMenu();
@@ -1338,3 +1341,18 @@ function loop(now: number) {
 }
 requestAnimationFrame(draw);
 requestAnimationFrame(loop);
+
+// Test-only, read-only state hook for CI (see tests/e2e/). Absent unless ?e2e=1.
+if (new URLSearchParams(location.search).has("e2e")) {
+  (window as any).__tetris = Object.freeze({
+    get screen() {
+      return screen;
+    },
+    get menuIndex() {
+      return menuIndex;
+    },
+    get frame() {
+      return frameCounter;
+    },
+  });
+}
