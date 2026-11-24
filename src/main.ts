@@ -654,12 +654,8 @@ function lockPiece(p: any, idx: number) {
   p.level = Math.floor(p.piecesPlaced / 10) + 1;
   // line clear
   const full = p.board.fullRows();
-  if (full.length > 0) {
-    p.board.removeRows(full);
-    playSfx("line_clear", idx === 0 ?  -0.95 : 0.95);
-  } else {
-    playSfx("piece_lock", idx === 0 ?  -0.95 : 0.95);
-  }
+  const cleared = full.length > 0;
+  if (cleared) p.board.removeRows(full);
   // spawn next
   match!.spawnFor(p);
   // check immediate collision => top out
@@ -667,6 +663,13 @@ function lockPiece(p: any, idx: number) {
     p.toppedOut = true;
     p.gameOver = true;
     p.current = null;
+  }
+  // suppress placement SFX if this leaves both players topped out (match ends -> only game_over)
+  const other = idx === 0 ? 1 : 0;
+  const matchEnds = p.toppedOut && !!(match!.players[other] && match!.players[other].toppedOut);
+  if (!matchEnds) {
+    if (cleared) playSfx("line_clear", idx === 0 ?  -0.95 : 0.95);
+    else playSfx("piece_lock", idx === 0 ?  -0.95 : 0.95);
   }
 }
 

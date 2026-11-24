@@ -10,6 +10,7 @@
 - Line clear.
 - Level up — none (silent progression).
 - Game over.
+- Placement SFX (piece lock / line clear) is suppressed when the placed piece leaves both players topped out and ends the match; in that case only the Game over SFX plays.
 - Pause/unpause.
 - Menu navigation (select/back).
 - Menu enter submenu (opening Stats, Volume, or Controls).
