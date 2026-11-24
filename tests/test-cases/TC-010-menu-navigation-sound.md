@@ -2,11 +2,12 @@
 
 - **Area:** Menus / audio / gameplay SFX
 - **Priority:** Medium
-- **Date run:** 2026-11-24 (run 1: FAIL — no navigation sounds at all; run 2: FAIL — 16/18 sub-cases pass, keyboard Esc back from Stats and Controls is silent; run 3: PASS on the Web Audio engine; run 4: PASS — 19/19)
+- **Date run:** 2026-11-24 (run 1: FAIL — no navigation sounds at all; run 2: FAIL — 16/18 sub-cases pass, keyboard Esc back from Stats and Controls is silent; run 3: PASS on the Web Audio engine; run 4: PASS — 19/19; run 5: DRAFT — Game Over group E added, not run)
 - **Spec:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" — "Move (left/right)", "Soft drop", "Menu navigation (select/back)" are listed SFX events. The spec does not name the files; `src/audio.ts` maps the events to `move.ogg`, `soft_drop.ogg`, `menu_select.ogg`, `menu_back.ogg`.
 - **Spec pin:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" and §"Sound Design (Panning)" @ `bb71dc0` (sound-file mapping and panning are implementation details read from `src/audio.ts`).
+- **Spec (Game Over group):** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" lists "Menu navigation (select/back)" as a global SFX with no per-screen exception; `specs/04-screens-and-ui.md` §"Game Over Screen" @ `8b4c2ef` defines the options Restart (default), Stats, Main Menu and the navigation paths covered below.
 - **Engine note:** from `bb71dc0` sounds play through the Web Audio API (`AudioBufferSourceNode` → `StereoPannerNode` → `GainNode`), not `HTMLAudioElement.play()`. The run 1–2 method no longer observes anything; run 3 uses the Web Audio hook described below.
-- **Behaviour under test:** each listed event causes exactly one `HTMLMediaElement.play()` for the expected sound file, on the expected input path, and not otherwise.
+- **Behaviour under test:** each listed event causes exactly one played sound for the expected file, on the expected input path, and not otherwise. This applies to every menu, including the Game Over screen (group E).
 
 ## Method (run 3 — Web Audio hook, supersedes the run 1–2 mock)
 
@@ -64,8 +65,41 @@ Run 2 (superseded): **FAIL — 2 of 18** — `Esc` back from Stats/Controls was 
 
 Run 4 (2026-11-24, `cb935ae`): **PASS — 19 of 19**, same Web Audio hook plus one added sub-case, A8, for the case-insensitive `s`/`Shift+S`/`w`/`Shift+W` menu navigation added to the spec in `8b4c2ef`. All menu-select, back-key, move and soft-drop sub-cases still pass; the three commits after `bb71dc0` only change screen layout.
 
+## Game Over group E (run 5 — draft, not run)
+
+**Why:** the case covered the Main Menu and the back keys from Volume/Stats/Controls, but not the Game Over menu, which `specs/04-screens-and-ui.md` §"Game Over Screen" defines with the same kind of navigable options. The global "Menu navigation (select/back)" SFX in `specs/05-audio-and-visuals.md` has no per-screen exception, so the Game Over selection is expected to sound like every other menu.
+
+**Preconditions (in addition to those above):**
+
+1. Game Over screen reached by holding soft drop on both mocked pads (buttons 0/1 with the same pad object in slots 0 and 1; ~6–10 s, method from TC-006 run 3), then release both.
+2. After entering Game Over, wait 250 ms and read the log once to take a baseline: the `game_over` fanfare from entering the screen must not be counted in any E sub-case.
+3. Selection starts on Restart (`gameOverIndex = 0`); Game Over items are drawn at y ≈ 500 / 560 / 620, hover area x 860–1060.
+4. Fresh page load for the keyboard group and again for the gamepad group; volume 0.7.
+
+**Expected (spec-derived, not yet observed):** each selection move on the Game Over screen plays `menu_select` exactly once; `Esc` and gamepad `B`/`Select` play `menu_back` exactly once. `specs/04-screens-and-ui.md` states no wrapping for Game Over, so an extra `↓` on Main Menu or `↑` on Restart must not move the selection and must stay silent (negative controls).
+
+| # | Action | Expected |
+|---|---|---|
+| E1 | `↓` from Restart → Stats | `menu_select` ×1 |
+| E2 | `↓` → Main Menu | `menu_select` ×1 |
+| E3 | `↓` again on Main Menu (clamped, no wrap) | no sound |
+| E4 | `↑` → Stats | `menu_select` ×1 |
+| E5 | `↑` → Restart | `menu_select` ×1 |
+| E6 | `↑` again on Restart (clamped) | no sound |
+| E7 | `s` then `w` (case-insensitive navigation) | `menu_select` ×2; selection Stats then Restart |
+| E8 | D-pad `↓` ×2, `↑` ×1 (mock pad 0) | `menu_select` ×3; selection Main Menu → Stats → Restart |
+| E9 | Hover Restart → Stats | `menu_select` ×1 |
+| E10 | Hover the same item again | no sound |
+| E11 | Hover the empty area below the items | no sound |
+| E12 | `Esc` → Main Menu | `menu_back` ×1 |
+| E13 | Gamepad `B` (pad 0) → Main Menu | `menu_back` ×1 |
+| E14 | Record the pan value of every E1–E13 sound | all 0 (centred); recorded only, panning is scored in TC-012 |
+
+Method is the run 3 Web Audio hook; each step waits 250 ms and the E-group reads the log delta since the previous read. Screenshots after E1, E7 and E9 confirm the Game Over selection position.
+
 ## Evidence
 
+- `tests/reports/TC-010/run5-results.json` — **to be produced by run 5** (does not exist yet): E1–E14 expected/actual sound names and screenshots references.
 - `tests/reports/TC-010/run4-results.json` — run 4 (`cb935ae`): every sub-case with expected/actual sound names, the decode table, and A8.
 - `tests/reports/TC-010/run4-*.png` — run 4 screenshots: Stats/Controls/Volume screens, game start and after the move/soft-drop steps.
 - `tests/reports/TC-010/run3-screens-and-sfx.json` — back-key screens and move/rotate/soft-drop sub-cases with the recorded sound names.
@@ -89,3 +123,4 @@ Run 4 (2026-11-24, `cb935ae`): **PASS — 19 of 19**, same Web Audio hook plus o
 | 2 | 2026-11-24 | `8da9d1f` | FAIL | 16/18; `Esc` back from Stats and Controls silent |
 | 3 | 2026-11-24 | `bb71dc0` | PASS | Web Audio hook; all 18 pass, both run 2 failures fixed |
 | 4 | 2026-11-24 | `cb935ae` | PASS | 19/19; adds A8 case-insensitive `w`/`s` navigation |
+| 5 | — | — | **DRAFT, not run** | Adds Game Over group E1–E14 (selection move, `Esc`/`B` back, hover, pan recorded) |

@@ -11,6 +11,7 @@
 - Game over.
 - Pause/unpause.
 - Menu navigation (select/back).
+- Menu enter submenu (opening Stats, Volume, or Controls).
 
 ## Volume
 
