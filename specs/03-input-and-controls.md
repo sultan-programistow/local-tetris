@@ -34,7 +34,7 @@
 - X + left trigger/bumper: rotate CCW.
 - B + right trigger/bumper: rotate CW.
 - Start: pause.
-- Select: back in menus.
+- Select (left menu button): does nothing.
 
 ### Menu navigation
 
@@ -48,7 +48,7 @@ Gamepad:
 - D-pad / left stick: navigate up/down/left/right.
 - A: select/confirm.
 - B: back.
-- Select: back.
+- Select (left menu button): does nothing.
 - Start: confirm (optional).
 
 ## DAS (Delayed Auto Shift)

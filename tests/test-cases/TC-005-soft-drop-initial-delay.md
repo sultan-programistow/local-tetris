@@ -2,83 +2,34 @@
 
 - **Area:** Gameplay / input
 - **Priority:** High
-- **Date run:** 2026-11-24 (run 6: PASS, automated; manual run 4: PASS)
-- **Environment:** Chromium (OpenBot browser), production build served statically at `http://127.0.0.1:4173` (`vite preview`, no HMR), canvas 1920×1080, cell 50 px
-- **Automated:** `tests/e2e/tc-005-soft-drop-initial-delay.spec.ts` — `npm run test TC-005`
-- **Spec:** `specs/03-input-and-controls.md` → "Soft Drop": first cell 350 ms, then 10 ms repeat (effectively drops to the bottom); keyboard `S`/`↓`, gamepad D-pad down / A.
-- **Spec pin:** `specs/03-input-and-controls.md` §"Soft Drop" @ `10aa6a0` (350 ms initial, 10 ms repeat). Re-check the pin when the spec changes.
+- **Spec pin:** `specs/03-input-and-controls.md` §"Soft Drop" @ `10aa6a0` — first cell immediately, 350 ms delay, then 10 ms repeat (effectively to the bottom); keyboard `S`/`↓`, gamepad D-pad down / `A`.
+- **Spec:** `tests/e2e/tc-005-soft-drop-initial-delay.spec.ts` — `npm run test TC-005`
 
-## Preconditions
+## Must hold
 
-1. The app is running (static preview) at `http://127.0.0.1:4173`.
-2. A match is in progress with a falling piece.
+- **Tap** (~120 ms) of `S`, `↓`, D-pad down or `A` moves the piece exactly one cell down, and no further before the next gravity step.
+- **Hold** moves one cell at the press edge, nothing for 350 ms, then drops rapidly to the floor.
+- `W` rotates the piece (its cell bounds turn from 150×50 to 50×150): it must not soft-drop.
 
-## Expected result
+## Notes
 
-**A. Tap (single step).** A short tap (~120 ms) of `S` / `ArrowDown` / gamepad D-pad down / gamepad A moves the piece **exactly one cell down immediately**, and no further.
+- The piece row is sampled per animation frame from the `?e2e=1` hook.
+- A downward step where both players move in the same sample is gravity, not input, and is not counted.
+- A piece is allowed to lock before each sub-case, so every step starts at the top of the board.
+- Asserted bands, frame-quantised: one cell per tap, 250–500 ms before the drop starts, then ≤ 200 ms per cell.
+- Root cause is out of scope for this asset.
 
-**B. Hold (initial delay, then rapid drop).** Holding a soft-drop input moves one cell at the press edge, provides no further movement for the spec's 350 ms, then repeats rapidly and drops to the bottom.
+## Can it fail
 
-`W` is bound to rotate CW in the spec (`W`/`X` = rotate CW for P1), so a `W` tap must rotate the piece, not move it down.
+`_sdTimer >= 350` → `>= 0` (repeats immediately) fails the hold-delay assertion. Restored afterwards.
 
-## Method
+## History
 
-A `CanvasRenderingContext2D.fillRect` hook logged every drawn board cell with `performance.now()`, giving a per-frame position timeline without blocking the game loop. Player cells were split by x (P1 x < 900, P2 x ≥ 900); a downward move is a +50 px change in the piece's top row. Both players share the gravity interval (~800 ms at level 1) and move in lockstep, so a step that moves **both** players is gravity and only a step on **one** player is attributed to its input. Gamepads mocked via `navigator.getGamepads()` (pad 0 → P1, pad 1 → P2).
-
-## Actual result
-
-### Sub-case A — tap: PASS (run 4)
-
-| Input | Press → first downward step | Move | Extra cells before next gravity step |
+| Run | Date | Result | Failure |
 |---|---|---|---|
-| P1 `S` | 4847 → 4906 (+59 ms) | one cell | none |
-| P2 `ArrowDown` | 5668 → 5722 (+54 ms) | one cell | none |
-| D-pad down (P1) | 6489 → 6555 (+66 ms) | one cell | none |
-| A (P1) | 7310 → 7356 (+46 ms) | one cell | none |
-| P1 `W` | 8130 → 8139: bbox 150×50 → 50×150 | rotation only | no downward move (correct per spec) |
+| 1 | 2026-11-23 | FAIL | a 100 ms tap moved one cell; hold repeated slowly (~100–225 ms/cell) |
+| 3 | 2026-11-23 | FAIL | tap sub-case added: 120 ms taps moved nothing; fixed by Developer in `e9ddd8c` |
 
-### Sub-case B — hold: PASS (run 4)
+The 350 ms value is the constant in `e9ddd8c`; an earlier 250 ms citation in this case was stale and is corrected.
 
-| Input | Press → first cell | Repeat starts | Gap after first cell | Then |
-|---|---|---|---|---|
-| P1 `S` | +35 ms | +335 ms | 300 ms | ~33 ms/cell to the floor |
-| P2 `ArrowDown` | +34 ms | +384 ms | 350 ms | ~33 ms/cell to the floor |
-| D-pad down (P1) | +66 ms | +416 ms | 350 ms | ~33 ms/cell to the floor |
-| A (P1) | +50 ms | +417 ms | 367 ms | ~33 ms/cell to the floor |
-
-The hold repeat uses a **350 ms** delay (`src/main.ts`: `if (p._sdTimer >= 350)`), matching the spec. Everything else matches: one cell at the press edge, no further movement until the delay elapses, then a rapid drop to the floor.
-
-## Status
-
-**PASS** (run 5 automated, manual run 4) — tap moves exactly one cell for keyboard and gamepad; `W` rotates per spec; hold waits 350 ms after the press-edge cell before the rapid drop, matching the spec.
-
-## Run history
-
-| Run | Date | Result | Notes |
-|---|---|---|---|
-| 1 | 2026-11-23 | FAIL | moved one cell on a 100 ms tap; slow repeat (~100–225 ms/cell) |
-| 2 | 2026-11-23 | PASS | first move at ≥250 ms; fast descent to the floor |
-| 3 | 2026-11-23 | FAIL | tap sub-case added: 120 ms taps moved nothing |
-| 4 | 2026-11-23 | PASS | tap moves one cell; hold delay 350 ms matches the updated spec |
-| 5 | 2026-11-24 | PASS (automated) | first automated run: tap = one cell on all four soft-drop inputs, hold delay 350–393 ms then 11–96 ms; `W` rotates |
-| 6 | 2026-11-24 | PASS (automated) | delay re-based on the press (358–377 ms) and simultaneous-gravity cells counted correctly: taps still one cell, rapid drop 12–53 ms per cell |
-
-## Verification
-
-Per-frame pixel analysis via a `fillRect` hook (piece/board cells only), timestamps relative to the input press. Raw timelines: `tests/reports/TC-005/run3-tap-timeline.txt` (before the fix) and `tests/reports/TC-005/run4-tap-hold-timeline.txt` (after). No image input used.
-
-## Notes / follow-up
-
-- Implemented by @Developer in `e9ddd8c` ("Soft drop tap moves one cell immediately") at Tester's request; 350 ms is the constant in that commit.
-- Spec was already at 350 ms (`10aa6a0`, "Initial press delay 350ms (DAS + soft drop)"); run 4's earlier 250 ms citation was stale and is corrected here.
-- Root cause is out of scope for this test asset.
-
-## Automation (run 6)
-
-`tests/e2e/tc-005-soft-drop-initial-delay.spec.ts`, run with `npm run test TC-005`. Per-frame samples of the hook give the piece row; a downward step where both players move in the same sample is gravity and is not counted, which is the same rule the manual run used. Inputs: P1 `S`, P2 `↓`, pad 0 D-pad down, pad 0 A. A piece is allowed to lock before each sub-case so every step starts at the top of the board.
-
-Tap: exactly one cell, no second cell before the next gravity step. Hold: press-edge cell, then a 250–500 ms gap, then gaps ≤ 200 ms to the floor.
-
-Mutation check: `_sdTimer >= 350` → `>= 0` (repeats immediately) fails the hold-delay assertion; restored afterwards.
-
-Evidence: `tests/reports/TC-005/run6-tap-hold-timeline.json`, `run6-after-softdrop.png`.
+Last automated run: run 6, PASS (2026-11-24) — evidence `tests/reports/TC-005/run6-tap-hold-timeline.json`.

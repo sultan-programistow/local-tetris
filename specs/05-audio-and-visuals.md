@@ -20,7 +20,7 @@
 - Single volume slider 0.0–1.0 (displayed as 0–100%), persisted to localStorage (`local-tetris:volume`).
 - 0.0 = silent (no separate mute toggle); icon in menu corner reflects state.
 - Adjustable via mouse drag/click, keyboard left/right or A/D (±0.05), gamepad D-pad/left stick left/right (±0.05).
-- Changes apply live; Enter/Space or A confirms and returns, B/Esc/Select backs out.
+- Changes apply live; Enter/Space or A confirms and returns, B/Esc backs out.
 - When adjusting the slider, play a short test sound (e.g., menu blip) so the player can judge the volume level.
 - Applies to all SFX.
 
