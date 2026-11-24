@@ -113,7 +113,9 @@ async function runCase(page: Page, c: Case) {
   } else {
     expect(steps.length, `${c.id}: several steps while held`).toBeGreaterThanOrEqual(5);
     expect(steps[0].t - t0, `${c.id}: first step at the press`).toBeLessThan(150);
-    const delay = steps[1].t - steps[0].t;
+    // Time the hold delay from the press, not from the first step: the first step is
+    // observed on a later frame, which would shorten the measured delay by that offset.
+    const delay = steps[1].t - t0;
     expect(delay, `${c.id}: hold delay ≥ ${DELAY_MIN} ms`).toBeGreaterThanOrEqual(DELAY_MIN);
     expect(delay, `${c.id}: hold delay ≤ ${DELAY_MAX} ms`).toBeLessThanOrEqual(DELAY_MAX);
     for (const g of gaps.slice(2)) {

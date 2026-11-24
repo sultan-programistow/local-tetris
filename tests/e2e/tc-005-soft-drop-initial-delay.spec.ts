@@ -33,7 +33,14 @@ const REPEAT_MAX = 200;
 
 type Step = { t: number; from: number; to: number };
 
-/** Downward steps of the driven player that are not shared gravity with the other player. */
+/**
+ * Downward steps of the driven player, with simultaneous gravity removed.
+ *
+ * Both players fall on the same gravity tick at level 1, so in one sample the driven
+ * player may move 2 rows: one gravity row (the other player moved 1) plus one input
+ * row. Counting "moved rows minus the other player's row" keeps that press-edge cell
+ * instead of discarding the whole sample as gravity.
+ */
 function downStepsOf(samples: { t: number; p: any }[], player: 0 | 1): Step[] {
   const out: Step[] = [];
   for (let i = 1; i < samples.length; i++) {
@@ -46,9 +53,12 @@ function downStepsOf(samples: { t: number; p: any }[], player: 0 | 1): Step[] {
     const other2 = b[1 - player];
     if (!me || !me2 || !other || !other2) continue;
     if (me.pieces !== me2.pieces) continue; // new piece
-    if (me2.y !== me.y + 1) continue;
-    if (other2.y !== other.y) continue; // both moved: gravity
-    out.push({ t: samples[i].t, from: me.y, to: me2.y });
+    const moved = me2.y - me.y;
+    const otherMoved = other2.y - other.y;
+    if (moved <= 0) continue;
+    const inputCells = moved - Math.min(otherMoved, 1);
+    if (inputCells <= 0) continue; // pure gravity, both players fell together
+    for (let k = 0; k < inputCells; k++) out.push({ t: samples[i].t, from: me2.y - k - 1, to: me2.y - k });
   }
   return out;
 }
@@ -121,8 +131,10 @@ test('TC-005 — tap drops one cell, hold waits ~350 ms then drops fast', async 
 
     const gaps = steps.map((s, i) => s.t - (i === 0 ? hold.t0 : steps[i - 1].t));
     expect(gaps[0], `${input.name} press-edge cell`).toBeLessThan(250);
-    expect(gaps[1], `${input.name} hold delay ≥ ${DELAY_MIN} ms`).toBeGreaterThanOrEqual(DELAY_MIN);
-    expect(gaps[1], `${input.name} hold delay ≤ ${DELAY_MAX} ms`).toBeLessThanOrEqual(DELAY_MAX);
+    // Delay measured from the press: the press-edge cell is seen on a later frame.
+    const holdDelay = steps[1].t - hold.t0;
+    expect(holdDelay, `${input.name} hold delay ≥ ${DELAY_MIN} ms`).toBeGreaterThanOrEqual(DELAY_MIN);
+    expect(holdDelay, `${input.name} hold delay ≤ ${DELAY_MAX} ms`).toBeLessThanOrEqual(DELAY_MAX);
     for (const g of gaps.slice(2)) {
       expect(g, `${input.name} rapid-drop gap`).toBeLessThanOrEqual(REPEAT_MAX);
     }
@@ -132,6 +144,7 @@ test('TC-005 — tap drops one cell, hold waits ~350 ms then drops fast', async 
       tapSteps: tap.steps.length,
       steps: steps.length,
       gaps: gaps.map((g) => Math.round(g)),
+      holdDelayMs: Math.round(steps[1].t - hold.t0),
     });
   }
 

@@ -1,0 +1,92 @@
+{
+  "case": "TC-005",
+  "runId": "run6",
+  "rows": [
+    {
+      "input": "P1 W",
+      "rotation": "0 -> 1"
+    },
+    {
+      "input": "P1 S",
+      "tapSteps": 1,
+      "steps": 15,
+      "gaps": [
+        4,
+        358,
+        13,
+        23,
+        12,
+        22,
+        12,
+        23,
+        17,
+        18,
+        15,
+        18,
+        15,
+        20,
+        14
+      ],
+      "holdDelayMs": 362
+    },
+    {
+      "input": "P2 ArrowDown",
+      "tapSteps": 1,
+      "steps": 13,
+      "gaps": [
+        18,
+        360,
+        36,
+        36,
+        49,
+        36,
+        51,
+        39,
+        37,
+        53,
+        35,
+        35,
+        41
+      ],
+      "holdDelayMs": 377
+    },
+    {
+      "input": "pad0 D-pad down",
+      "tapSteps": 1,
+      "steps": 11,
+      "gaps": [
+        10,
+        348,
+        27,
+        22,
+        37,
+        20,
+        32,
+        37,
+        18,
+        37,
+        24
+      ],
+      "holdDelayMs": 358
+    },
+    {
+      "input": "pad0 A",
+      "tapSteps": 1,
+      "steps": 10,
+      "gaps": [
+        24,
+        347,
+        33,
+        38,
+        34,
+        36,
+        36,
+        35,
+        36,
+        46
+      ],
+      "holdDelayMs": 371
+    }
+  ],
+  "at": "2026-11-24T18:11:30.047Z"
+}

@@ -2,7 +2,7 @@
 
 - **Area:** Menus / audio / gameplay SFX
 - **Priority:** Medium
-- **Date run:** 2026-11-24 (run 8: PASS, automated; manual run 7: PASS)
+- **Date run:** 2026-11-24 (run 9: PASS, automated; manual run 7: PASS)
 - **Automated:** `tests/e2e/tc-010-menu-navigation-sound.spec.ts` — `npm run test TC-010`
 - **Spec:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" — "Move (left/right)", "Soft drop", "Menu navigation (select/back)" are listed SFX events. The spec does not name the files; `src/audio.ts` maps the events to `move.ogg`, `soft_drop.ogg`, `menu_select.ogg`, `menu_back.ogg`.
 - **Spec pin:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" incl. "Menu enter submenu (opening Stats, Volume, or Controls)" and §"Sound Design (Panning)" @ `4d88126` (sound-file mapping and panning are implementation details read from `src/audio.ts`).
@@ -158,11 +158,11 @@ Method is the run 3 Web Audio hook; each step waits 250 ms and the E-group reads
 | 4 | 2026-11-24 | `cb935ae` | PASS | 19/19; adds A8 case-insensitive `w`/`s` navigation |
 | 5 | 2026-11-24 | `4d88126` | **FAIL** | Groups A–D 22/22 PASS incl. new submenu-entry A10/A11 (panning now 95%); Game Over group E: arrows, `w`/`s` and D-pad silent (6 genuine failures), `Esc`/`B` back play `menu_back`; E9 hover step invalid (see harness note) |
 | 6 | 2026-11-24 | `37a97fd` | **FAIL** | Group E: arrows, `w`/`s`, D-pad and back keys now pass; hover fix not in this build; E9 step invalid, so hover not validly exercised |
-| 7 | 2026-11-24 | `962dc56` | **PASS** |
-| 8 | 2026-11-24 | current | PASS (automated) | `npm run test TC-010`: groups A (12 steps), B (4), C (7), D1 and E (13) all pass; the asset check takes the file list from the built bundle |
-| 8 | 2026-11-24 | current | PASS (automated) | `npm run test TC-010`: groups A (12 steps), B (4), C (7), D1 and E (13) all pass; the asset check takes the file list from the built bundle | Group E 14/14 with the corrected hover step; hover plays `menu_select` only on a real selection change, clamped/no-change steps stay silent |
+| 7 | 2026-11-24 | `962dc56` | **PASS** | Group E 14/14 with the corrected hover step; hover plays `menu_select` only on a real selection change, clamped/no-change steps stay silent |
+| 8 | 2026-11-24 | current | PASS (automated) | `npm run test TC-010`: groups A (12 steps), B (4), C (7), D1 and E (13) all pass |
+| 9 | 2026-11-24 | current | PASS (automated) | re-run after the countdown sounds landed: the asset check now derives the 14 declared files from `dist/assets/*.js` and all pass; no other step changed |
 
-## Automation (run 8)
+## Automation (run 9)
 
 `tests/e2e/tc-010-menu-navigation-sound.spec.ts`, run with `npm run test TC-010`, three tests: groups A–D, the Game Over group E1–E12, and E13 (Game Over back via gamepad B, which needs its own match).
 
@@ -172,4 +172,4 @@ Keys are held for ~70 ms because a `keyboard.press()` can fall entirely between 
 
 Mutation check: muting the Game Over arrow selection sound fails E1; restored afterwards.
 
-Evidence: `tests/reports/TC-010/run8-audio-results.json`, `run8-gameover-audio-results.json`, `run8-gameover-B.json`, `run8-after-moves.png`.
+Evidence: `tests/reports/TC-010/run9-audio-results.json`, `run9-gameover-audio-results.json`, `run9-gameover-B.json`, `run9-after-moves.png`.

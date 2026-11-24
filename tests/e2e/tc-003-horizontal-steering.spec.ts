@@ -118,8 +118,10 @@ test('TC-003 — tap moves one column, hold waits ~350 ms then repeats ~75 ms', 
 
     const gaps: number[] = moves.map((m, i) => m.t - (i === 0 ? hold.t0 : moves[i - 1].t));
     expect(gaps[0], `${input.name} press-edge move`).toBeLessThan(200);
-    expect(gaps[1], `${input.name} DAS delay ≥ ${DELAY_MIN} ms`).toBeGreaterThanOrEqual(DELAY_MIN);
-    expect(gaps[1], `${input.name} DAS delay ≤ ${DELAY_MAX} ms`).toBeLessThanOrEqual(DELAY_MAX);
+    // Delay measured from the press: the press-edge move is seen on a later frame.
+    const dasDelay = moves[1].t - hold.t0;
+    expect(dasDelay, `${input.name} DAS delay ≥ ${DELAY_MIN} ms`).toBeGreaterThanOrEqual(DELAY_MIN);
+    expect(dasDelay, `${input.name} DAS delay ≤ ${DELAY_MAX} ms`).toBeLessThanOrEqual(DELAY_MAX);
     for (const g of gaps.slice(2)) {
       expect(g, `${input.name} ARR repeat gap`).toBeLessThanOrEqual(REPEAT_MAX);
     }
@@ -129,6 +131,7 @@ test('TC-003 — tap moves one column, hold waits ~350 ms then repeats ~75 ms', 
       tapMoves: tap.moves.length,
       moves: moves.length,
       gaps: gaps.map((g) => Math.round(g)),
+      dasDelayMs: Math.round(moves[1].t - hold.t0),
       columns: moves.map((m) => `${m.from}->${m.to}`),
     });
   }

@@ -55,8 +55,8 @@ Canvas pixel checks (no DOM content):
 |---|---|---|---|
 | 1 | 2026-11-23 | FAIL | checks 2, 3, 4, 5, 9 fail; checks 1, 6, 7, 8 pass |
 | 2 | 2026-11-23 | FAIL | after gamepad-Start fix `82b1d18`: checks 2 and 3 now pass; 4 and 5 still fail (`B`/`Select`); 8 and 9 not re-run |
-| 3 | 2026-11-23 | PASS | after `B`/`Select` fix `5bd2de2`
-| 4 | 2026-11-24 | PASS (automated) | `npm run test TC-006`: menu opens paused with "Resume" first, board frozen across 900 ms, Esc/Enter/A/B/Select/Start and mouse Resume all resume; Esc, B and Select return from Game Over to the Main Menu (three matches, 7.1–8.5 s each) |: checks 4, 5 and 9 pass; other checks not re-run |
+| 3 | 2026-11-23 | PASS | after `B`/`Select` fix `5bd2de2`: checks 4, 5 and 9 pass; other checks not re-run |
+| 4 | 2026-11-24 | PASS (automated) | `npm run test TC-006`: menu opens paused with "Resume" first, board frozen across 900 ms, Esc/Enter/A/B/Select/Start and mouse Resume all resume; Esc, B and Select return from Game Over to the Main Menu (three matches, 7.1–8.5 s each) |
 
 ## Evidence
 

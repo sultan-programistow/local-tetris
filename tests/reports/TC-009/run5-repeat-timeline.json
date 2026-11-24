@@ -1,0 +1,377 @@
+{
+  "case": "TC-009",
+  "runId": "run5",
+  "rows": [
+    {
+      "id": "A1",
+      "path": "gamepad",
+      "hold": 120,
+      "steps": 1,
+      "gaps": [
+        16
+      ],
+      "deltas": [
+        -5
+      ]
+    },
+    {
+      "id": "A2",
+      "path": "gamepad",
+      "hold": 120,
+      "steps": 1,
+      "gaps": [
+        6
+      ],
+      "deltas": [
+        5
+      ]
+    },
+    {
+      "id": "A3",
+      "path": "gamepad",
+      "hold": 120,
+      "steps": 1,
+      "gaps": [
+        38
+      ],
+      "deltas": [
+        -5
+      ]
+    },
+    {
+      "id": "A4",
+      "path": "gamepad",
+      "hold": 120,
+      "steps": 1,
+      "gaps": [
+        40
+      ],
+      "deltas": [
+        5
+      ]
+    },
+    {
+      "id": "B1",
+      "path": "gamepad",
+      "hold": 250,
+      "steps": 1,
+      "gaps": [
+        12
+      ],
+      "deltas": [
+        -5
+      ]
+    },
+    {
+      "id": "B2",
+      "path": "gamepad",
+      "hold": 250,
+      "steps": 1,
+      "gaps": [
+        24
+      ],
+      "deltas": [
+        5
+      ]
+    },
+    {
+      "id": "C1",
+      "path": "gamepad",
+      "hold": 650,
+      "steps": 7,
+      "gaps": [
+        7,
+        324,
+        63,
+        45,
+        45,
+        56,
+        91
+      ],
+      "deltas": [
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5
+      ]
+    },
+    {
+      "id": "C2",
+      "path": "gamepad",
+      "hold": 650,
+      "steps": 7,
+      "gaps": [
+        17,
+        296,
+        44,
+        65,
+        61,
+        72,
+        53
+      ],
+      "deltas": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "id": "C3",
+      "path": "gamepad",
+      "hold": 650,
+      "steps": 8,
+      "gaps": [
+        35,
+        299,
+        47,
+        50,
+        50,
+        50,
+        67,
+        50
+      ],
+      "deltas": [
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5
+      ]
+    },
+    {
+      "id": "C4",
+      "path": "gamepad",
+      "hold": 650,
+      "steps": 7,
+      "gaps": [
+        5,
+        314,
+        71,
+        76,
+        77,
+        46,
+        45
+      ],
+      "deltas": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "id": "D1/D2",
+      "path": "gamepad",
+      "hold": 250,
+      "steps": 0,
+      "gaps": []
+    },
+    {
+      "id": "E1",
+      "path": "keyboard",
+      "hold": 120,
+      "steps": 1,
+      "gaps": [
+        17
+      ],
+      "deltas": [
+        -5
+      ]
+    },
+    {
+      "id": "E2",
+      "path": "keyboard",
+      "hold": 120,
+      "steps": 1,
+      "gaps": [
+        7
+      ],
+      "deltas": [
+        5
+      ]
+    },
+    {
+      "id": "E3",
+      "path": "keyboard",
+      "hold": 120,
+      "steps": 1,
+      "gaps": [
+        6
+      ],
+      "deltas": [
+        -5
+      ]
+    },
+    {
+      "id": "E4",
+      "path": "keyboard",
+      "hold": 120,
+      "steps": 1,
+      "gaps": [
+        24
+      ],
+      "deltas": [
+        5
+      ]
+    },
+    {
+      "id": "F1",
+      "path": "keyboard",
+      "hold": 250,
+      "steps": 1,
+      "gaps": [
+        13
+      ],
+      "deltas": [
+        -5
+      ]
+    },
+    {
+      "id": "F2",
+      "path": "keyboard",
+      "hold": 250,
+      "steps": 1,
+      "gaps": [
+        3
+      ],
+      "deltas": [
+        5
+      ]
+    },
+    {
+      "id": "G1",
+      "path": "keyboard",
+      "hold": 650,
+      "steps": 7,
+      "gaps": [
+        20,
+        292,
+        75,
+        56,
+        64,
+        53,
+        83
+      ],
+      "deltas": [
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5
+      ]
+    },
+    {
+      "id": "G2",
+      "path": "keyboard",
+      "hold": 650,
+      "steps": 8,
+      "gaps": [
+        10,
+        288,
+        44,
+        43,
+        64,
+        45,
+        44,
+        64
+      ],
+      "deltas": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "id": "G3",
+      "path": "keyboard",
+      "hold": 650,
+      "steps": 9,
+      "gaps": [
+        12,
+        278,
+        61,
+        63,
+        44,
+        44,
+        49,
+        61,
+        38
+      ],
+      "deltas": [
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5,
+        -5
+      ]
+    },
+    {
+      "id": "G4",
+      "path": "keyboard",
+      "hold": 650,
+      "steps": 8,
+      "gaps": [
+        23,
+        274,
+        62,
+        41,
+        79,
+        62,
+        61,
+        59
+      ],
+      "deltas": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "id": "H1",
+      "path": "keyboard",
+      "hold": 650,
+      "steps": 7,
+      "gaps": [
+        14,
+        286,
+        57,
+        74,
+        64,
+        82,
+        59
+      ],
+      "plainHoldSteps": 7,
+      "note": "OS repeat 500/33"
+    }
+  ],
+  "at": "2026-11-24T18:10:45.838Z"
+}

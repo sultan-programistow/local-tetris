@@ -42,8 +42,8 @@ Viewport: 1781×1103. Canvas displayed: 1781.0×1001.8 (ends at y≈1052). Board
 |---|---|---|---|
 | 1 | 2026-11-23 | PASS | cell = 24 (board 240×480) — fit inside the viewport |
 | 2 | 2026-11-23 | FAIL | cell changed to 54 (board 540×1080) — bottom extended past the canvas/viewport |
-| 3 | 2026-11-23 | PASS | cell 50, origin y=40
-| 4 | 2026-11-24 | PASS (automated) | `npm run test TC-004`: border measured at 199–700 × 39–1040 (P1) and 1219–1720 × 39–1040 (P2) at both 1600×900 and 1366×768; both inside canvas and viewport | (board 500×1000, ends y=1040) — fits; border drawn |
+| 3 | 2026-11-23 | PASS | cell 50, origin y=40 (board 500×1000, ends y=1040) — fits; border drawn |
+| 4 | 2026-11-24 | PASS (automated) | `npm run test TC-004`: border measured at 199–700 × 39–1040 (P1) and 1219–1720 × 39–1040 (P2) at both 1600×900 and 1366×768; both inside canvas and viewport |
 
 ## Verification
 

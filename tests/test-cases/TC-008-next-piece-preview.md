@@ -72,7 +72,6 @@ Odd dimensions sit one cell off centre on one axis (floor rounding). The spec's 
 |---|---|---|---|
 | 1 | 2026-11-23 | PASS | 7 spawns, one match; first-frame presence and box geometry checked |
 | 2 | 2026-11-24 | PASS (automated) | `npm run test TC-008`: 8 spawns in match 1 and 6 in match 2; every preview equalled the piece that spawned next on both boards, shapes in spawn orientation, 6 of 7 tetrominoes seen |
-| 2 | 2026-11-24 | PASS (automated) | `npm run test TC-008`: 8 spawns in match 1 and 6 in match 2; every preview equalled the piece that spawned next on both boards, shapes in spawn orientation, 6 of 7 tetrominoes seen |
 
 ## Evidence
 

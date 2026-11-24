@@ -2,7 +2,7 @@
 
 - **Area:** Gameplay / input
 - **Priority:** High
-- **Date run:** 2026-11-24 (run 11: PASS, automated; manual run 10: PASS)
+- **Date run:** 2026-11-24 (run 12: PASS, automated; manual run 10: PASS)
 - **Environment:** Chromium (OpenBot browser), production build served statically at `http://127.0.0.1:4174` (`vite preview`, no HMR), build from `3798531`, canvas 1920×1080, cell 50 px, P1 board origin (200,40), P2 origin (1220,40)
 - **Automated:** `tests/e2e/tc-003-horizontal-steering.spec.ts` — `npm run test TC-003`
 - **Spec:** `specs/03-input-and-controls.md` → Keyboard, Gamepad, DAS (initial delay 350 ms, repeat 75 ms, keyboard and gamepad)
@@ -72,8 +72,9 @@ Left and right now behave the same, for keyboard and gamepad. (Later moves end a
 | 7 | 2026-11-23 | FAIL | after left-DAS fix `4a16841`: left identical to run 6; right passing |
 | 8 | 2026-11-23 | FAIL | after key-edge fix `557f95b`: left identical; right passing |
 | 9 | 2026-11-23 | FAIL | after gamepad-timer fix `ff18d12`: gamepad-left passes; keyboard-left still ~167 ms |
-| 10 | 2026-11-23 | PASS |
-| 11 | 2026-11-24 | PASS (automated) | `npm run test TC-003`: tap = exactly one column on all 10 paths; hold delay 312–385 ms, then repeats every 73–114 ms (spec 350/75, frame-quantised) | after dead-loop removal `3798531`: left and right both ~350 ms then ~75 ms, keyboard and gamepad |
+| 10 | 2026-11-23 | PASS | after dead-loop removal `3798531`: left and right both ~350 ms then ~75 ms, keyboard and gamepad |
+| 11 | 2026-11-24 | PASS (automated) | first automated run: tap = one column on all 10 paths, hold delay 312–385 ms then 73–114 ms |
+| 12 | 2026-11-24 | PASS (automated) | timing re-based on the press: DAS delay 334–396 ms, repeats 72–110 ms across all 10 paths (spec 350/75, frame-quantised) |
 
 ## Verification
 
@@ -85,7 +86,7 @@ Per-frame analysis via a `fillRect` hook, current piece = last four cell fills p
 - Runs 6–9 re-tested DAS fixes (`8c932b1`, `4a16841`, `557f95b`, `ff18d12`); the remaining keyboard-left defect was resolved in `3798531`.
 - Root cause is out of scope for this test asset.
 
-## Automation (run 11)
+## Automation (run 12)
 
 `tests/e2e/tc-003-horizontal-steering.spec.ts`, run with `npm run test TC-003` on the production build at 1600×900. The current piece's column is sampled once per animation frame from the read-only `?e2e=1` hook, so each column change is timed without a `fillRect` hook or a fixed sleep. Inputs: P1 `a`/`d`, P2 `←`/`→`, D-pad left/right on pads 0 and 1, and pad 0's left stick.
 
@@ -93,4 +94,4 @@ Tap: exactly one move, no second move in the 400 ms after release. Hold: press-e
 
 Mutation check: setting the keyboard DAS threshold to 0 (repeat immediately) fails the hold-delay assertion; restored afterwards.
 
-Evidence: `tests/reports/TC-003/run11-das-timeline.json` (per-input tap count, gaps, columns), `run11-after-das.png`.
+Evidence: `tests/reports/TC-003/run12-das-timeline.json` (per-input tap count, gaps, columns, `dasDelayMs`), `run12-after-das.png`.

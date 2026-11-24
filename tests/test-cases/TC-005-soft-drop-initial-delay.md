@@ -2,7 +2,7 @@
 
 - **Area:** Gameplay / input
 - **Priority:** High
-- **Date run:** 2026-11-24 (run 5: PASS, automated; manual run 4: PASS)
+- **Date run:** 2026-11-24 (run 6: PASS, automated; manual run 4: PASS)
 - **Environment:** Chromium (OpenBot browser), production build served statically at `http://127.0.0.1:4173` (`vite preview`, no HMR), canvas 1920×1080, cell 50 px
 - **Automated:** `tests/e2e/tc-005-soft-drop-initial-delay.spec.ts` — `npm run test TC-005`
 - **Spec:** `specs/03-input-and-controls.md` → "Soft Drop": first cell 350 ms, then 10 ms repeat (effectively drops to the bottom); keyboard `S`/`↓`, gamepad D-pad down / A.
@@ -60,7 +60,8 @@ The hold repeat uses a **350 ms** delay (`src/main.ts`: `if (p._sdTimer >= 350)`
 | 2 | 2026-11-23 | PASS | first move at ≥250 ms; fast descent to the floor |
 | 3 | 2026-11-23 | FAIL | tap sub-case added: 120 ms taps moved nothing |
 | 4 | 2026-11-23 | PASS | tap moves one cell; hold delay 350 ms matches the updated spec |
-| 5 | 2026-11-24 | PASS (automated) | `npm run test TC-005`: tap = exactly one cell on all four soft-drop inputs; hold delay 350–393 ms, then 11–96 ms per cell; `W` rotates (0 → 1) and does not drop |
+| 5 | 2026-11-24 | PASS (automated) | first automated run: tap = one cell on all four soft-drop inputs, hold delay 350–393 ms then 11–96 ms; `W` rotates |
+| 6 | 2026-11-24 | PASS (automated) | delay re-based on the press (358–377 ms) and simultaneous-gravity cells counted correctly: taps still one cell, rapid drop 12–53 ms per cell |
 
 ## Verification
 
@@ -72,7 +73,7 @@ Per-frame pixel analysis via a `fillRect` hook (piece/board cells only), timesta
 - Spec was already at 350 ms (`10aa6a0`, "Initial press delay 350ms (DAS + soft drop)"); run 4's earlier 250 ms citation was stale and is corrected here.
 - Root cause is out of scope for this test asset.
 
-## Automation (run 5)
+## Automation (run 6)
 
 `tests/e2e/tc-005-soft-drop-initial-delay.spec.ts`, run with `npm run test TC-005`. Per-frame samples of the hook give the piece row; a downward step where both players move in the same sample is gravity and is not counted, which is the same rule the manual run used. Inputs: P1 `S`, P2 `↓`, pad 0 D-pad down, pad 0 A. A piece is allowed to lock before each sub-case so every step starts at the top of the board.
 
@@ -80,4 +81,4 @@ Tap: exactly one cell, no second cell before the next gravity step. Hold: press-
 
 Mutation check: `_sdTimer >= 350` → `>= 0` (repeats immediately) fails the hold-delay assertion; restored afterwards.
 
-Evidence: `tests/reports/TC-005/run5-tap-hold-timeline.json`, `run5-after-softdrop.png`.
+Evidence: `tests/reports/TC-005/run6-tap-hold-timeline.json`, `run6-after-softdrop.png`.

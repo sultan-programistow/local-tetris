@@ -43,7 +43,10 @@ npm run test           # every automated case
 - Screenshots and probe values land in `reports/TC-###/runN-*`. Set `TC_RUN_ID` to name the run explicitly (CI builds).
 - The markdown case stays the source of truth; each spec points to its case file.
 - Cases without a spec exit with code 3 rather than passing silently.
-- `?e2e=1` enables a read-only state hook (`window.__tetris`: `screen`, `menuIndex`, `frame`); `harness.spec.ts` checks it stays absent without the flag.
+- `?e2e=1` enables a read-only state hook (`window.__tetris`): `screen`, `menuIndex`, `frame`, `menuItems`, `gameOverIndex`, `volume`, `status`, `countdownMs`, and `players` (x, y, type, rotation, next, score, pieces, over as plain copies). `harness.spec.ts` checks it stays absent without the flag and cannot be written.
+- Shared helpers live in `tests/e2e/helpers/`: `hook.ts` (typed state reader), `app.ts` (match start, pause, game over, gamepad mock, per-frame trace, key/pad taps), `pieces.ts` (piece driving, preview box reader), `audio.ts` (Web Audio hook), `canvas.ts` (pixel probes, logical→CSS).
+- Keys and gamepad buttons are pressed with a hold (~55–150 ms) rather than `press()`/a one-frame pulse: the game polls input once per animation frame, so a shorter press can be missed entirely.
+- Sound asset checks derive the expected file list from the built bundle (`sounds/<name>.ogg` in `dist/assets/*.js`), so a newly added sound is checked rather than quietly ignored.
 
 ## CI
 
