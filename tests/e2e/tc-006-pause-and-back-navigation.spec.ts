@@ -4,7 +4,8 @@
  *
  * Opening the menu over a live match pauses it (pieces frozen), the first item reads
  * "Resume", and every back path resumes: keyboard Esc/Enter on Resume, gamepad B,
- * Select, Start and A. Game Over returns to the Main Menu on Esc, B and Select.
+ * Start and A. Gamepad Select does nothing (spec 2026-11-24). Game Over returns to
+ * the Main Menu on Esc and B; Select does nothing there too.
  */
 import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
@@ -92,7 +93,7 @@ test('TC-006 — Esc pauses the match and every keyboard path resumes it', async
   await writeReport({});
 });
 
-test('TC-006 — gamepad Start pauses, B and Select resume', async ({ page }) => {
+test('TC-006 — gamepad Start pauses, B resumes, Select does nothing', async ({ page }) => {
   test.setTimeout(60_000);
   await installGamepads(page);
   await page.goto('/?e2e=1');
@@ -112,12 +113,20 @@ test('TC-006 — gamepad Start pauses, B and Select resume', async ({ page }) =>
   await expect.poll(async () => (await game(page)).screen).toBe('play');
   await snap(page, '4', 'gamepad B on the paused menu resumes play');
 
-  // 5 — Select resumes.
+  // 5 — Select does nothing: the paused menu stays open, same row, game frozen.
   await tapPad(page, 0, { buttons: [BTN.START] }, 150);
   await expect.poll(async () => (await game(page)).screen).toBe('menu');
+  const beforeSelect = await game(page);
   await tapPad(page, 0, { buttons: [BTN.SELECT] }, 150);
+  await page.waitForTimeout(250);
+  s = await snap(page, '5', 'gamepad Select on the paused menu does nothing');
+  expect(s.screen).toBe('menu');
+  expect(s.status).toBe('paused');
+  expect(s.menuIndex).toBe(beforeSelect.menuIndex);
+  expect(s.players).toEqual(beforeSelect.players);
+  // Leave play state for the next step via the one remaining back path.
+  await tapPad(page, 0, { buttons: [BTN.B] }, 150);
   await expect.poll(async () => (await game(page)).screen).toBe('play');
-  await snap(page, '5', 'gamepad Select on the paused menu resumes play');
 
   // 2 again — Start on "Resume" (after it opened the menu and was released) resumes.
   await tapPad(page, 0, { buttons: [BTN.START] }, 150);
@@ -129,7 +138,7 @@ test('TC-006 — gamepad Start pauses, B and Select resume', async ({ page }) =>
   await writeReport({});
 });
 
-test('TC-006 — Game Over returns to the Main Menu on Esc, B and Select', async ({ page }) => {
+test('TC-006 — Game Over returns to the Main Menu on Esc and B; Select does nothing', async ({ page }) => {
   test.setTimeout(120_000);
   await installGamepads(page);
 
@@ -156,14 +165,21 @@ test('TC-006 — Game Over returns to the Main Menu on Esc, B and Select', async
   await expect.poll(async () => (await game(page)).screen).toBe('menu');
   await snap(page, '9', 'gamepad B on Game Over opens the Main Menu');
 
-  // 9 — Select on Game Over -> Main Menu.
+  // 9b — Select on Game Over does nothing: still on Game Over, same selection.
   await page.keyboard.press('Enter');
   await expect.poll(async () => (await game(page)).screen, { timeout: 15_000 }).toBe('play');
   const g3 = await reachGameOver(page);
   timings.push(g3.ms);
+  const goIndex = (await game(page)).gameOverIndex;
   await tapPad(page, 0, { buttons: [BTN.SELECT] }, 150);
+  await page.waitForTimeout(250);
+  const s = await snap(page, '9b', 'gamepad Select on Game Over does nothing');
+  expect(s.screen).toBe('gameover');
+  expect(s.gameOverIndex).toBe(goIndex);
+  await page.screenshot({ path: `${REPORTS}/${RUN}-gameover-select.png` });
+  // Middle button path out for the final screenshot.
+  await page.keyboard.press('Escape');
   await expect.poll(async () => (await game(page)).screen).toBe('menu');
-  await snap(page, '9b', 'gamepad Select on Game Over opens the Main Menu');
   await page.screenshot({ path: `${REPORTS}/${RUN}-back-at-menu.png` });
 
   await writeReport({ gameOverMs: timings, gameOverSelectionAtEntry: selectedAtStart });

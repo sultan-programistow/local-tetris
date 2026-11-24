@@ -4,7 +4,8 @@
  *
  * Opening the menu over a live match (or the countdown) plays `pause` exactly once,
  * and every resume path the app offers plays `unpause` exactly once:
- * keyboard Esc / Enter / Space, gamepad Start / A / B / Select, and a mouse click.
+ * keyboard Esc / Enter / Space, gamepad Start / A / B, and a mouse click on Resume.
+ * Gamepad Select does nothing (spec 2026-11-24): it must stay silent and not resume.
  */
 import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
@@ -116,14 +117,17 @@ test('TC-013 — pause and unpause sounds on every input path', async ({ page })
   expect(s.screen).toBe('play');
   record('B5', ['unpause'], names(ev), s.screen);
 
-  // B6 — gamepad Select on the paused menu.
+  // B6 — gamepad Select on the paused menu: no longer a back path, so no unpause.
   await tapPad(page, 0, { buttons: [BTN.START] }, 150);
   await expect.poll(async () => (await game(page)).screen).toBe('menu');
   ev = await step(page, () => tapPad(page, 0, { buttons: [BTN.SELECT] }, 150), 350);
   s = await state(page);
-  expect(names(ev), 'B6 pad Select resume').toEqual(['unpause']);
-  expect(s.screen).toBe('play');
-  record('B6', ['unpause'], names(ev), s.screen);
+  expect(names(ev), 'B6 pad Select is inert').toEqual([]);
+  expect(s).toMatchObject({ screen: 'menu', status: 'paused' });
+  record('B6', [], names(ev), s.screen);
+  // Resume so the next group starts from play.
+  await page.keyboard.press('Escape');
+  await expect.poll(async () => (await game(page)).screen).toBe('play');
 
   // A4 — gamepad 1 Start in play.
   ev = await step(page, () => tapPad(page, 1, { buttons: [BTN.START] }, 150), 350);
