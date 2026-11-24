@@ -1,0 +1,311 @@
+{
+ "build": "4d88126",
+ "assets": [
+  {
+   "name": "move",
+   "ok": true,
+   "dur": 0.042,
+   "tagged": "move"
+  },
+  {
+   "name": "rotate",
+   "ok": true,
+   "dur": 0.617,
+   "tagged": "rotate"
+  },
+  {
+   "name": "soft_drop",
+   "ok": true,
+   "dur": 0.129,
+   "tagged": "soft_drop"
+  },
+  {
+   "name": "piece_lock",
+   "ok": true,
+   "dur": 0.292,
+   "tagged": "piece_lock"
+  },
+  {
+   "name": "line_clear",
+   "ok": true,
+   "dur": 0.559,
+   "tagged": "line_clear"
+  },
+  {
+   "name": "game_over",
+   "ok": true,
+   "dur": 0.17,
+   "tagged": "game_over"
+  },
+  {
+   "name": "pause",
+   "ok": true,
+   "dur": 0.268,
+   "tagged": "pause"
+  },
+  {
+   "name": "unpause",
+   "ok": true,
+   "dur": 0.258,
+   "tagged": "unpause"
+  },
+  {
+   "name": "menu_select",
+   "ok": true,
+   "dur": 0.059,
+   "tagged": "menu_select"
+  },
+  {
+   "name": "menu_back",
+   "ok": true,
+   "dur": 0.065,
+   "tagged": "menu_back"
+  }
+ ],
+ "results": [
+  {
+   "step": "E1 ArrowDown Restart -> Stats",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [],
+   "selection_after": "Stats",
+   "pans": [],
+   "status": "FAIL"
+  },
+  {
+   "step": "E2 ArrowDown Stats -> Main Menu",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [],
+   "selection_after": "Main Menu",
+   "pans": [],
+   "status": "FAIL"
+  },
+  {
+   "step": "E3 ArrowDown at Main Menu (clamped)",
+   "expected": [],
+   "got": [],
+   "selection_after": "Main Menu",
+   "pans": [],
+   "status": "PASS"
+  },
+  {
+   "step": "E4 ArrowUp Main Menu -> Stats",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [],
+   "selection_after": "Stats",
+   "pans": [],
+   "status": "FAIL"
+  },
+  {
+   "step": "E5 ArrowUp Stats -> Restart",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [],
+   "selection_after": "Restart",
+   "pans": [],
+   "status": "FAIL"
+  },
+  {
+   "step": "E6 ArrowUp at Restart (clamped)",
+   "expected": [],
+   "got": [],
+   "selection_after": "Restart",
+   "pans": [],
+   "status": "PASS"
+  },
+  {
+   "step": "E7 s then w (case-insensitive)",
+   "expected": [
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "got": [],
+   "selection_after": "Restart",
+   "pans": [],
+   "status": "FAIL"
+  },
+  {
+   "step": "E8 D-pad down x2, up x1",
+   "expected": [
+    "menu_select.ogg",
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "got": [],
+   "selection_after": "Stats",
+   "pans": [],
+   "status": "FAIL"
+  },
+  {
+   "step": "E9 hover Restart -> Stats",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [],
+   "selection_after": "Stats",
+   "pans": [],
+   "status": "FAIL"
+  },
+  {
+   "step": "E10 hover same item again",
+   "expected": [],
+   "got": [],
+   "selection_after": "Stats",
+   "pans": [],
+   "status": "PASS"
+  },
+  {
+   "step": "E11 hover empty area",
+   "expected": [],
+   "got": [],
+   "selection_after": "Stats",
+   "pans": [],
+   "status": "PASS"
+  },
+  {
+   "step": "E13 gamepad B -> Main Menu",
+   "expected": [
+    "menu_back.ogg"
+   ],
+   "got": [
+    "menu_back.ogg"
+   ],
+   "selection_after": null,
+   "pans": [
+    0
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "E12 Escape -> Main Menu",
+   "expected": [
+    "menu_back.ogg"
+   ],
+   "got": [
+    "menu_back.ogg"
+   ],
+   "selection_after": null,
+   "pans": [
+    0
+   ],
+   "status": "PASS"
+  },
+  {
+   "step": "E14 pan values of E1-E13 menu sounds (recorded only, not scored)",
+   "expected": "all 0",
+   "got": [
+    0,
+    0
+   ],
+   "status": "INFO"
+  }
+ ],
+ "trace": [
+  {
+   "event": "reach_gameover",
+   "tag": "session1",
+   "ok": true
+  },
+  {
+   "event": "baseline_selection",
+   "value": "Restart"
+  },
+  {
+   "event": "after E1",
+   "selection": "Stats"
+  },
+  {
+   "event": "after E13",
+   "texts": [
+    {
+     "text": "LOCAL TETRIS",
+     "x": 960,
+     "y": 200,
+     "fill": "#ffffff"
+    },
+    {
+     "text": "Start",
+     "x": 960,
+     "y": 400,
+     "fill": "#00ff00"
+    },
+    {
+     "text": "Stats",
+     "x": 960,
+     "y": 460,
+     "fill": "#aaaaaa"
+    },
+    {
+     "text": "Volume",
+     "x": 960,
+     "y": 520,
+     "fill": "#aaaaaa"
+    },
+    {
+     "text": "Controls",
+     "x": 960,
+     "y": 580,
+     "fill": "#aaaaaa"
+    },
+    {
+     "text": "4d88126",
+     "x": 1910,
+     "y": 1070,
+     "fill": "rgba(255, 255, 255, 0.35)"
+    }
+   ]
+  },
+  {
+   "event": "reach_gameover",
+   "tag": "session2",
+   "ok": true
+  },
+  {
+   "event": "after E12",
+   "texts": [
+    {
+     "text": "LOCAL TETRIS",
+     "x": 960,
+     "y": 200,
+     "fill": "#ffffff"
+    },
+    {
+     "text": "Start",
+     "x": 960,
+     "y": 400,
+     "fill": "#00ff00"
+    },
+    {
+     "text": "Stats",
+     "x": 960,
+     "y": 460,
+     "fill": "#aaaaaa"
+    },
+    {
+     "text": "Volume",
+     "x": 960,
+     "y": 520,
+     "fill": "#aaaaaa"
+    },
+    {
+     "text": "Controls",
+     "x": 960,
+     "y": 580,
+     "fill": "#aaaaaa"
+    },
+    {
+     "text": "4d88126",
+     "x": 1910,
+     "y": 1070,
+     "fill": "rgba(255, 255, 255, 0.35)"
+    }
+   ]
+  }
+ ]
+}

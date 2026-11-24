@@ -1,0 +1,100 @@
+{
+  "enter_Stats_keyboard": [
+    [
+      "menu_select",
+      0
+    ]
+  ],
+  "enter_Volume_keyboard": [
+    [
+      "menu_select",
+      0
+    ]
+  ],
+  "enter_Controls_keyboard": [
+    [
+      "menu_select",
+      0
+    ]
+  ],
+  "enter_Stats_gamepad": [
+    [
+      "menu_select",
+      0
+    ]
+  ],
+  "P1_move_a": [
+    [
+      "move",
+      -0.95
+    ]
+  ],
+  "P1_rotate_x": [
+    [
+      "rotate",
+      -0.95
+    ]
+  ],
+  "P1_soft_s": [
+    [
+      "soft_drop",
+      -0.95
+    ]
+  ],
+  "P2_move_left": [
+    [
+      "move",
+      0.95
+    ]
+  ],
+  "P2_rotate_]": [
+    [
+      "rotate",
+      0.95
+    ]
+  ],
+  "P2_soft_down": [
+    [
+      "soft_drop",
+      0.95
+    ]
+  ],
+  "locks": [
+    [
+      "soft_drop",
+      -0.95
+    ],
+    [
+      "soft_drop",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ]
+  ],
+  "pause": [
+    [
+      "pause",
+      0
+    ]
+  ],
+  "unpause": [
+    [
+      "unpause",
+      0
+    ]
+  ]
+}

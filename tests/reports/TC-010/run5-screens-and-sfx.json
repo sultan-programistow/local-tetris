@@ -123,10 +123,10 @@
       "actual": [
         [
           "move",
-          -0.85
+          -0.95
         ]
       ],
-      "pass": true
+      "pass": false
     },
     {
       "step": "C2 P1 d move",
@@ -139,10 +139,10 @@
       "actual": [
         [
           "move",
-          -0.85
+          -0.95
         ]
       ],
-      "pass": true
+      "pass": false
     },
     {
       "step": "C5 P2 ArrowLeft",
@@ -155,10 +155,10 @@
       "actual": [
         [
           "move",
-          0.85
+          0.95
         ]
       ],
-      "pass": true
+      "pass": false
     },
     {
       "step": "C6 P2 ArrowRight",
@@ -171,10 +171,10 @@
       "actual": [
         [
           "move",
-          0.85
+          0.95
         ]
       ],
-      "pass": true
+      "pass": false
     },
     {
       "step": "R1 P1 x rotate CW",
@@ -187,10 +187,10 @@
       "actual": [
         [
           "rotate",
-          -0.85
+          -0.95
         ]
       ],
-      "pass": true
+      "pass": false
     },
     {
       "step": "R2 P2 ] rotate CW",
@@ -203,10 +203,10 @@
       "actual": [
         [
           "rotate",
-          0.85
+          0.95
         ]
       ],
-      "pass": true
+      "pass": false
     },
     {
       "step": "C3 P1 s soft drop",
@@ -219,10 +219,10 @@
       "actual": [
         [
           "soft_drop",
-          -0.85
+          -0.95
         ]
       ],
-      "pass": true
+      "pass": false
     },
     {
       "step": "C4 P2 ArrowDown soft drop",
@@ -235,31 +235,37 @@
       "actual": [
         [
           "soft_drop",
-          0.85
+          0.95
         ]
       ],
-      "pass": true
+      "pass": false
     }
   ],
   "screens": {},
   "lock_window": [
     {
       "name": "soft_drop",
-      "pan": -0.8500000238418579,
-      "t": 18821,
-      "ctxT": 18.699
+      "pan": -0.949999988079071,
+      "t": 18123,
+      "ctxT": 18.069
     },
     {
       "name": "piece_lock",
-      "pan": -0.8500000238418579,
-      "t": 19877,
-      "ctxT": 19.755
+      "pan": -0.949999988079071,
+      "t": 19088,
+      "ctxT": 19.04
     },
     {
       "name": "piece_lock",
-      "pan": -0.8500000238418579,
-      "t": 20767,
-      "ctxT": 20.64
+      "pan": -0.949999988079071,
+      "t": 19926,
+      "ctxT": 19.883
+    },
+    {
+      "name": "piece_lock",
+      "pan": -0.949999988079071,
+      "t": 20794,
+      "ctxT": 20.747
     }
   ]
 }

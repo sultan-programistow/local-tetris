@@ -1,0 +1,260 @@
+{
+  "steps": [
+    {
+      "step": "E1 Down Restart->Stats",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [],
+      "pass": false
+    },
+    {
+      "step": "E2 Down Stats->MainMenu",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [],
+      "pass": false
+    },
+    {
+      "step": "E3 Down on MainMenu (clamped)",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "step": "E4 Up MainMenu->Stats",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [],
+      "pass": false
+    },
+    {
+      "step": "E5 Up Stats->Restart",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [],
+      "pass": false
+    },
+    {
+      "step": "E6 Up on Restart (clamped)",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "step": "E7a s (case-insensitive down)",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [],
+      "pass": false
+    },
+    {
+      "step": "E7b w (case-insensitive up)",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [],
+      "pass": false
+    },
+    {
+      "step": "E8 D-pad down x2, up x1",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ],
+        [
+          "menu_select",
+          0.0
+        ],
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [],
+      "pass": null
+    },
+    {
+      "step": "E9 hover Restart->Stats",
+      "expected": [
+        [
+          "menu_select",
+          0.0
+        ]
+      ],
+      "actual": [],
+      "pass": false
+    },
+    {
+      "step": "E10 hover same item",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "step": "E11 hover empty below",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "step": "E13 gamepad B -> Main Menu",
+      "expected": [
+        [
+          "menu_back",
+          0.0
+        ]
+      ],
+      "actual": [
+        [
+          "menu_back",
+          0
+        ]
+      ],
+      "pass": null
+    },
+    {
+      "step": "E12 Esc -> Main Menu",
+      "expected": [
+        [
+          "menu_back",
+          0.0
+        ]
+      ],
+      "actual": [
+        [
+          "menu_back",
+          0
+        ]
+      ],
+      "pass": null
+    }
+  ],
+  "reached_gameover": true,
+  "gameover_log": [
+    [
+      "soft_drop",
+      -0.95
+    ],
+    [
+      "soft_drop",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "piece_lock",
+      -0.95
+    ],
+    [
+      "piece_lock",
+      0.95
+    ],
+    [
+      "game_over",
+      0
+    ]
+  ],
+  "reached_gameover_2": true
+}
