@@ -624,7 +624,6 @@ function lockPiece(p: any, idx: number) {
         p.board.set(x, y, piece.def.color);
       }
     }
-  playSfx("piece_lock", idx === 0 ?  -0.95 : 0.95);
   p.score += 1;
   p.piecesPlaced += 1;
   // level
@@ -634,6 +633,8 @@ function lockPiece(p: any, idx: number) {
   if (full.length > 0) {
     p.board.removeRows(full);
     playSfx("line_clear", idx === 0 ?  -0.95 : 0.95);
+  } else {
+    playSfx("piece_lock", idx === 0 ?  -0.95 : 0.95);
   }
   // spawn next
   match!.spawnFor(p);
