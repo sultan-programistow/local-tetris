@@ -1,0 +1,175 @@
+{
+ "build": "962dc56",
+ "results": [
+  {
+   "step": "E1 ArrowDown Restart -> Stats",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "selection_after": "Stats",
+   "status": "PASS"
+  },
+  {
+   "step": "E2 ArrowDown Stats -> Main Menu",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "selection_after": "Main Menu",
+   "status": "PASS"
+  },
+  {
+   "step": "E3 ArrowDown clamped at Main Menu",
+   "expected": [],
+   "got": [],
+   "selection_after": "Main Menu",
+   "status": "PASS"
+  },
+  {
+   "step": "E4 ArrowUp Main Menu -> Stats",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "selection_after": "Stats",
+   "status": "PASS"
+  },
+  {
+   "step": "E5 ArrowUp Stats -> Restart",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "selection_after": "Restart",
+   "status": "PASS"
+  },
+  {
+   "step": "E6 ArrowUp clamped at Restart",
+   "expected": [],
+   "got": [],
+   "selection_after": "Restart",
+   "status": "PASS"
+  },
+  {
+   "step": "E7 s then w",
+   "expected": [
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg",
+    "menu_select.ogg"
+   ],
+   "selection_after": "Restart",
+   "status": "PASS"
+  },
+  {
+   "step": "E8a D-pad down Restart -> Stats",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "selection_after": "Stats",
+   "status": "PASS"
+  },
+  {
+   "step": "E8b D-pad down Stats -> Main Menu",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "selection_after": "Main Menu",
+   "status": "PASS"
+  },
+  {
+   "step": "E8c D-pad up Main Menu -> Stats",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "selection_after": "Stats",
+   "status": "PASS"
+  },
+  {
+   "step": "E9 hover Restart -> Stats",
+   "expected": [
+    "menu_select.ogg"
+   ],
+   "got": [
+    "menu_select.ogg"
+   ],
+   "selection_after": "Stats",
+   "status": "PASS"
+  },
+  {
+   "step": "E10 hover same item",
+   "expected": [],
+   "got": [],
+   "selection_after": "Stats",
+   "status": "PASS"
+  },
+  {
+   "step": "E11 hover empty area below",
+   "expected": [],
+   "got": [],
+   "selection_after": "Stats",
+   "status": "PASS"
+  },
+  {
+   "step": "E12 Esc -> Main Menu",
+   "expected": [
+    "menu_back.ogg"
+   ],
+   "got": [
+    "menu_back.ogg"
+   ],
+   "selection_after": null,
+   "status": "PASS"
+  },
+  {
+   "step": "E13 gamepad B -> Main Menu",
+   "expected": [
+    "menu_back.ogg"
+   ],
+   "got": [
+    "menu_back.ogg"
+   ],
+   "selection_after": null,
+   "status": "PASS"
+  }
+ ],
+ "trace": [
+  {
+   "event": "after_enter",
+   "screen": "game/962dc56,NEXT,P1 Score: 0,P2 Score: 0"
+  },
+  {
+   "event": "reach_gameover",
+   "ok": true
+  },
+  {
+   "event": "baseline",
+   "selection": "Restart"
+  },
+  {
+   "event": "reach_gameover_session2",
+   "ok": true
+  }
+ ],
+ "note": "Run 7 on build 962dc56 (hover fix). E14 was a harness duplicate (Esc after E13 already returned to Main Menu) and is not scored."
+}

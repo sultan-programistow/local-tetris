@@ -2,7 +2,7 @@
 
 - **Area:** Menus / audio / gameplay SFX
 - **Priority:** Medium
-- **Date run:** 2026-11-24 (run 1: FAIL — no navigation sounds at all; run 2: FAIL — 16/18; run 3: PASS on the Web Audio engine; run 4: PASS — 19/19; run 5: FAIL — groups A–D 22/22 PASS incl. submenu entry, Game Over group E 7/14 because selection moves are silent; run 6: FAIL — group E 13/14, keyboard and gamepad selection sounds fixed, mouse hover still silent)
+- **Date run:** 2026-11-24 (run 1: FAIL — no navigation sounds at all; run 2: FAIL — 16/18; run 3: PASS on the Web Audio engine; run 4: PASS — 19/19; run 5: FAIL — groups A–D 22/22 PASS incl. submenu entry, Game Over group E 7/14 because selection moves are silent; run 6: FAIL — group E keyboard/W-S/D-pad selection sounds fixed, hover not yet in that build; run 7: PASS — group E 14/14 on `962dc56`, hover included)
 - **Spec:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" — "Move (left/right)", "Soft drop", "Menu navigation (select/back)" are listed SFX events. The spec does not name the files; `src/audio.ts` maps the events to `move.ogg`, `soft_drop.ogg`, `menu_select.ogg`, `menu_back.ogg`.
 - **Spec pin:** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" incl. "Menu enter submenu (opening Stats, Volume, or Controls)" and §"Sound Design (Panning)" @ `4d88126` (sound-file mapping and panning are implementation details read from `src/audio.ts`).
 - **Spec (Game Over group):** `specs/05-audio-and-visuals.md` §"Audio Events (SFX)" lists "Menu navigation (select/back)" as a global SFX with no per-screen exception; `specs/04-screens-and-ui.md` §"Game Over Screen" @ `8b4c2ef` defines the options Restart (default), Stats, Main Menu and the navigation paths covered below.
@@ -67,7 +67,9 @@ Run 2 (superseded): **FAIL — 2 of 18** — `Esc` back from Stats/Controls was 
 
 Run 4 (2026-11-24, `cb935ae`): **PASS — 19 of 19**, same Web Audio hook plus one added sub-case, A8, for the case-insensitive `s`/`Shift+S`/`w`/`Shift+W` menu navigation added to the spec in `8b4c2ef`. All menu-select, back-key, move and soft-drop sub-cases still pass; the three commits after `bb71dc0` only change screen layout.
 
-## Game Over group E (run 5 — FAIL 7/14; run 6 — FAIL 13/14)
+## Game Over group E (run 5 — FAIL 6/14 genuine defects; run 7 — PASS 14/14)
+
+**Harness correction:** runs 5 and 6 hovered Stats at the end of E9, but E8 leaves the selection on Stats, so that step never changed the selection and scored a correct silence as a failure. Run 7 fixes the step (normalise to Restart with `↑`, then hover Stats) and is the authoritative hover result; the E9 rows of runs 5–6 are superseded.
 
 **Why:** the case covered the Main Menu and the back keys from Volume/Stats/Controls, but not the Game Over menu, which `specs/04-screens-and-ui.md` §"Game Over Screen" defines with the same kind of navigable options. The global "Menu navigation (select/back)" SFX in `specs/05-audio-and-visuals.md` has no per-screen exception, so the Game Over selection is expected to sound like every other menu.
 
@@ -92,20 +94,20 @@ Run 4 (2026-11-24, `cb935ae`): **PASS — 19 of 19**, same Web Audio hook plus o
 | E6 | `↑` again on Restart (clamped) | no sound | no move, no sound | PASS |
 | E7 | `s` then `w` (case-insensitive navigation) | `menu_select` ×2; selection Stats then Restart | selection went Stats then Restart; no sound | **FAIL** |
 | E8 | D-pad `↓` ×2, `↑` ×1 (mock pad 0) | `menu_select` ×3; selection Main Menu → Stats → Restart | selection ended on Stats after the 3 moves; no sound | **FAIL** |
-| E9 | Hover Restart → Stats | `menu_select` ×1 | selection moved to Stats; no sound | **FAIL** |
+| E9 | Hover on Stats (intended Restart → Stats) | `menu_select` ×1 | selection was already Stats after E8; no change, no sound | N/A — step set up incorrectly |
 | E10 | Hover the same item again | no sound | no sound | PASS |
 | E11 | Hover the empty area below the items | no sound | no sound | PASS |
 | E12 | `Esc` → Main Menu | `menu_back` ×1 | `menu_back` ×1 | PASS |
 | E13 | Gamepad `B` (pad 0) → Main Menu | `menu_back` ×1 | `menu_back` ×1 | PASS |
 | E14 | Record the pan value of every E1–E13 sound | all 0 (centred); recorded only | `[0, 0]` (the two `menu_back` plays); no selection sounds to measure | INFO |
 
-**Run 5 result: FAIL — 7 of 14 scored.** Every Game Over selection path (arrows, `s`/`w`, D-pad, mouse hover) moves the highlight but plays no sound, while `Esc` and gamepad `B` back both play `menu_back`. The 7 passes are the two clamped negative controls, the two hover-no-change controls, and the two back keys. Selection positions were confirmed from the drawn green label after each step, so the failure is the missing sound, not missing navigation.
+**Run 5 result: FAIL — 6 genuine failures at `4d88126`.** Arrows, `s`/`w` and D-pad move the highlight but play no sound (E1, E2, E4, E5, E7, E8); `Esc` and gamepad `B` play `menu_back` (E12, E13), and the clamped/no-change controls stay silent (E3, E6, E10, E11). E9 is not counted: its hover target was already the selected item. Selection positions were confirmed from the drawn green label after each step, so the failures are missing sounds, not missing navigation.
 
 Method is the run 3 Web Audio hook; each step waits 250 ms and the E-group reads the log delta since the previous read. Screenshots after E1, E7 and E9 confirm the Game Over selection position.
 
-**Run 6 (after the fix request):** production build of `37a97fd` (clean copy of the commit via `git archive`, `vite preview` at `http://127.0.0.1:4182`), headless Chrome 158, 1920×1080, same Web Audio and `fillText` hooks, two sessions as in run 5.
+**Run 7 (after the fixes):** production build of `962dc56` (clean copy of the commit via `git archive`, `vite preview` at `http://127.0.0.1:4183`), headless Chrome 158, 1920×1080, same Web Audio and `fillText` hooks, two sessions as in run 5. E9 now presses `↑` first so the selection is on Restart, then hovers Stats.
 
-| # | Action | Expected | Actual (run 6, `37a97fd`) | Status |
+| # | Action | Expected | Actual (run 7, `962dc56`) | Status |
 |---|---|---|---|---|
 | E1 | `↓` from Restart → Stats | `menu_select` ×1 | `menu_select` ×1 | PASS |
 | E2 | `↓` → Main Menu | `menu_select` ×1 | `menu_select` ×1 | PASS |
@@ -115,19 +117,20 @@ Method is the run 3 Web Audio hook; each step waits 250 ms and the E-group reads
 | E6 | `↑` again on Restart (clamped) | no sound | no move, no sound | PASS |
 | E7 | `s` then `w` | `menu_select` ×2 | `menu_select` ×2 | PASS |
 | E8 | D-pad `↓` ×2, `↑` ×1 | `menu_select` ×3 | `menu_select` ×3 | PASS |
-| E9 | Hover Restart → Stats | `menu_select` ×1 | selection moved to Stats; no sound | **FAIL** |
+| E9 | `↑` to Restart, then hover Stats | `menu_select` ×1 | `menu_select` ×1 | PASS |
 | E10 | Hover the same item again | no sound | no sound | PASS |
 | E11 | Hover the empty area below the items | no sound | no sound | PASS |
 | E12 | `Esc` → Main Menu | `menu_back` ×1 | `menu_back` ×1 | PASS |
 | E13 | Gamepad `B` (pad 0) → Main Menu | `menu_back` ×1 | `menu_back` ×1 | PASS |
-| E14 | Pan value of every E1–E13 sound | all 0 (centred); recorded only | `[0] × 11` (nine `menu_select`, two `menu_back`) | INFO |
+| E14 | Pan value of every E1–E13 sound | all 0 (centred); recorded only | `[0] × 12` (ten `menu_select`, two `menu_back`) | INFO |
 
-**Run 6 result: FAIL — 13 of 14 scored.** `37a97fd` fixes the keyboard (arrows, `s`/`w`) and D-pad selection sounds and keeps `menu_back` on `Esc` and gamepad `B`; the clamped and no-change controls stay silent. Mouse hover still moves the selection from Restart to Stats without playing `menu_select`, so group E does not yet meet the spec's "every menu selection move sounds" requirement. Confirmed on two clean page loads (both 13/14). A third attempt was discarded because Game Over was not reached within 45 s, so its steps ran on the wrong screen.
+**Run 7 result: PASS — 14 of 14 scored.** Every Game Over selection change — arrows, `s`/`w`, D-pad, mouse hover — plays `menu_select` exactly once, only when the highlight actually moves; `Esc` and gamepad `B` play `menu_back`; the clamped and no-change controls stay silent. All menu sounds are centred (pan 0). Hover was fixed in `962dc56`; the keyboard and D-pad paths were fixed in `37a97fd`.
 
 ## Evidence
 
-- `tests/reports/TC-010/run6-gameover-audio-results.json` — run 6 (`37a97fd`): E1–E14 expected/actual sound names, selection after each step, pan values, asset decode table; the only failure is E9 (hover).
-- `tests/reports/TC-010/run6-gameover-screen.png`, `run6-gameover-session2.png`, `run6-E1-stats-selected.png`, `run6-E7-after-w.png`, `run6-E9-hover-stats.png` — run 6 Game Over: entry in both sessions, and the selection after `↓`, after `s`/`w`, and after hovering Stats (Stats highlighted, no sound recorded).
+- `tests/reports/TC-010/run7b-gameover-audio-results.json` — run 7 (`962dc56`): E1–E14 expected/actual sound names, selection after each step, pan values, asset decode table; 14/14 PASS.
+- `tests/reports/TC-010/run7b-gameover-screen.png`, `run7b-gameover-session2.png`, `run7b-E1-stats-selected.png`, `run7b-E7-after-w.png`, `run7b-E9-hover-stats.png` — run 7 Game Over: entry in both sessions, and the selection after `↓`, after `s`/`w`, and after hovering Stats.
+- `tests/reports/TC-010/run6-gameover-audio-results.json` — run 6 (`37a97fd`, superseded): keyboard/D-pad passes; its E9 hover row is invalid per the harness note above.
 - `tests/reports/TC-010/run5-gameover-audio-results.json` — run 5 (`4d88126`): E1–E14 expected/actual sound names, selection after each step, pan values, asset decode table.
 - `tests/reports/TC-010/run5-gameover-audio-start.png`, `run5-gameover-session2.png` — Game Over screen with Restart highlighted in both sessions.
 - `tests/reports/TC-010/run5-E1-stats-selected.png`, `run5-E7-after-w.png`, `run5-E9-hover-stats.png` — Game Over after `↓`, after `s`/`w`, and after hovering Stats; the highlighted option moved, no sound was recorded.
@@ -154,3 +157,4 @@ Method is the run 3 Web Audio hook; each step waits 250 ms and the E-group reads
 | 4 | 2026-11-24 | `cb935ae` | PASS | 19/19; adds A8 case-insensitive `w`/`s` navigation |
 | 5 | 2026-11-24 | `4d88126` | **FAIL** | Groups A–D 22/22 PASS incl. new submenu-entry A10/A11 (panning now 95%); Game Over group E 7/14 — every selection move (arrows, `w`/`s`, D-pad, hover) is silent, `Esc`/`B` back play `menu_back` |
 | 6 | 2026-11-24 | `37a97fd` | **FAIL** | Group E 13/14 — arrows, `w`/`s`, D-pad and back keys now pass, pan 0 throughout; mouse hover still changes the selection silently (E9) |
+| 7 | 2026-11-24 | `962dc56` | **PASS** | Group E 13/13 — hover now plays `menu_select` on a real selection change and stays silent when the item does not change (E9–E11); every other E path still passes |
