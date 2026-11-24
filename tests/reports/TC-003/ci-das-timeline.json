@@ -7,11 +7,11 @@
       "tapMoves": 1,
       "moves": 3,
       "gaps": [
-        24,
-        316,
-        74
+        8,
+        338,
+        97
       ],
-      "dasDelayMs": 340,
+      "dasDelayMs": 345,
       "columns": [
         "3->2",
         "2->1",
@@ -21,19 +21,21 @@
     {
       "input": "P1 d",
       "tapMoves": 1,
-      "moves": 4,
+      "moves": 5,
       "gaps": [
-        4,
-        342,
-        120,
-        90
+        26,
+        326,
+        103,
+        72,
+        88
       ],
-      "dasDelayMs": 345,
+      "dasDelayMs": 352,
       "columns": [
         "3->4",
         "4->5",
         "5->6",
-        "6->7"
+        "6->7",
+        "7->8"
       ]
     },
     {
@@ -41,11 +43,11 @@
       "tapMoves": 1,
       "moves": 3,
       "gaps": [
-        39,
-        307,
-        92
+        35,
+        316,
+        91
       ],
-      "dasDelayMs": 346,
+      "dasDelayMs": 351,
       "columns": [
         "3->2",
         "2->1",
@@ -55,19 +57,21 @@
     {
       "input": "P2 ArrowRight",
       "tapMoves": 1,
-      "moves": 4,
+      "moves": 5,
       "gaps": [
-        20,
-        335,
-        76,
-        81
+        19,
+        327,
+        84,
+        83,
+        84
       ],
-      "dasDelayMs": 356,
+      "dasDelayMs": 346,
       "columns": [
         "3->4",
         "4->5",
         "5->6",
-        "6->7"
+        "6->7",
+        "7->8"
       ]
     },
     {
@@ -75,11 +79,11 @@
       "tapMoves": 1,
       "moves": 3,
       "gaps": [
-        34,
-        378,
-        107
+        10,
+        350,
+        83
       ],
-      "dasDelayMs": 413,
+      "dasDelayMs": 360,
       "columns": [
         "3->2",
         "2->1",
@@ -91,11 +95,11 @@
       "tapMoves": 1,
       "moves": 3,
       "gaps": [
-        19,
-        365,
-        123
+        18,
+        350,
+        84
       ],
-      "dasDelayMs": 385,
+      "dasDelayMs": 368,
       "columns": [
         "3->2",
         "2->1",
@@ -105,37 +109,41 @@
     {
       "input": "pad0 D-pad right",
       "tapMoves": 1,
-      "moves": 4,
+      "moves": 5,
       "gaps": [
-        22,
-        356,
-        93,
-        85
+        5,
+        366,
+        86,
+        85,
+        83
       ],
-      "dasDelayMs": 378,
+      "dasDelayMs": 371,
       "columns": [
         "3->4",
         "4->5",
         "5->6",
-        "6->7"
+        "6->7",
+        "7->8"
       ]
     },
     {
       "input": "pad1 D-pad right",
       "tapMoves": 1,
-      "moves": 4,
+      "moves": 5,
       "gaps": [
-        16,
-        364,
-        96,
-        79
+        14,
+        367,
+        83,
+        83,
+        83
       ],
-      "dasDelayMs": 379,
+      "dasDelayMs": 381,
       "columns": [
         "3->4",
         "4->5",
         "5->6",
-        "6->7"
+        "6->7",
+        "7->8"
       ]
     },
     {
@@ -143,11 +151,11 @@
       "tapMoves": 1,
       "moves": 3,
       "gaps": [
-        9,
-        353,
-        93
+        16,
+        340,
+        79
       ],
-      "dasDelayMs": 361,
+      "dasDelayMs": 356,
       "columns": [
         "3->2",
         "2->1",
@@ -157,21 +165,23 @@
     {
       "input": "pad0 stick right",
       "tapMoves": 1,
-      "moves": 4,
+      "moves": 5,
       "gaps": [
-        14,
-        350,
-        83,
-        83
+        42,
+        366,
+        82,
+        90,
+        80
       ],
-      "dasDelayMs": 364,
+      "dasDelayMs": 408,
       "columns": [
         "3->4",
         "4->5",
         "5->6",
-        "6->7"
+        "6->7",
+        "7->8"
       ]
     }
   ],
-  "at": "2026-11-24T18:13:26.762Z"
+  "at": "2026-11-24T18:20:29.410Z"
 }

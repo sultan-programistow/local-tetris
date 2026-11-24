@@ -10,10 +10,10 @@
     "afterEnter": {
       "screen": "countdown",
       "menuIndex": 0,
-      "frame": 10
+      "frame": 4
     },
     "afterPixels": {
-      "nonBg": 89800,
+      "nonBg": 89835,
       "menuGreen": 0,
       "p1Board": 37440,
       "centerDigit": 1830
@@ -26,14 +26,14 @@
     "state": {
       "screen": "play",
       "menuIndex": 0,
-      "frame": 100
+      "frame": 173
     },
     "pixels": {
-      "nonBg": 108994,
+      "nonBg": 109029,
       "menuGreen": 0,
       "p1Board": 46656,
       "centerDigit": 0
     }
   },
-  "at": "2026-11-24T18:12:58.667Z"
+  "at": "2026-11-24T18:20:02.065Z"
 }
