@@ -1,0 +1,60 @@
+{
+  "case": "TC-015",
+  "runId": "run1",
+  "rows": [
+    {
+      "id": "A1",
+      "expected": "normal lock -> piece_lock, pan -0.95",
+      "actual": [
+        {
+          "name": "piece_lock",
+          "pan": -0.949999988079071
+        }
+      ],
+      "pieces": {
+        "before": 0,
+        "after": 1
+      }
+    },
+    {
+      "id": "A2",
+      "expected": "match-ending placement -> no piece_lock/line_clear, only game_over",
+      "actualTail": [
+        {
+          "name": "game_over",
+          "pan": 0,
+          "dGameOverMs": 0
+        }
+      ],
+      "tailPlacements": [],
+      "lastPlacementBeforeGameOver": {
+        "name": "piece_lock",
+        "dGameOverMs": -508
+      },
+      "gameOver": {
+        "pan": 0,
+        "t": 11959.300000011921
+      },
+      "run": {
+        "ms": 7733,
+        "firstTopOutAt": 1795547648520,
+        "firstTopOutPlayer": 0,
+        "firstTopOutPieces": [
+          11,
+          9
+        ],
+        "finalPieces": [
+          11,
+          11
+        ],
+        "finalOver": [
+          true,
+          true
+        ]
+      },
+      "totalEvents": 25
+    }
+  ],
+  "endWindowMs": 150,
+  "at": "2026-11-24T19:14:09.606Z"
+}
