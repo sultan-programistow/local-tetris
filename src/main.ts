@@ -219,9 +219,9 @@ function handleMouseClick() {
         pausedFromGame = false;
         startMatch();
       }
-    } else if (opt === "Stats") { screen = "stats"; playSfx("menu_select"); }
-    else if (opt === "Volume") { screen = "volume"; playSfx("menu_select"); }
-    else if (opt === "Controls") { screen = "controls"; playSfx("menu_select"); }
+    } else if (opt === "Stats") { screen = "stats"; playSfx("menu_enter"); }
+    else if (opt === "Volume") { screen = "volume"; playSfx("menu_enter"); }
+    else if (opt === "Controls") { screen = "controls"; playSfx("menu_enter"); }
   } else if (screen === "volume") {
     updateVolumeFromMouse();
   } else if (screen === "gameover") {
@@ -1038,9 +1038,9 @@ window.addEventListener("keydown", (e) => {
             pausedFromGame = false;
             startMatch();
           }
-        } else if (opt === "Stats") { screen = "stats"; playSfx("menu_select"); }
-        else if (opt === "Volume") { screen = "volume"; playSfx("menu_select"); }
-        else if (opt === "Controls") { screen = "controls"; playSfx("menu_select"); }
+        } else if (opt === "Stats") { screen = "stats"; playSfx("menu_enter"); }
+        else if (opt === "Volume") { screen = "volume"; playSfx("menu_enter"); }
+        else if (opt === "Controls") { screen = "controls"; playSfx("menu_enter"); }
       }
     } else if (screen === "stats") {
       if (e.key === "w" || e.key === "W" || e.key === "ArrowUp")
@@ -1227,9 +1227,9 @@ function handleGamepadMenus(dt: number) {
         } else if (opt === "Restart") {
           pausedFromGame = false;
           startMatch();
-        } else if (opt === "Stats") { screen = "stats"; playSfx("menu_select"); }
-        else if (opt === "Volume") { screen = "volume"; playSfx("menu_select"); }
-        else if (opt === "Controls") { screen = "controls"; playSfx("menu_select"); }
+        } else if (opt === "Stats") { screen = "stats"; playSfx("menu_enter"); }
+        else if (opt === "Volume") { screen = "volume"; playSfx("menu_enter"); }
+        else if (opt === "Controls") { screen = "controls"; playSfx("menu_enter"); }
       }
     } else if (screen === "gameover") {
       if (up && !prev.up) {

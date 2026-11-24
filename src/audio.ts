@@ -8,6 +8,7 @@ const SOUND_FILES: Record<string, string> = {
   pause: 'sounds/pause.ogg',
   unpause: 'sounds/unpause.ogg',
   menu_select: 'sounds/menu_select.ogg',
+  menu_enter: 'sounds/menu_enter.ogg',
   menu_back: 'sounds/menu_back.ogg',
 };
 
