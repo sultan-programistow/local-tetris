@@ -1,0 +1,143 @@
+{
+ "build": "962dc56",
+ "at": "2026-11-24T00:32:18.375Z",
+ "cases": [
+  {
+   "id": "A1",
+   "path": "keyboard Esc in play",
+   "expected": [
+    "pause"
+   ],
+   "actual": [
+    "pause"
+   ],
+   "stateAfter": "pause menu",
+   "selected": "Resume"
+  },
+  {
+   "id": "B1",
+   "path": "keyboard Esc in paused menu (Resume selected)",
+   "expected": [
+    "unpause"
+   ],
+   "actual": [],
+   "stateAfter": "play",
+   "selected": null
+  },
+  {
+   "id": "B2",
+   "path": "keyboard Enter on Resume",
+   "expected": [
+    "unpause"
+   ],
+   "actual": [
+    "unpause"
+   ],
+   "stateAfter": "play",
+   "selected": null
+  },
+  {
+   "id": "B3",
+   "path": "keyboard Space on Resume",
+   "expected": [
+    "unpause"
+   ],
+   "actual": [
+    "unpause"
+   ],
+   "stateAfter": "play",
+   "selected": null
+  },
+  {
+   "id": "A2",
+   "path": "keyboard Esc during countdown",
+   "expected": [
+    "pause"
+   ],
+   "actual": [
+    "pause"
+   ],
+   "stateAfter": "pause menu",
+   "selected": "Resume"
+  },
+  {
+   "id": "A3",
+   "path": "gamepad 0 Start in play",
+   "expected": [
+    "pause"
+   ],
+   "actual": [],
+   "stateAfter": "pause menu",
+   "selected": "Resume"
+  },
+  {
+   "id": "B4",
+   "path": "gamepad 0 A on Resume",
+   "expected": [
+    "unpause"
+   ],
+   "actual": [
+    "unpause",
+    "soft_drop"
+   ],
+   "stateAfter": "play",
+   "selected": null
+  },
+  {
+   "id": "B5",
+   "path": "gamepad 0 B in paused menu",
+   "expected": [
+    "unpause"
+   ],
+   "actual": [
+    "unpause"
+   ],
+   "stateAfter": "play",
+   "selected": null
+  },
+  {
+   "id": "B6",
+   "path": "gamepad 0 Select(8) in paused menu",
+   "expected": [
+    "unpause"
+   ],
+   "actual": [
+    "unpause"
+   ],
+   "stateAfter": "play",
+   "selected": null
+  },
+  {
+   "id": "A4",
+   "path": "gamepad 1 Start in play",
+   "expected": [
+    "pause"
+   ],
+   "actual": [],
+   "stateAfter": "pause menu",
+   "selected": "Resume"
+  },
+  {
+   "id": "B7",
+   "path": "gamepad 0 Start again on Resume",
+   "expected": [
+    "unpause"
+   ],
+   "actual": [
+    "unpause"
+   ],
+   "stateAfter": "play",
+   "selected": null
+  },
+  {
+   "id": "B8",
+   "path": "mouse click Resume (index 0)",
+   "expected": [
+    "unpause"
+   ],
+   "actual": [],
+   "stateAfter": "play",
+   "selected": null
+  }
+ ]
+}

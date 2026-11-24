@@ -1,0 +1,116 @@
+{
+ "build": "962dc56",
+ "at": "2026-11-24T00:32:49.238Z",
+ "cases": [
+  {
+   "id": "K1",
+   "path": "keyboard Enter on Stats from pause menu",
+   "expected": [
+    "1 sound"
+   ],
+   "actual": [
+    "menu_select"
+   ],
+   "screen": "STATS"
+  },
+  {
+   "id": "K2",
+   "path": "keyboard Enter on Volume from pause menu",
+   "expected": [
+    "1 sound"
+   ],
+   "actual": [
+    "menu_select"
+   ],
+   "screen": "VOLUME"
+  },
+  {
+   "id": "K3",
+   "path": "keyboard Enter on Controls from pause menu",
+   "expected": [
+    "1 sound"
+   ],
+   "actual": [
+    "menu_select"
+   ],
+   "screen": "CONTROLS"
+  },
+  {
+   "id": "K4",
+   "path": "keyboard Esc back from Controls",
+   "expected": [
+    "menu_back"
+   ],
+   "actual": [
+    "menu_back"
+   ],
+   "screen": "menu"
+  },
+  {
+   "id": "G1",
+   "path": "gamepad 0 A on Stats from pause menu",
+   "expected": [
+    "1 sound"
+   ],
+   "actual": [
+    "menu_select"
+   ],
+   "screen": "STATS"
+  },
+  {
+   "id": "G2",
+   "path": "gamepad 0 A on Volume from pause menu",
+   "expected": [
+    "1 sound"
+   ],
+   "actual": [
+    "menu_select"
+   ],
+   "screen": "VOLUME"
+  },
+  {
+   "id": "G3",
+   "path": "gamepad 0 A on Controls from pause menu",
+   "expected": [
+    "1 sound"
+   ],
+   "actual": [
+    "menu_select"
+   ],
+   "screen": "CONTROLS"
+  },
+  {
+   "id": "M1",
+   "path": "mouse click Stats from pause menu",
+   "expected": [
+    "1 sound"
+   ],
+   "actual": [
+    "menu_select"
+   ],
+   "screen": "STATS"
+  },
+  {
+   "id": "M2",
+   "path": "mouse click Volume from pause menu",
+   "expected": [
+    "1 sound"
+   ],
+   "actual": [
+    "menu_select"
+   ],
+   "screen": "VOLUME"
+  },
+  {
+   "id": "M3",
+   "path": "mouse click Controls from pause menu",
+   "expected": [
+    "1 sound"
+   ],
+   "actual": [
+    "menu_select"
+   ],
+   "screen": "CONTROLS"
+  }
+ ]
+}
