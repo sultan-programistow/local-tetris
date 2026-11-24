@@ -215,6 +215,7 @@ function handleMouseClick() {
         pausedFromGame = false;
         screen = pausedReturn;
         if (match) match.status = "playing";
+        playSfx("unpause");
       } else {
         pausedFromGame = false;
         startMatch();
@@ -1024,6 +1025,7 @@ window.addEventListener("keydown", (e) => {
           pausedFromGame = false;
           screen = pausedReturn;
           if (match) match.status = "playing";
+          playSfx("unpause");
         }
       }
       if (e.key === "Enter" || e.key === " ") {
@@ -1183,6 +1185,7 @@ function handleGamepadMenus(dt: number) {
         screen = "menu";
         menuIndex = 0;
         startOpenedMenu = true;
+        playSfx("pause");
       }
     }
     if (screen === "countdown") {
@@ -1193,6 +1196,7 @@ function handleGamepadMenus(dt: number) {
         screen = "menu";
         menuIndex = 0;
         startOpenedMenu = true;
+        playSfx("pause");
       }
     }
     if (screen === "menu") {
