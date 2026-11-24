@@ -45,3 +45,12 @@ npm run test           # every automated case
 - Cases without a spec exit with code 3 rather than passing silently.
 - `?e2e=1` enables a read-only state hook (`window.__tetris`: `screen`, `menuIndex`, `frame`); `harness.spec.ts` checks it stays absent without the flag.
 
+## CI
+
+`.github/workflows/tests.yml` runs `npm run test` on every push to `main` and on
+pull requests targeting `main` (and on manual dispatch). It installs Chromium, runs
+the suite with `TC_RUN_ID=ci-<run>-<attempt>`, and uploads `test-results/` plus
+`tests/reports/` as the `test-evidence-…` artifact for 14 days. A red run means the
+build or a spec failed; the artifact holds the screenshots, probe JSON, and
+Playwright trace. Merges are not blocked: the check is informational.
+
