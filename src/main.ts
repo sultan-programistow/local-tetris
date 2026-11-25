@@ -124,9 +124,10 @@ const USED_KEYS = new Set([
   " ",
 ]);
 window.addEventListener("keydown", (e) => {
-  if (USED_KEYS.has(e.key)) {
-    keys.add(e.key);
-    keyEdges.add(e.key);
+  const k = e.key.toLowerCase();
+  if (USED_KEYS.has(k) || USED_KEYS.has(e.key)) {
+    keys.add(k);
+    keyEdges.add(k);
     e.preventDefault();
   }
   // rotation edge handling during play
@@ -157,7 +158,7 @@ window.addEventListener("keydown", (e) => {
   }
 });
 window.addEventListener("keyup", (e) => {
-  keys.delete(e.key);
+  keys.delete(e.key.toLowerCase());
 });
 
 // Mouse support for menus
