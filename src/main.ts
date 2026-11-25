@@ -124,7 +124,7 @@ const USED_KEYS = new Set([
   " ",
 ]);
 window.addEventListener("keydown", (e) => {
-  const k = e.key.toLowerCase();
+  const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   if (USED_KEYS.has(k) || USED_KEYS.has(e.key)) {
     keys.add(k);
     keyEdges.add(k);
@@ -158,7 +158,7 @@ window.addEventListener("keydown", (e) => {
   }
 });
 window.addEventListener("keyup", (e) => {
-  keys.delete(e.key.toLowerCase());
+  keys.delete(e.key.length === 1 ? e.key.toLowerCase() : e.key);
 });
 
 // Mouse support for menus

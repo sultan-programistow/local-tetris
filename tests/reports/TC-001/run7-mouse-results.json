@@ -1,0 +1,52 @@
+{
+  "case": "TC-001",
+  "mode": "mouse",
+  "runId": "run7",
+  "viewport": {
+    "width": 1600,
+    "height": 900
+  },
+  "probes": {
+    "before": {
+      "screen": "menu",
+      "menuIndex": 0,
+      "frame": 5
+    },
+    "beforePixels": {
+      "nonBg": 15958,
+      "menuGreen": 567,
+      "p1Board": 0,
+      "centerDigit": 2166
+    },
+    "afterClick": {
+      "screen": "countdown",
+      "menuIndex": 0,
+      "frame": 16
+    },
+    "afterPixels": {
+      "nonBg": 89806,
+      "menuGreen": 0,
+      "p1Board": 37440,
+      "centerDigit": 1830
+    }
+  },
+  "screenshots": [
+    "tests/reports/TC-001/run7-menu-before.png",
+    "tests/reports/TC-001/run7-after-click.png",
+    "tests/reports/TC-001/run7-play.png"
+  ],
+  "final": {
+    "state": {
+      "screen": "play",
+      "menuIndex": 0,
+      "frame": 102
+    },
+    "pixels": {
+      "nonBg": 109000,
+      "menuGreen": 0,
+      "p1Board": 46656,
+      "centerDigit": 0
+    }
+  },
+  "at": "2026-11-25T20:47:58.367Z"
+}

@@ -1,0 +1,188 @@
+{
+  "case": "TC-011",
+  "runId": "run7",
+  "steps": [
+    {
+      "id": "start",
+      "note": "fresh menu",
+      "screen": "menu",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K1",
+      "note": "ArrowDown x4 wraps",
+      "screen": "menu",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K2",
+      "note": "ArrowUp x4 wraps",
+      "screen": "menu",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K3",
+      "note": "s x4 / w x4",
+      "screen": "menu",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K13",
+      "note": "Shift+W x2, Shift+S x2",
+      "screen": "menu",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K6",
+      "note": "left/right/x are negative controls",
+      "screen": "menu",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K4",
+      "note": "Space opened Volume, Esc returned",
+      "screen": "menu",
+      "menuIndex": 2,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K5",
+      "note": "Enter opened Controls, Esc returned",
+      "screen": "menu",
+      "menuIndex": 3,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K7",
+      "note": "D-pad down x4 / up x4",
+      "screen": "menu",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K8",
+      "note": "D-pad down x3 + A opened Controls, B returned",
+      "screen": "menu",
+      "menuIndex": 3,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K9",
+      "note": "stick down x4 / up x4",
+      "screen": "menu",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K10",
+      "note": "stick down x3 + A opened Controls, B returned",
+      "screen": "menu",
+      "menuIndex": 3,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K11a",
+      "note": "Esc in play -> pause menu",
+      "screen": "menu",
+      "menuIndex": 0,
+      "items": [
+        "Resume",
+        "Restart",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K11b",
+      "note": "Esc again resumed play",
+      "screen": "play",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    },
+    {
+      "id": "K12",
+      "note": "gamepad B resumed play",
+      "screen": "play",
+      "menuIndex": 0,
+      "items": [
+        "Start",
+        "Stats",
+        "Volume",
+        "Controls"
+      ]
+    }
+  ],
+  "at": "2026-11-25T20:50:57.993Z"
+}

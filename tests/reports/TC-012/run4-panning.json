@@ -1,0 +1,187 @@
+{
+  "case": "TC-012",
+  "runId": "run4",
+  "rows": [
+    {
+      "id": "D1",
+      "expected": "menu_select",
+      "actual": [
+        "menu_select"
+      ],
+      "pan": 0
+    },
+    {
+      "id": "D2",
+      "expected": "menu_select",
+      "actual": [
+        "menu_select"
+      ],
+      "pan": 0
+    },
+    {
+      "id": "D5",
+      "expected": "menu_select",
+      "actual": [
+        "menu_select"
+      ],
+      "pan": 0
+    },
+    {
+      "id": "D6",
+      "expected": "menu_back",
+      "actual": [
+        "menu_back"
+      ],
+      "pan": 0
+    },
+    {
+      "id": "D7",
+      "expected": "menu_back",
+      "actual": [
+        "menu_back"
+      ],
+      "pan": 0
+    },
+    {
+      "id": "D8",
+      "expected": "menu_back",
+      "actual": [
+        "menu_back"
+      ],
+      "pan": 0
+    },
+    {
+      "id": "D3",
+      "expected": "pause",
+      "actual": [
+        "pause"
+      ],
+      "pan": 0
+    },
+    {
+      "id": "D4",
+      "expected": "unpause",
+      "actual": [
+        "unpause"
+      ],
+      "pan": 0
+    },
+    {
+      "id": "A1",
+      "expected": "move",
+      "actual": [
+        "move"
+      ],
+      "pan": -0.949999988079071
+    },
+    {
+      "id": "A2",
+      "expected": "move",
+      "actual": [
+        "move"
+      ],
+      "pan": -0.949999988079071
+    },
+    {
+      "id": "A3",
+      "expected": "soft_drop",
+      "actual": [
+        "soft_drop"
+      ],
+      "pan": -0.949999988079071
+    },
+    {
+      "id": "A4",
+      "expected": "rotate",
+      "actual": [
+        "rotate"
+      ],
+      "pan": -0.949999988079071
+    },
+    {
+      "id": "A5",
+      "expected": "piece_lock/line_clear",
+      "actual": [
+        "soft_drop",
+        "soft_drop_fast",
+        "piece_lock"
+      ],
+      "pan": -0.949999988079071
+    },
+    {
+      "id": "B1",
+      "expected": "move",
+      "actual": [
+        "move"
+      ],
+      "pan": 0.949999988079071
+    },
+    {
+      "id": "B2",
+      "expected": "move",
+      "actual": [
+        "move"
+      ],
+      "pan": 0.949999988079071
+    },
+    {
+      "id": "B3",
+      "expected": "soft_drop",
+      "actual": [
+        "soft_drop"
+      ],
+      "pan": 0.949999988079071
+    },
+    {
+      "id": "B4",
+      "expected": "rotate",
+      "actual": [
+        "rotate"
+      ],
+      "pan": 0.949999988079071
+    },
+    {
+      "id": "B5",
+      "expected": "piece_lock/line_clear",
+      "actual": [
+        "soft_drop",
+        "soft_drop_fast",
+        "piece_lock"
+      ],
+      "pan": 0.949999988079071
+    },
+    {
+      "id": "C1",
+      "expected": "move",
+      "actual": [
+        "move"
+      ],
+      "pan": -0.949999988079071
+    },
+    {
+      "id": "C2",
+      "expected": "soft_drop",
+      "actual": [
+        "soft_drop"
+      ],
+      "pan": -0.949999988079071
+    },
+    {
+      "id": "C3",
+      "expected": "move",
+      "actual": [
+        "move"
+      ],
+      "pan": 0.949999988079071
+    },
+    {
+      "id": "C4",
+      "expected": "soft_drop",
+      "actual": [
+        "soft_drop"
+      ],
+      "pan": 0.949999988079071
+    }
+  ],
+  "at": "2026-11-25T20:51:12.890Z"
+}
