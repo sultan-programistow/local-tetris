@@ -31,7 +31,7 @@ local-tetris/
 - `Board`: 2D grid (10×20) of cell color/null.
 - `Piece`: shape matrix, position, rotation state, color.
 - `GameState`: boards[2], current pieces[2], queues[2] (next 1), scores[2], levels[2], piecesPlaced[2], status (playing/gameover), seed.
-- `Stats`: sessionsPlayed, sessionsPlayedToday, totalPlayTimeMs, todayPlayTimeMs (reset when date changes), winsP1, winsP1Today, winsP2, winsP2Today, sessions[] (all play sessions: date+time, winner, scores; newest first). Game Over shows the last 5. Win % derived.
+- `Stats`: sessionsPlayed, sessionsPlayedToday, totalPlayTimeMs, todayPlayTimeMs (reset when date changes), winsP1, winsP1Today, winsP2, winsP2Today, sessions[] (all play sessions: date+time, winner, scores; newest first). Game Over shows the last 5. Win % derived. All dates/times are in the player's local timezone (browser local time): `todayDate` is the local calendar date (YYYY-MM-DD) and resets the "today" counters when it changes; `sessions[].date` is stored as a local ISO-8601 string (YYYY-MM-DDTHH:mm:ss), not UTC.
 
 ## Seeded RNG
 

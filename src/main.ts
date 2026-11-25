@@ -35,11 +35,26 @@ interface Stats {
   sessions: Session[];
 }
 
+function localDateStr(d: Date = new Date()): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function localIsoStr(d: Date = new Date()): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const h = String(d.getHours()).padStart(2, "0");
+  const min = String(d.getMinutes()).padStart(2, "0");
+  const sec = String(d.getSeconds()).padStart(2, "0");
+  return `${y}-${m}-${day}T${h}:${min}:${sec}`;
+}
 function loadStats(): Stats {
   try {
     const s = JSON.parse(localStorage.getItem(STORAGE_STATS) || "");
     if (s.todayPlayTimeMs === undefined) s.todayPlayTimeMs = 0;
-    if (!s.todayDate) s.todayDate = new Date().toISOString().slice(0, 10);
+    if (!s.todayDate) s.todayDate = localDateStr();
     if (s.sessionsToday === undefined) s.sessionsToday = 0;
     if (s.winsP1Today === undefined) s.winsP1Today = 0;
     if (s.winsP2Today === undefined) s.winsP2Today = 0;
@@ -52,7 +67,7 @@ function loadStats(): Stats {
       sessionsToday: 0,
       totalPlayTimeMs: 0,
       todayPlayTimeMs: 0,
-      todayDate: new Date().toISOString().slice(0, 10),
+      todayDate: localDateStr(),
       winsP1: 0,
       winsP2: 0,
       winsP1Today: 0,
@@ -686,14 +701,14 @@ function decideWinner() {
   playSfx("game_over");
   // stats
   const sess: Session = {
-    date: new Date().toISOString(),
+    date: localIsoStr(),
     winner: w,
     scores: [p0.score, p1.score],
     pieces: [p0.piecesPlaced, p1.piecesPlaced],
     durationMs: Date.now() - sessionStart,
   };
   stats.sessionsPlayed++;
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDateStr();
   if (stats.todayDate !== today) {
     stats.todayDate = today;
     stats.todayPlayTimeMs = 0;
