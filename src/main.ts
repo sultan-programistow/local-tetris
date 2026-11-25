@@ -701,7 +701,7 @@ function decideWinner() {
   playSfx("game_over");
   // stats
   const sess: Session = {
-    date: localIsoStr(),
+    date: new Date().toISOString(),
     winner: w,
     scores: [p0.score, p1.score],
     pieces: [p0.piecesPlaced, p1.piecesPlaced],
@@ -966,8 +966,10 @@ function drawStats() {
     else { winLabel = s.winner === 'p1' ? 'P1' : 'P2'; scoreStr = `${s.winner === 'p1' ? s.scores[0] : s.scores[1]}:${s.winner === 'p1' ? s.scores[1] : s.scores[0]}`; }
     const dur = `${Math.floor(s.durationMs / 60000)}:${String(Math.floor((s.durationMs % 60000) / 1000)).padStart(2, "0")}`;
     ctx.fillStyle = "#fff";
+    const d = new Date(s.date);
+    const disp = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
     ctx.fillText(
-      `${(s.date.slice(0, 10) + " " + s.date.slice(11, 16)).padEnd(18)}${dur.padEnd(10)}${winLabel.padEnd(10)}${scoreStr}`,
+      `${disp.padEnd(18)}${dur.padEnd(10)}${winLabel.padEnd(10)}${scoreStr}`,
       610,
       y,
     );
