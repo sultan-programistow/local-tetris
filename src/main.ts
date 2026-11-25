@@ -134,16 +134,16 @@ window.addEventListener("keydown", (e) => {
   if (screen === "play" && match && match.status === "playing") {
     let idx = -1,
       dir = 0;
-    if (e.key === "z") {
+    if (k === "z") {
       idx = 0;
       dir = -1;
-    } else if (e.key === "x" || e.key === "w" || e.key === "W") {
+    } else if (k === "x" || k === "w") {
       idx = 0;
       dir = 1;
-    } else if (e.key === "[") {
+    } else if (k === "[" || k === "{") {
       idx = 1;
       dir = -1;
-    } else if (e.key === "]" || e.key === "ArrowUp") {
+    } else if (k === "]" || k === "}" || k === "arrowup") {
       idx = 1;
       dir = 1;
     }
